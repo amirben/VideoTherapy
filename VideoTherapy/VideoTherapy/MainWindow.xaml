@@ -4,9 +4,25 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VideoTherapy"
+        xmlns:controls="clr-namespcae:VideoTherapy.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="525" WindowStyle="None" ResizeMode="NoResize"  WindowStartupLocation="CenterScreen" WindowState="Maximized">
+
     <Grid>
+       
         
+        <Grid x:Name="OpenningWindow">
+            <Grid.Background>
+                <ImageBrush Stretch="Fill" ImageSource="Images\login_background.png" AlignmentY="Top" AlignmentX="Center" />
+            </Grid.Background>
+        </Grid>
+
+        <local:LoginDialog x:Name="LoginDialog"/>
+
+
     </Grid>
+    
+    
+
+
 </Window>
