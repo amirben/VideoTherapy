@@ -57,10 +57,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="LoginDialog.xaml.cs">
+    <Compile Include="TreatmentMenu.xaml.cs">
+      <DependentUpon>TreatmentMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginDialog.xaml.cs">
       <DependentUpon>LoginDialog.xaml</DependentUpon>
     </Compile>
-    <Page Include="LoginDialog.xaml">
+    <Compile Include="XML\ObjectReader.cs" />
+    <Page Include="TreatmentMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LoginDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -105,13 +113,35 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\" />
+    <Resource Include="Images\city-sunny-buildings-skyscrapers-large.jpg" />
+    <Resource Include="Images\Therapist1.png" />
+    <Resource Include="Images\video1.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\login_background.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\patient.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\calendar.png" />
+    <Resource Include="Images\message.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\backward.png" />
+    <Resource Include="Images\forward.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\play.png" />
+    <Content Include="XML\TreatmentsList.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VideoTherapy-Objects\VideoTherapy-Objects.csproj">
+      <Project>{26139272-4dab-4fbe-bbf1-40c2b409817d}</Project>
+      <Name>VideoTherapy-Objects</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

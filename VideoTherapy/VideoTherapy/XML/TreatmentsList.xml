@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<Treatments>
+
+  <Treatment num="1">
+    <Exercise>
+      <ExerciseNumber>1</ExerciseNumber>
+      <ExerciseName>Lower Limbs Aerobic</ExerciseName>
+      <Repetitions>5</Repetitions>
+      <ExerciseCompleted>3</ExerciseCompleted>
+      <LastViewed>31.8.2015</LastViewed>
+      <IsPlayed>True</IsPlayed>
+      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
+    </Exercise>
+  
+    <Exercise>
+      <ExerciseNumber>2</ExerciseNumber>
+      <ExerciseName>Lower Limbs Aerobic</ExerciseName>
+      <Repetitions>6</Repetitions>
+      <ExerciseCompleted>3</ExerciseCompleted>
+      <LastViewed>31.8.2015</LastViewed>
+      <IsPlayed>True</IsPlayed>
+      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
+    </Exercise>
+
+    <Exercise>
+      <ExerciseNumber>3</ExerciseNumber>
+      <ExerciseName>Lower Limbs Aerobic</ExerciseName>
+      <Repetitions>5</Repetitions>
+      <ExerciseCompleted>4</ExerciseCompleted>
+      <LastViewed>31.8.2015</LastViewed>
+      <IsPlayed>True</IsPlayed>
+      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
+    </Exercise>
+    
+    <Exercise>
+      <ExerciseNumber>4</ExerciseNumber>
+      <ExerciseName>Lower Limbs Aerobic</ExerciseName>
+      <Repetitions>2</Repetitions>
+      <ExerciseCompleted>0</ExerciseCompleted>
+      <LastViewed>31.8.2015</LastViewed>
+      <IsPlayed>True</IsPlayed>
+      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
+    </Exercise>
+    
+    <Exercise>
+      <ExerciseNumber>5</ExerciseNumber>
+      <ExerciseName>Lower Limbs Aerobic</ExerciseName>
+      <Repetitions>2</Repetitions>
+      <ExerciseCompleted>0</ExerciseCompleted>
+      <LastViewed>31.8.2015</LastViewed>
+      <IsPlayed>False</IsPlayed>
+      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
+    </Exercise>
+    
+    <Exercise>
+      <ExerciseNumber>6</ExerciseNumber>
+      <ExerciseName>Lower Limbs Aerobic</ExerciseName>
+      <Repetitions>2</Repetitions>
+      <ExerciseCompleted>0</ExerciseCompleted>
+      <LastViewed>31.8.2015</LastViewed>
+      <IsPlayed>False</IsPlayed>
+      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
+    </Exercise>
+  
+  </Treatment>
+  
+
+  
+  <Treatment num="2">
+    <Exercise>
+      <ExerciseNumber>1</ExerciseNumber>
+      <ExerciseName>Squat</ExerciseName>
+      <Repetitions>10</Repetitions>
+      <ExerciseCompleted>3</ExerciseCompleted>
+      <LastViewed>31.8.2015</LastViewed>
+      <IsPlayed>True</IsPlayed>
+      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
+    </Exercise>
+  
+    <Exercise>
+      <ExerciseNumber>2</ExerciseNumber>
+      <ExerciseName>Squat</ExerciseName>
+      <Repetitions>8</Repetitions>
+      <ExerciseCompleted>6</ExerciseCompleted>
+      <LastViewed>31.8.2015</LastViewed>
+      <IsPlayed>True</IsPlayed>
+      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
+    </Exercise>
+
+    <Exercise>
+      <ExerciseNumber>3</ExerciseNumber>
+      <ExerciseName>Squat</ExerciseName>
+      <Repetitions>2</Repetitions>
+      <ExerciseCompleted>3</ExerciseCompleted>
+      <LastViewed>31.8.2015</LastViewed>
+      <IsPlayed>True</IsPlayed>
+      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
+    </Exercise>
+    
+    <Exercise>
+      <ExerciseNumber>4</ExerciseNumber>
+      <ExerciseName>Squat</ExerciseName>
+      <Repetitions>2</Repetitions>
+      <ExerciseCompleted>0</ExerciseCompleted>
+      <LastViewed>31.8.2015</LastViewed>
+      <IsPlayed>False</IsPlayed>
+      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
+    </Exercise>
+       
+  </Treatment>
+
+
+  <Treatment num="3">
+    <Exercise>
+      <ExerciseNumber>1</ExerciseNumber>
+      <ExerciseName>Legs and lower back</ExerciseName>
+      <Repetitions>4</Repetitions>
+      <ExerciseCompleted>3</ExerciseCompleted>
+      <LastViewed>31.8.2015</LastViewed>
+      <IsPlayed>True</IsPlayed>
+      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
+    </Exercise>
+  
+    <Exercise>
+      <ExerciseNumber>2</ExerciseNumber>
+      <ExerciseName>Legs and lower back</ExerciseName>
+      <Repetitions>6</Repetitions>
+      <ExerciseCompleted>3</ExerciseCompleted>
+      <LastViewed>31.8.2015</LastViewed>
+      <IsPlayed>True</IsPlayed>
+      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
+    </Exercise>
+
+    <Exercise>
+      <ExerciseNumber>3</ExerciseNumber>
+      <ExerciseName>Legs and lower back</ExerciseName>
+      <Repetitions>2</Repetitions>
+      <ExerciseCompleted>0</ExerciseCompleted>
+      <LastViewed>31.8.2015</LastViewed>
+      <IsPlayed>False</IsPlayed>
+      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
+    </Exercise>
+    
+    <Exercise>
+      <ExerciseNumber>4</ExerciseNumber>
+      <ExerciseName>Legs and lower back</ExerciseName>
+      <Repetitions>2</Repetitions>
+      <ExerciseCompleted>0</ExerciseCompleted>
+      <LastViewed>31.8.2015</LastViewed>
+      <IsPlayed>False</IsPlayed>
+      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
+    </Exercise>
+    
+    <Exercise>
+      <ExerciseNumber>5</ExerciseNumber>
+      <ExerciseName>Legs and lower back</ExerciseName>
+      <Repetitions>2</Repetitions>
+      <ExerciseCompleted>0</ExerciseCompleted>
+      <LastViewed>31.8.2015</LastViewed>
+      <IsPlayed>False</IsPlayed>
+      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
+    </Exercise>
+  
+  </Treatment>
+    
+    
+</Treatments>

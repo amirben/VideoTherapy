@@ -17,7 +17,7 @@
             </Grid.Background>
         </Grid>
 
-        <local:LoginDialog x:Name="LoginDialog"/>
+        <local:LoginDialog x:Name="LoginDialog" Visibility="Hidden"/>
 
 
     </Grid>

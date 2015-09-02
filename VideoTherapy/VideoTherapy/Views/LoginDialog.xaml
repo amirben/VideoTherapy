@@ -8,7 +8,7 @@
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="root">
 
-    <Grid >
+    <Grid Visibility="{Binding Visibility}">
         <Border Background="#90000000" Visibility="{Binding Visibility}">
             <Border  BorderThickness="1" CornerRadius="10,10,10,10" VerticalAlignment="Center"
 					HorizontalAlignment="Center">
