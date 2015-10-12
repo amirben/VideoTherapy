@@ -1,0 +1,115 @@
+﻿<UserControl x:Class="VideoTherapy.UC_TreatmentSelection"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VideoTherapy"
+             xmlns:mv="clr-namespace:VideoTherapy.Model_View"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    
+    
+
+    <StackPanel x:Name="TreatmentSelection" Orientation="Vertical" Background="#7F000000" Margin="15,15,7,15" >
+            
+        <Grid  HorizontalAlignment="Stretch" Height="80"  >
+                <Button x:Name="BackwardBtn" HorizontalAlignment="Left" Height="45" Width="45" Margin="20,15,0,15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
+                    <Button.Content>
+                        <Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" Background="#4fc3f7" >
+                            <Image Source="..\Images\backward.png" Height="25" Width="25" ></Image>
+                        </Border>
+                    </Button.Content>
+                </Button>
+                <TextBlock x:Name="CurrentTreatmentLbl" HorizontalAlignment="Center" Text="Treatment #1" VerticalAlignment="Center" TextAlignment="Center" FontSize="58"  Margin="0,15"  Foreground="White" FontWeight="Bold" FontFamily="Roboto"/>
+                <!--Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}"-->
+
+                <Button x:Name="ForwardBtn" HorizontalAlignment="Right" Height="45" Width="45" Margin="0,15,20,15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" >
+                    <Button.Content>
+                        <Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" Background="#4fc3f7" >
+                            <Image Source="..\Images\forward.png" Height="25" Width="25" ></Image>
+                        </Border>
+                    </Button.Content>
+                </Button>
+        </Grid>
+            
+        <DockPanel x:Name="CalenderTimeline" Margin="10">
+            <ProgressBar x:Name="CalenderProgressBar" Margin="15,0" Height="4" Value="50" DockPanel.Dock="Top">
+                <ProgressBar.Template>
+                    <ControlTemplate>
+                        <Grid x:Name="Root">
+                            <Border Name="PART_Track"  BorderBrush="Black" BorderThickness="2" />
+                            <Border Name="PART_Indicator" BorderBrush="#ff8300" BorderThickness="2" HorizontalAlignment="Left" />
+                        </Grid>
+                    </ControlTemplate>
+                </ProgressBar.Template>
+            </ProgressBar>
+
+            <TextBlock x:Name="StartDate" Text="16.8.15" Foreground="White" FontFamily="Roboto" FontSize="16" DockPanel.Dock="Right" TextAlignment="Right" Margin="15,5,15,0"></TextBlock>
+            <TextBlock x:Name="EndDate" Text="9.8.15" Foreground="White" FontFamily="Roboto" FontSize="16" DockPanel.Dock="Left" Margin="15,5,15,0"></TextBlock>
+        </DockPanel>
+
+        <StackPanel x:Name="TreatmentScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
+            <ProgressBar x:Name="MotionQualityProgressBar" Margin="10,15,40,15">
+                <ProgressBar.Template>
+                    <ControlTemplate>
+                        <DockPanel>
+                            <Grid DockPanel.Dock="Top" Margin="8">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="67" />
+                                <mv:CircularProgress   Stroke="#4fc3f7" StrokeThickness="6" Height="180" Width="180" Margin="5" Value="67" HorizontalAlignment="Center"/>
+                            </Grid>
+
+                            <TextBlock DockPanel.Dock="Bottom" Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Motion Quality"/>
+                        </DockPanel>
+                    </ControlTemplate>
+                </ProgressBar.Template>
+            </ProgressBar>
+
+            <ProgressBar x:Name="RepetitionsProgressBar" Margin="40,15,10,15">
+                <ProgressBar.Template>
+                    <ControlTemplate>
+                        <DockPanel>
+                            <Grid DockPanel.Dock="Top" Margin="8">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="91" />
+                                <mv:CircularProgress Stroke="#80c683" StrokeThickness="6" Height="180" Width="180" Margin="5" Value="91" HorizontalAlignment="Center"/>
+                            </Grid>
+
+                            <TextBlock DockPanel.Dock="Bottom" Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Repetitions"/>
+                        </DockPanel>
+                    </ControlTemplate>
+                </ProgressBar.Template>
+            </ProgressBar>
+        </StackPanel>
+
+        <StackPanel x:Name="TherapistInfo" Background="Black" Margin="15,35,15,15">
+            <StackPanel.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="FontFamily" Value="Roboto"/>
+                    <Setter Property="Margin" Value="5,5,0,0"/>
+                </Style>
+            </StackPanel.Resources>
+            
+            <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,5,10,-5">
+                <Image Source="..\Images\therapist.JPG" Height="140" Width="140" Margin="5,5,5,0" >
+                    <Image.Clip>
+                        <EllipseGeometry Center="60,60" RadiusX="60" RadiusY="60" />
+                    </Image.Clip>
+                </Image>
+                
+                <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0,15,0,0">
+                    <TextBlock Text="Dr. Gibson" FontSize="20" FontWeight="Bold" />
+                    <TextBlock Text="Physical Therapist" FontSize="18"/>
+                    <TextBlock Text="Your Therapist Since | 7.5.15" Opacity="0.5" FontSize="16"/>
+                </StackPanel>
+            </StackPanel>
+
+            <Line HorizontalAlignment="Stretch"  Stroke="White" Margin="10,0" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"  StrokeThickness="1" />
+
+            <Grid  Margin="10,5,10,25">
+                <TextBlock FontFamily="Roboto" FontSize="20" TextWrapping="Wrap" TextAlignment="Left" Foreground="White" 
+                           Text="This treatment is the first sterp in you road to success, bla bla bla blabla blabla blabla blabla blabla bla" />
+            </Grid>
+        </StackPanel>
+    </StackPanel>
+        
+</UserControl>

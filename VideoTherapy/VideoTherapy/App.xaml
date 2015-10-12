@@ -4,6 +4,14 @@
              xmlns:local="clr-namespace:VideoTherapy"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="{x:Type UserControl}">
+            <Setter Property="FontFamily" Value="Roboto" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+
+        <Style TargetType="{x:Type Window}">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+               
     </Application.Resources>
 </Application>

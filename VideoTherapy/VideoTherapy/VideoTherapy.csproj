@@ -38,6 +38,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -57,14 +58,61 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ExerciseView.xaml.cs">
+      <DependentUpon>ExerciseView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model-View\CircularProgress.cs" />
+    <Compile Include="TrainingMenu.xaml.cs">
+      <DependentUpon>TrainingMenu.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TreatmentMenu.xaml.cs">
       <DependentUpon>TreatmentMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\TrainingValueToColorConvert.cs" />
+    <Compile Include="Views\TrainingMenu\UC_ExerciseSelection.xaml.cs">
+      <DependentUpon>UC_ExerciseSelection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TrainingMenu\UC_TrainingSelection.xaml.cs">
+      <DependentUpon>UC_TrainingSelection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_TrainingProgramSelection.xaml.cs">
+      <DependentUpon>UC_TrainingProgramSelection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_TreatmentSelection.xaml.cs">
+      <DependentUpon>UC_TreatmentSelection.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginDialog.xaml.cs">
       <DependentUpon>LoginDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UC_UserInfo.xaml.cs">
+      <DependentUpon>UC_UserInfo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="XML\ObjectReader.cs" />
+    <Page Include="ExerciseView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TrainingMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="TreatmentMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TrainingMenu\UC_ExerciseSelection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TrainingMenu\UC_TrainingSelection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UC_TrainingProgramSelection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UC_TreatmentSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -84,6 +132,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\UC_UserInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -133,6 +185,14 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\play.png" />
+    <Resource Include="Images\city_sunny_background.jpg" />
+    <Resource Include="Images\therapist.JPG" />
+    <Resource Include="Images\patient.jpeg" />
+    <Resource Include="Images\check.png" />
+    <Resource Include="Images\pause.png" />
+    <Resource Include="Images\rewind.png" />
+    <Resource Include="Images\next.png" />
+    <Resource Include="Images\go.png" />
     <Content Include="XML\TreatmentsList.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -142,6 +202,10 @@
       <Project>{26139272-4dab-4fbe-bbf1-40c2b409817d}</Project>
       <Name>VideoTherapy-Objects</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\ExerciseScreen\" />
+    <Folder Include="Views\TreatmentMenu\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

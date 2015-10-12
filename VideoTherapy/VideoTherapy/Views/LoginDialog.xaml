@@ -21,9 +21,9 @@
                     <Image Source="/images/patient.png" Height="78" VerticalAlignment="Bottom" Margin="0,0,-3.4,189.6"/>
 
                     <Label Content="Email" Margin="10,180,10,163.2"/>
-                    <TextBox Margin="10,211,10,140.2" Height="18"></TextBox>
+                    <TextBox x:Name="emailTxt" Margin="10,211,10,140.2" Height="18"></TextBox>
                     <Label Content="Password" Margin="10,234,0,110.2"/>
-                    <PasswordBox Margin="10,259,10,92.2" Height="18"></PasswordBox>
+                    <PasswordBox x:Name="passwordTxt" Margin="10,259,10,92.2" Height="18"></PasswordBox>
                     <CheckBox Margin="10,282,0,65.2">Remember Me!</CheckBox>
                     <Button Name="LoginBtn" Content="Login" Margin="78,309,78,37.2" Background="LightGreen" Click="LoginBtn_Click" />
                     <TextBlock  Margin="78,332,78,10.2">

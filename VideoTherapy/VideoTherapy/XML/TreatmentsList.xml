@@ -3,166 +3,206 @@
 <Treatments>
 
   <Treatment num="1">
-    <Exercise>
-      <ExerciseNumber>1</ExerciseNumber>
-      <ExerciseName>Lower Limbs Aerobic</ExerciseName>
+    <Training>
+      <TrainingNumber>1</TrainingNumber>
+      <TrainingName>Lower Limbs Aerobic</TrainingName>
       <Repetitions>5</Repetitions>
-      <ExerciseCompleted>3</ExerciseCompleted>
-      <LastViewed>31.8.2015</LastViewed>
-      <IsPlayed>True</IsPlayed>
-      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
-    </Exercise>
-  
-    <Exercise>
-      <ExerciseNumber>2</ExerciseNumber>
-      <ExerciseName>Lower Limbs Aerobic</ExerciseName>
-      <Repetitions>6</Repetitions>
-      <ExerciseCompleted>3</ExerciseCompleted>
-      <LastViewed>31.8.2015</LastViewed>
-      <IsPlayed>True</IsPlayed>
-      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
-    </Exercise>
+      <TrainingCompleted>3</TrainingCompleted>
+      <LastViewed>10.8.2015</LastViewed>
+      <TrainingThumbs>..\images\video1.jpg</TrainingThumbs>
 
-    <Exercise>
-      <ExerciseNumber>3</ExerciseNumber>
-      <ExerciseName>Lower Limbs Aerobic</ExerciseName>
+      <ExerciseList>
+        <Exercise>
+          <ExerciseNum>1</ExerciseNum>
+          <ExerciseName>Body Posture</ExerciseName>
+          <Repetitions>5</Repetitions>
+          <ExerciseThumbs></ExerciseThumbs>
+          <VideoPath></VideoPath>
+        </Exercise>
+      
+        <Exercise>
+          <ExerciseNum>2</ExerciseNum>
+          <ExerciseName>Body Posture</ExerciseName>
+          <Repetitions>5</Repetitions>
+          <ExerciseThumbs></ExerciseThumbs>
+          <VideoPath></VideoPath>
+        </Exercise>
+            
+        <Exercise>
+          <ExerciseNum>3</ExerciseNum>
+          <ExerciseName>Body Posture</ExerciseName>
+          <Repetitions>5</Repetitions>
+          <ExerciseThumbs></ExerciseThumbs>
+          <VideoPath></VideoPath>
+        </Exercise>
+            
+        <Exercise>
+          <ExerciseNum>4</ExerciseNum>
+          <ExerciseName>Body Posture</ExerciseName>
+          <Repetitions>5</Repetitions>
+          <ExerciseThumbs></ExerciseThumbs>
+          <VideoPath></VideoPath>
+        </Exercise>
+      
+        <Exercise>
+          <ExerciseNum>5</ExerciseNum>
+          <ExerciseName>Body Posture</ExerciseName>
+          <Repetitions>5</Repetitions>
+          <ExerciseThumbs></ExerciseThumbs>
+          <VideoPath></VideoPath>
+        </Exercise>
+      </ExerciseList>
+    </Training>
+  
+    <Training>
+      <TrainingNumber>2</TrainingNumber>
+      <TrainingName>Lower Limbs Aerobic</TrainingName>
+      <Repetitions>6</Repetitions>
+      <TrainingCompleted>3</TrainingCompleted>
+      <LastViewed>10.8.2015</LastViewed>
+      <TrainingThumbs>..\images\video1.jpg</TrainingThumbs>
+    </Training>
+
+    <Training>
+      <TrainingNumber>3</TrainingNumber>
+      <TrainingName>Lower Limbs Aerobic</TrainingName>
       <Repetitions>5</Repetitions>
-      <ExerciseCompleted>4</ExerciseCompleted>
+      <TrainingCompleted>4</TrainingCompleted>
+      <LastViewed>10.8.2015</LastViewed>
+      <IsPlayed>True</IsPlayed>
+      <TrainingThumbs>..\images\video1.jpg</TrainingThumbs>
+    </Training>
+    
+    <Training>
+      <TrainingNumber>4</TrainingNumber>
+      <TrainingName>Lower Limbs Aerobic</TrainingName>
+      <Repetitions>2</Repetitions>
+      <TrainingCompleted>2</TrainingCompleted>
       <LastViewed>31.8.2015</LastViewed>
       <IsPlayed>True</IsPlayed>
-      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
-    </Exercise>
+      <TrainingThumbs>..\images\video1.jpg</TrainingThumbs>
+    </Training>
     
-    <Exercise>
-      <ExerciseNumber>4</ExerciseNumber>
-      <ExerciseName>Lower Limbs Aerobic</ExerciseName>
+    <Training>
+      <TrainingNumber>5</TrainingNumber>
+      <TrainingName>Lower Limbs Aerobic</TrainingName>
       <Repetitions>2</Repetitions>
-      <ExerciseCompleted>0</ExerciseCompleted>
-      <LastViewed>31.8.2015</LastViewed>
-      <IsPlayed>True</IsPlayed>
-      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
-    </Exercise>
-    
-    <Exercise>
-      <ExerciseNumber>5</ExerciseNumber>
-      <ExerciseName>Lower Limbs Aerobic</ExerciseName>
-      <Repetitions>2</Repetitions>
-      <ExerciseCompleted>0</ExerciseCompleted>
+      <TrainingCompleted>0</TrainingCompleted>
       <LastViewed>31.8.2015</LastViewed>
       <IsPlayed>False</IsPlayed>
-      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
-    </Exercise>
+      <TrainingThumbs>..\images\video1.jpg</TrainingThumbs>
+    </Training>
     
-    <Exercise>
-      <ExerciseNumber>6</ExerciseNumber>
-      <ExerciseName>Lower Limbs Aerobic</ExerciseName>
+    <Training>
+      <TrainingNumber>6</TrainingNumber>
+      <TrainingName>Lower Limbs Aerobic</TrainingName>
       <Repetitions>2</Repetitions>
-      <ExerciseCompleted>0</ExerciseCompleted>
+      <TrainingCompleted>0</TrainingCompleted>
       <LastViewed>31.8.2015</LastViewed>
       <IsPlayed>False</IsPlayed>
-      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
-    </Exercise>
+      <TrainingThumbs>..\images\video1.jpg</TrainingThumbs>
+    </Training>
   
   </Treatment>
   
 
   
-  <Treatment num="2">
-    <Exercise>
-      <ExerciseNumber>1</ExerciseNumber>
-      <ExerciseName>Squat</ExerciseName>
+  <!--<Treatment num="2">
+    <Training>
+      <TrainingNumber>1</TrainingNumber>
+      <TrainingName>Squat</TrainingName>
       <Repetitions>10</Repetitions>
-      <ExerciseCompleted>3</ExerciseCompleted>
+      <TrainingCompleted>3</TrainingCompleted>
       <LastViewed>31.8.2015</LastViewed>
       <IsPlayed>True</IsPlayed>
-      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
-    </Exercise>
+      <TrainingThumbs>..\images\video1.jpg</TrainingThumbs>
+    </Training>
   
-    <Exercise>
-      <ExerciseNumber>2</ExerciseNumber>
-      <ExerciseName>Squat</ExerciseName>
+    <Training>
+      <TrainingNumber>2</TrainingNumber>
+      <TrainingName>Squat</TrainingName>
       <Repetitions>8</Repetitions>
-      <ExerciseCompleted>6</ExerciseCompleted>
+      <TrainingCompleted>6</TrainingCompleted>
       <LastViewed>31.8.2015</LastViewed>
       <IsPlayed>True</IsPlayed>
-      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
-    </Exercise>
+      <TrainingThumbs>..\images\video1.jpg</TrainingThumbs>
+    </Training>
 
-    <Exercise>
-      <ExerciseNumber>3</ExerciseNumber>
-      <ExerciseName>Squat</ExerciseName>
+    <Training>
+      <TrainingNumber>3</TrainingNumber>
+      <TrainingName>Squat</TrainingName>
       <Repetitions>2</Repetitions>
-      <ExerciseCompleted>3</ExerciseCompleted>
+      <TrainingCompleted>3</TrainingCompleted>
       <LastViewed>31.8.2015</LastViewed>
       <IsPlayed>True</IsPlayed>
-      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
-    </Exercise>
+      <TrainingThumbs>..\images\video1.jpg</TrainingThumbs>
+    </Training>
     
-    <Exercise>
-      <ExerciseNumber>4</ExerciseNumber>
-      <ExerciseName>Squat</ExerciseName>
+    <Training>
+      <TrainingNumber>4</TrainingNumber>
+      <TrainingName>Squat</TrainingName>
       <Repetitions>2</Repetitions>
-      <ExerciseCompleted>0</ExerciseCompleted>
+      <TrainingCompleted>0</TrainingCompleted>
       <LastViewed>31.8.2015</LastViewed>
       <IsPlayed>False</IsPlayed>
-      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
-    </Exercise>
+      <TrainingThumbs>..\images\video1.jpg</TrainingThumbs>
+    </Training>
        
   </Treatment>
 
 
   <Treatment num="3">
-    <Exercise>
-      <ExerciseNumber>1</ExerciseNumber>
-      <ExerciseName>Legs and lower back</ExerciseName>
+    <Training>
+      <TrainingNumber>1</TrainingNumber>
+      <TrainingName>Legs and lower back</TrainingName>
       <Repetitions>4</Repetitions>
-      <ExerciseCompleted>3</ExerciseCompleted>
+      <TrainingCompleted>3</TrainingCompleted>
       <LastViewed>31.8.2015</LastViewed>
       <IsPlayed>True</IsPlayed>
-      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
-    </Exercise>
+      <TrainingThumbs>..\images\video1.jpg</TrainingThumbs>
+    </Training>
   
-    <Exercise>
-      <ExerciseNumber>2</ExerciseNumber>
-      <ExerciseName>Legs and lower back</ExerciseName>
+    <Training>
+      <TrainingNumber>2</TrainingNumber>
+      <TrainingName>Legs and lower back</TrainingName>
       <Repetitions>6</Repetitions>
-      <ExerciseCompleted>3</ExerciseCompleted>
+      <TrainingCompleted>3</TrainingCompleted>
       <LastViewed>31.8.2015</LastViewed>
       <IsPlayed>True</IsPlayed>
-      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
-    </Exercise>
+      <TrainingThumbs>..\images\video1.jpg</TrainingThumbs>
+    </Training>
 
-    <Exercise>
-      <ExerciseNumber>3</ExerciseNumber>
-      <ExerciseName>Legs and lower back</ExerciseName>
+    <Training>
+      <TrainingNumber>3</TrainingNumber>
+      <TrainingName>Legs and lower back</TrainingName>
       <Repetitions>2</Repetitions>
-      <ExerciseCompleted>0</ExerciseCompleted>
+      <TrainingCompleted>0</TrainingCompleted>
       <LastViewed>31.8.2015</LastViewed>
       <IsPlayed>False</IsPlayed>
-      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
-    </Exercise>
+      <TrainingThumbs>..\images\video1.jpg</TrainingThumbs>
+    </Training>
     
-    <Exercise>
-      <ExerciseNumber>4</ExerciseNumber>
-      <ExerciseName>Legs and lower back</ExerciseName>
+    <Training>
+      <TrainingNumber>4</TrainingNumber>
+      <TrainingName>Legs and lower back</TrainingName>
       <Repetitions>2</Repetitions>
-      <ExerciseCompleted>0</ExerciseCompleted>
+      <TrainingCompleted>0</TrainingCompleted>
       <LastViewed>31.8.2015</LastViewed>
       <IsPlayed>False</IsPlayed>
-      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
-    </Exercise>
+      <TrainingThumbs>..\images\video1.jpg</TrainingThumbs>
+    </Training>
     
-    <Exercise>
-      <ExerciseNumber>5</ExerciseNumber>
-      <ExerciseName>Legs and lower back</ExerciseName>
+    <Training>
+      <TrainingNumber>5</TrainingNumber>
+      <TrainingName>Legs and lower back</TrainingName>
       <Repetitions>2</Repetitions>
-      <ExerciseCompleted>0</ExerciseCompleted>
+      <TrainingCompleted>0</TrainingCompleted>
       <LastViewed>31.8.2015</LastViewed>
       <IsPlayed>False</IsPlayed>
-      <ExerciseThumbs>images\video1.jpg</ExerciseThumbs>
-    </Exercise>
+      <TrainingThumbs>..\images\video1.jpg</TrainingThumbs>
+    </Training>
   
-  </Treatment>
+  </Treatment>-->
     
     
 </Treatments>

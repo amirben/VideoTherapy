@@ -21,14 +21,13 @@ namespace VideoTherapy.XML
                 var Query = Xdoc.Descendants("Treatment").Select(T => new Treatment()
                 {
                     TreatmentNumber = Int32.Parse(T.Attribute("num").Value),
-                    ExerciseList = (T.Descendants("Exercise").Select(EX => new Exercise() {
-                        ExerciseNumber = Int32.Parse(EX.Element("ExerciseNumber").Value),
-                        ExerciseName = EX.Element("ExerciseName").Value,
+                    TrainingList = (T.Descendants("Training").Select(EX => new Training() {
+                        TrainingNumber = Int32.Parse(EX.Element("TrainingNumber").Value),
+                        TrainingName = EX.Element("TrainingName").Value,
                         Repetitions = Int32.Parse(EX.Element("Repetitions").Value),
-                        ExerciseCompleted = Int32.Parse(EX.Element("ExerciseCompleted").Value),
+                        TrainingCompleted = Int32.Parse(EX.Element("TrainingCompleted").Value),
                         LastViewed = EX.Element("LastViewed").Value,
-                        IsPlayed = bool.Parse(EX.Element("IsPlayed").Value),
-                        ExerciseThumbs = EX.Element("ExerciseThumbs").Value
+                        TrainingThumbs = EX.Element("TrainingThumbs").Value
 
                     })).ToList()
                     
@@ -42,7 +41,8 @@ namespace VideoTherapy.XML
                 
             }
 
-           
         }
+
+
     }
 }

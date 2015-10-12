@@ -9,6 +9,6 @@ namespace VideoTherapy_Objects
     public class Treatment
     {
         public int TreatmentNumber { set; get; }
-        public List<Exercise> ExerciseList { set; get; }
+        public List<Training> TrainingList { set; get; }
     }
 }

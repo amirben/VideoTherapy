@@ -33,24 +33,39 @@ namespace VideoTherapy
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            // todo check if user is set the check box to "Rememeber me"
-            authenticated = true;
-            if (!authenticated)
-            {
-                //LoginDialog.ShowHandlerDialog();
-                LoginDialog ld = new LoginDialog();
-                DataContext = ld;
-                OpenningWindow.Children.Add(ld);
+            //LoginDialog ld = new LoginDialog();
 
-            }
-            else
-            {
-                // todo load treatment window
-                OpenningWindow.Children.Clear();
-                OpenningWindow.Background = null;
-                OpenningWindow.Children.Add(new TreatmentMenu());
-            }
+            //ld.SetMainWindow(this);
+            //DataContext = ld;
+            //OpenningWindow.Children.Add(ld);
 
+            //OpenTreatmentWindow();
+
+            //OpenTrainingWindow();
+
+
+            OpenExerciseWindow();
+        }
+
+        private void OpenExerciseWindow()
+        {
+            OpenningWindow.Children.Clear();
+            OpenningWindow.Background = null;
+            OpenningWindow.Children.Add(new ExerciseView());
+        }
+
+        private void OpenTrainingWindow()
+        {
+            OpenningWindow.Children.Clear();
+            OpenningWindow.Background = null;
+            OpenningWindow.Children.Add(new TrainingMenu());
+        }
+
+        public void OpenTreatmentWindow()
+        {
+            OpenningWindow.Children.Clear();
+            OpenningWindow.Background = null;
+            OpenningWindow.Children.Add(new TreatmentMenu());
         }
     }
 }
