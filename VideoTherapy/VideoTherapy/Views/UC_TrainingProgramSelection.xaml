@@ -9,6 +9,47 @@
              d:DesignHeight="300" d:DesignWidth="300">
 
     <UserControl.Resources>
+
+        <!--Styling the scrollbar-->
+        <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
+            <Setter Property="Panel.ZIndex" Value="1" />
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="Opacity" Value="0.5" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border Name="Border" CornerRadius="1" Background="White" BorderBrush="Transparent" BorderThickness="1" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
+            <Grid>
+                <Border Grid.RowSpan="3" Background="Transparent" BorderBrush="Transparent" />
+                <Track Name="PART_Track" Grid.Row="1" IsDirectionReversed="true">
+                    <Track.Thumb>
+                        <Thumb Style="{StaticResource ScrollBarThumb}" Margin="6,1,6,1"/>
+                    </Track.Thumb>
+                </Track>
+            </Grid>
+        </ControlTemplate>
+
+        <Style TargetType="ScrollBar">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Vertical">
+                    <Setter Property="Width" Value="30"/>
+                    <Setter Property="Height" Value="Auto" />
+                    <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        
         <Style TargetType="Border" x:Key="BorderStyle">
             <Setter Property="BorderBrush" Value="White"></Setter>
             <Style.Triggers>
@@ -75,21 +116,27 @@
     </UserControl.Resources>
 
 
-    <StackPanel x:Name="TrainingProgramSelection" Orientation="Vertical" Background="#7F000000" Margin="7,15,7,15" >
+    <Grid x:Name="TrainingProgramSelection" Background="#7F000000" Margin="7,15,7,15" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="130"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Orientation="Vertical" Grid.Row="0">
+            <Label HorizontalAlignment="Left" FontFamily="Roboto" FontSize="36" Foreground="White"  FontWeight="Bold" Margin="26,20,26,0">Training Program</Label>
 
-        <Label HorizontalAlignment="Left" FontFamily="Roboto" FontSize="36" Foreground="White"  FontWeight="Bold" Margin="26,20,26,0">Training Program</Label>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"  Margin="26,10">
+                <Border Background="#4fc3f7" BorderThickness="2" CornerRadius="20" Height="34" Width="34">
+                    <TextBlock Text="i" FontFamily="Roboto" FontSize="20"  Foreground="Gray" TextAlignment="Center" Margin="-2,3,-2.4,2.6"/>
+                </Border>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"  Margin="26,10">
-            <Border Background="#4fc3f7" BorderThickness="2" CornerRadius="20" Height="34" Width="34">
-                <TextBlock Text="i" FontFamily="Roboto" FontSize="20"  Foreground="Gray" TextAlignment="Center" Margin="-2,3,-2.4,2.6"/>
-            </Border>
-
-            <Label Foreground="White" FontFamily="Roboto" FontSize="30">Select a training session to start</Label>
+                <Label Foreground="White" FontFamily="Roboto" FontSize="30">Select a training session to start</Label>
+            </StackPanel>
         </StackPanel>
+        
 
         <!--Treatment List-->
-        <ListBox x:Name="TreatmentTrainingList"  BorderBrush="Transparent" Background="Transparent" Margin="26,15" ItemsSource="{Binding}" ItemTemplate="{DynamicResource TrainingImageDataTemplate}" ItemsPanel="{DynamicResource TrainingImageItemsPanelTemplate}" />
-
-
-    </StackPanel>
+        <ListBox x:Name="TreatmentTrainingList" Grid.Row="1" BorderBrush="Transparent" Background="Transparent" Margin="26,15" ItemsSource="{Binding}" ItemTemplate="{DynamicResource TrainingImageDataTemplate}" ItemsPanel="{DynamicResource TrainingImageItemsPanelTemplate}" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+    </Grid>
+    
 </UserControl>

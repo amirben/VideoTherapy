@@ -39,12 +39,12 @@ namespace VideoTherapy
             //DataContext = ld;
             //OpenningWindow.Children.Add(ld);
 
-            //OpenTreatmentWindow();
+            OpenTreatmentWindow();
 
             //OpenTrainingWindow();
 
 
-            OpenExerciseWindow();
+            //OpenExerciseWindow();
         }
 
         private void OpenExerciseWindow()
