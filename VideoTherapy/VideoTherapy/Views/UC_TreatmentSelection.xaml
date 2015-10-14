@@ -39,6 +39,7 @@
                         <Grid x:Name="Root">
                             <Border Name="PART_Track"  BorderBrush="Black" BorderThickness="2" />
                             <Border Name="PART_Indicator" BorderBrush="#ff8300" BorderThickness="2" HorizontalAlignment="Left" />
+                            <Ellipse Width="10" Height="10" Fill="Yellow"  VerticalAlignment="Center" ></Ellipse>
                         </Grid>
                     </ControlTemplate>
                 </ProgressBar.Template>
@@ -55,7 +56,9 @@
                         <DockPanel>
                             <Grid DockPanel.Dock="Top" Margin="8">
                                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="67" />
-                                <mv:CircularProgress   Stroke="#4fc3f7" StrokeThickness="6" Height="180" Width="180" Margin="5" Value="67" HorizontalAlignment="Center"/>
+                                <mv:CircularProgress   Stroke="#7F000000" StrokeThickness="6" Height="180" Width="180" Margin="5" Value="100" HorizontalAlignment="Center"/>
+                                <mv:CircularProgress   Stroke="#4fc3f7" StrokeThickness="6" Height="180" Width="180" Margin="5" Value="67" HorizontalAlignment="Center" isCircle="True"/>
+                                
                             </Grid>
 
                             <TextBlock DockPanel.Dock="Bottom" Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Motion Quality"/>
@@ -70,7 +73,9 @@
                         <DockPanel>
                             <Grid DockPanel.Dock="Top" Margin="8">
                                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="91" />
-                                <mv:CircularProgress Stroke="#80c683" StrokeThickness="6" Height="180" Width="180" Margin="5" Value="91" HorizontalAlignment="Center"/>
+                                <mv:CircularProgress Stroke="#7F000000" StrokeThickness="6" Height="180" Width="180" Margin="5" Value="100" HorizontalAlignment="Center" isCircle="False"/>
+                                <mv:CircularProgress Stroke="#80c683" StrokeThickness="6" Height="180" Width="180" Margin="5" Value="91" HorizontalAlignment="Center" isCircle="True"/>
+                                
                             </Grid>
 
                             <TextBlock DockPanel.Dock="Bottom" Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Repetitions"/>

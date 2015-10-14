@@ -35,6 +35,8 @@ namespace VideoTherapy.Model_View
             set { SetValue(ValueProperty, value); }
         }
 
+        public Boolean isCircle { set; get; }
+
         // DependencyProperty - Value (0 - 100)
         private static FrameworkPropertyMetadata valueMetadata =
                 new FrameworkPropertyMetadata(
@@ -89,8 +91,45 @@ namespace VideoTherapy.Model_View
                         true,    // isStroked
                         false);
 
+                    if (isCircle)
+                    {
+                        //ctx.ArcTo(
+                        //new Point((RenderSize.Width / 2.0) + xEnd + 0.1,
+                        //          (RenderSize.Height / 2.0) - yEnd + 0.1),
+                        //new Size(4, 4),
+                        //20.0,     // rotationAngle
+                        //true,   // greater than 180 deg?
+                        //SweepDirection.Clockwise,
+                        //true,    // isStroked
+                        //false);
+                        double ControlPointRatio = (Math.Sqrt(2) - 1) * 4 / 3;
+                        double newXEnd = (RenderSize.Width / 2.0) + xEnd;
+                        double newYEnd = (RenderSize.Height / 2.0) - yEnd;
+                        int radius = 3;
+
+                        var x0 = newXEnd - radius;
+                        var x1 = newXEnd - radius * ControlPointRatio;
+                        var x2 = newXEnd;
+                        var x3 = newXEnd + radius * ControlPointRatio;
+                        var x4 = newXEnd + radius;
+
+                        var y0 = newYEnd - radius;
+                        var y1 = newYEnd - radius * ControlPointRatio;
+                        var y2 = newYEnd;
+                        var y3 = newYEnd + radius * ControlPointRatio;
+                        var y4 = newYEnd + radius;
+
+                        ctx.BeginFigure(new Point(x2, y0), true, true);
+                        ctx.BezierTo(new Point(x3, y0), new Point(x4, y1), new Point(x4, y2), true, true);
+                        ctx.BezierTo(new Point(x4, y3), new Point(x3, y4), new Point(x2, y4), true, true);
+                        ctx.BezierTo(new Point(x1, y4), new Point(x0, y3), new Point(x0, y2), true, true);
+                        ctx.BezierTo(new Point(x0, y1), new Point(x1, y0), new Point(x2, y0), true, true);
+                    }
+                    
+
+
                     //ctx.LineTo(new Point((RenderSize.Width / 2.0) + xEnd, (RenderSize.Height / 2.0) - yEnd), true, true);
-         
+
                 }
 
                 return geom;

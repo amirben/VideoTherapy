@@ -7,92 +7,123 @@
              xmlns:mv="clr-namespace:VideoTherapy.Model_View"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
+    <Grid>
+        <MediaElement Source="C:\Users\amirb\Desktop\Afeka\VideoTherapy\Prototype\videos\lower_limbs_aerobic.mp4" Stretch="Fill" />
+            <Grid>
 
-    <DockPanel>
-        <StackPanel x:Name="VideoControls" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20">
-            <Border CornerRadius="30" Height="60" Width="60" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#4fc3f7" >
-                <Image x:Name="PrevVideo"  Source="Images\rewind.png" Height="20" Width="20" ></Image>
-            </Border>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                <StackPanel x:Name="WaitForStartLbl" Background="#7F000000" Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
+                    <Border Background="#4fc3f7" BorderThickness="2" CornerRadius="20" Height="34" Width="34" Margin="15,5,5,5">
+                        <TextBlock Text="i" FontFamily="Roboto" FontSize="20"  Foreground="#7F000000" TextAlignment="Center" Margin="5"/>
+                    </Border>
 
-            <Border CornerRadius="42" Height="85" Width="85" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#4fc3f7" >
-                <Image x:Name="PausePlayVideo"  Source="Images\pause.png" Height="50" Width="50" ></Image>
-            </Border>
-            <Border CornerRadius="30" Height="60" Width="60" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#4fc3f7" >
-                <Image x:Name="NextVideo"  Source="Images\next.png" Height="20" Width="20" />
-            </Border>
+                    <Label Foreground="White" FontFamily="Roboto" FontSize="20" Margin="5,15,15,15">Place your body on the figure to start</Label>
+                </StackPanel>
+                <StackPanel x:Name="VideoControls" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20">
+                    <Border CornerRadius="30" Height="60" Width="60" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
+                        <Image x:Name="PrevVideo"  Source="Images\rewind.png" Height="20" Width="20" ></Image>
+                    </Border>
 
-        </StackPanel>
+                    <Border CornerRadius="42" Height="85" Width="85" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
+                        <Image x:Name="PausePlayVideo"  Source="Images\pause.png" Height="50" Width="50" ></Image>
+                    </Border>
+                    <Border CornerRadius="30" Height="60" Width="60" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
+                        <Image x:Name="NextVideo"  Source="Images\next.png" Height="20" Width="20" />
+                    </Border>
 
-        <StackPanel x:Name="ExerciseDetailsAndStatus" Orientation="Vertical" DockPanel.Dock="Left" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20" >
+                </StackPanel>
+                
+            </StackPanel>
+                
 
-            <StackPanel x:Name="ExerciseDetails" Background="Black" Width="340" Height="320" Margin="15,0,15,15">
-                <Grid HorizontalAlignment="Stretch" Height="50"  >
-                    <Button x:Name="BackwardBtn" HorizontalAlignment="Left" Height="28" Width="28" Margin="10,10,0,5" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
-                        <Button.Content>
-                            <Border CornerRadius="20" Height="26" Width="26" Margin="0" BorderBrush="Transparent" BorderThickness="0" Background="#4fc3f7" >
-                                <Image Source="Images\backward.png" Height="16" Width="16" ></Image>
-                            </Border>
-                        </Button.Content>
-                    </Button>
-                    <TextBlock x:Name="CurrentTrainingLbl" HorizontalAlignment="Stretch" Text="Training #1" VerticalAlignment="Top" TextAlignment="Left" FontSize="24"  Margin="50,10,0.2,0"  Foreground="White" FontWeight="Bold"/>
-                    <!--Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}"-->
-                </Grid>
-                <TextBlock x:Name="CurrentExerciseLbl" HorizontalAlignment="Stretch" Text="Exercise #1" VerticalAlignment="Center" TextAlignment="Left" FontSize="34"  Margin="50,0,0,0" FontWeight="Bold" Foreground="White" />
-                <TextBlock x:Name="ExerciseNameLbl" HorizontalAlignment="Stretch" Text="Body Posture" VerticalAlignment="Center" TextAlignment="Left" FontSize="20"  Margin="50,0,0,0" FontWeight="Bold" Foreground="White" />
+                
 
-                <StackPanel x:Name="TreatmentScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">
+            <StackPanel x:Name="ExerciseDetailsAndStatus" Orientation="Vertical" DockPanel.Dock="Left" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20" >
 
-                    <ProgressBar x:Name="OverallMotionQualityProgressBar" Margin="15,14,30,20">
+                <StackPanel x:Name="ExerciseDetails" Background="#7F000000" Width="360" Height="320" Margin="15,0,15,15">
+                    <Grid HorizontalAlignment="Stretch" Height="50"  >
+                        <Button x:Name="BackwardBtn" HorizontalAlignment="Left" Height="28" Width="28" Margin="10,10,0,5" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
+                            <Button.Content>
+                                <Border CornerRadius="20" Height="26" Width="26" Margin="0" BorderBrush="Transparent" BorderThickness="0" Background="#4fc3f7" >
+                                    <Image Source="Images\backward.png" Height="16" Width="16" ></Image>
+                                </Border>
+                            </Button.Content>
+                        </Button>
+                        <TextBlock x:Name="CurrentTrainingLbl" HorizontalAlignment="Stretch" Text="Training #1" VerticalAlignment="Top" TextAlignment="Left" FontSize="24"  Margin="50,10,0.2,0"  Foreground="White" FontWeight="Bold"/>
+                        <!--Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}"-->
+                    </Grid>
+                    <TextBlock x:Name="CurrentExerciseLbl" HorizontalAlignment="Stretch" Text="Exercise #1" VerticalAlignment="Center" TextAlignment="Left" FontSize="34"  Margin="50,0,0,0" FontWeight="Bold" Foreground="White" />
+                    <TextBlock x:Name="ExerciseNameLbl" HorizontalAlignment="Stretch" Text="Body Posture" VerticalAlignment="Center" TextAlignment="Left" FontSize="20"  Margin="50,0,0,0" FontWeight="Bold" Foreground="White" />
+
+                    <StackPanel x:Name="TreatmentScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">
+
+                        <ProgressBar x:Name="OverallMotionQualityProgressBar" Margin="15,14,30,20">
+                            <ProgressBar.Template>
+                                <ControlTemplate>
+                                    <DockPanel>
+                                        <Grid DockPanel.Dock="Top" Margin="0,0,0,10">
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" Foreground="White" Text="93" />
+                                            <mv:CircularProgress   Stroke="#ff3f80" StrokeThickness="4" Height="100" Width="100" Margin="5" Value="93" HorizontalAlignment="Center"/>
+                                        </Grid>
+
+                                        <TextBlock DockPanel.Dock="Bottom" Foreground="White" FontFamily="Roboto" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Overall&#10;Motion Quality" TextAlignment="Center"/>
+                                    </DockPanel>
+                                </ControlTemplate>
+                            </ProgressBar.Template>
+                        </ProgressBar>
+
+                        <ProgressBar x:Name="ExerciseMotionQualityProgressBar" Margin="30,14,15,20">
+                            <ProgressBar.Template>
+                                <ControlTemplate>
+                                    <DockPanel>
+                                        <Grid DockPanel.Dock="Top" Margin="0,0,0,10">
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" Foreground="White" Text="67" />
+                                            <mv:CircularProgress   Stroke="#4fc3f7" StrokeThickness="4" Height="100" Width="100" Margin="5" Value="67" HorizontalAlignment="Center"/>
+                                        </Grid>
+
+                                        <TextBlock DockPanel.Dock="Bottom" Foreground="White" FontFamily="Roboto" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Exercise&#10;Motion Quality" TextAlignment="Center"/>
+                                    </DockPanel>
+                                </ControlTemplate>
+                            </ProgressBar.Template>
+                        </ProgressBar>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel x:Name="ExerciseStatus" Background="#7F000000" Width="360" Height="320" Margin="15">
+                    <ProgressBar x:Name="ExerciseRepetitionsProgressBar" Margin="15">
                         <ProgressBar.Template>
                             <ControlTemplate>
                                 <DockPanel>
-                                    <Grid DockPanel.Dock="Top" Margin="0,0,0,10">
-                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" Foreground="White" Text="93" />
-                                        <mv:CircularProgress   Stroke="#80c683" StrokeThickness="4" Height="100" Width="100" Margin="5" Value="93" HorizontalAlignment="Center"/>
+                                    <Grid DockPanel.Dock="Top" Margin="8">
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="65" Foreground="White" Text="4/5" />
+                                        <mv:CircularProgress   Stroke="#80c683" StrokeThickness="8" Height="200" Width="200" Margin="5" Value="80" HorizontalAlignment="Center"/>
                                     </Grid>
 
-                                    <TextBlock DockPanel.Dock="Bottom" Foreground="White" FontFamily="Roboto" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Overall&#10;Motion Quality" TextAlignment="Center"/>
-                                </DockPanel>
-                            </ControlTemplate>
-                        </ProgressBar.Template>
-                    </ProgressBar>
-
-                    <ProgressBar x:Name="ExerciseMotionQualityProgressBar" Margin="30,14,15,20">
-                        <ProgressBar.Template>
-                            <ControlTemplate>
-                                <DockPanel>
-                                    <Grid DockPanel.Dock="Top" Margin="0,0,0,10">
-                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" Foreground="White" Text="67" />
-                                        <mv:CircularProgress   Stroke="#4fc3f7" StrokeThickness="4" Height="100" Width="100" Margin="5" Value="67" HorizontalAlignment="Center"/>
-                                    </Grid>
-
-                                    <TextBlock DockPanel.Dock="Bottom" Foreground="White" FontFamily="Roboto" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Exercise&#10;Motion Quality" TextAlignment="Center"/>
+                                    <TextBlock DockPanel.Dock="Bottom" Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Exercise Repetitions" Margin="0,20,0,0"/>
                                 </DockPanel>
                             </ControlTemplate>
                         </ProgressBar.Template>
                     </ProgressBar>
                 </StackPanel>
+
             </StackPanel>
 
-            <StackPanel x:Name="ExerciseStatus" Background="Black" Width="340" Height="320" Margin="15">
-                <ProgressBar x:Name="ExerciseRepetitionsProgressBar" Margin="15">
-                    <ProgressBar.Template>
-                        <ControlTemplate>
-                            <DockPanel>
-                                <Grid DockPanel.Dock="Top" Margin="8">
-                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="65" Foreground="White" Text="4/5" />
-                                    <mv:CircularProgress   Stroke="#80c683" StrokeThickness="8" Height="200" Width="200" Margin="5" Value="80" HorizontalAlignment="Center"/>
-                                </Grid>
-
-                                <TextBlock DockPanel.Dock="Bottom" Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Exercise Repetitions" Margin="0,20,0,0"/>
-                            </DockPanel>
-                        </ControlTemplate>
-                    </ProgressBar.Template>
-                </ProgressBar>
-            </StackPanel>
-
-        </StackPanel>
+            <Border DockPanel.Dock="Right" Width="220" HorizontalAlignment="Right" VerticalAlignment="Top" Background="#7F000000" CornerRadius="45" Margin="15">
+                <DockPanel x:Name="UserProfile">
+                    
+                    <Image x:Name="UserImage" Source=".\Images\patient.jpeg" Margin="5" Height="80" Width="80" HorizontalAlignment="Right" DockPanel.Dock="Right" >
+                        <Image.Clip>
+                            <EllipseGeometry Center="40,40" RadiusX="40" RadiusY="40" />
+                        </Image.Clip>
+                    </Image>
+                    <TextBlock x:Name="UserName" Text="John Doe" HorizontalAlignment="Center" VerticalAlignment="Center" DockPanel.Dock="Right" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                </DockPanel>
+            </Border>
 
 
-    </DockPanel>
+
+
+            </Grid>
+    </Grid>
+    
 </UserControl>

@@ -50,7 +50,9 @@
                             <DockPanel>
                                 <Grid DockPanel.Dock="Top" Margin="8">
                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="60" Foreground="White" Text="67" />
-                                    <mv:CircularProgress   Stroke="#4fc3f7" StrokeThickness="8" Height="200" Width="200" Margin="5" Value="67" HorizontalAlignment="Center"/>
+                                    <mv:CircularProgress   Stroke="#7F000000" StrokeThickness="8" Height="200" Width="200" Margin="5" Value="100" HorizontalAlignment="Center" />
+                                    <mv:CircularProgress   Stroke="#4fc3f7" StrokeThickness="8" Height="200" Width="200" Margin="5" Value="67" HorizontalAlignment="Center" isCircle="True"/>
+                                    
                                 </Grid>
 
                                 <TextBlock DockPanel.Dock="Bottom" Foreground="White" FontFamily="Roboto" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Motion Quality"/>
@@ -65,7 +67,8 @@
                             <DockPanel>
                                 <Grid DockPanel.Dock="Top" Margin="8">
                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="60" Foreground="White" Text="91" />
-                                    <mv:CircularProgress Stroke="#80c683" StrokeThickness="8" Height="200" Width="200" Margin="5" Value="91" HorizontalAlignment="Center"/>
+                                    <mv:CircularProgress   Stroke="#7F000000" StrokeThickness="8" Height="200" Width="200" Margin="5" Value="100" HorizontalAlignment="Center" />
+                                    <mv:CircularProgress Stroke="#80c683" StrokeThickness="8" Height="200" Width="200" Margin="5" Value="91" HorizontalAlignment="Center" isCircle="True"/>
                                 </Grid>
 
                                 <TextBlock DockPanel.Dock="Bottom" Foreground="White" FontFamily="Roboto" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Repetitions"/>
