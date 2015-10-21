@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.Threading;
 using System.Windows.Threading;
 
+using VideoTherapy.Views;
 using VideoTherapy_Objects;
 
 namespace VideoTherapy
@@ -34,20 +35,7 @@ namespace VideoTherapy
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            //LoginDialog ld = new LoginDialog();
-
-            //ld.SetMainWindow(this);
-            //DataContext = ld;
-            //OpenningWindow.Children.Add(ld);
-
             OpenLoginPopUp();
-
-            //OpenTreatmentWindow();
-
-            //OpenTrainingWindow();
-
-
-            //OpenExerciseWindow();
         }
 
         private void OpenLoginPopUp()
@@ -65,23 +53,28 @@ namespace VideoTherapy
             OpenningWindow.Children.Add(new ExerciseView());
         }
 
-        private void OpenTrainingWindow()
+        public void OpenTrainingWindow(Patient _currentPatient, Training _selectedTraining)
         {
-            OpenningWindow.Children.Clear();
-            OpenningWindow.Background = null;
-            OpenningWindow.Children.Add(new TrainingMenu());
+            //OpenningWindow.Children.Clear();
+            //OpenningWindow.Background = null;
+
+            using (TrainingMenu _trainingMenu = new TrainingMenu(_currentPatient, _selectedTraining))
+            {
+                _trainingMenu.MainWindow = this;
+                this.Content = _trainingMenu;
+                //OpenningWindow.Children.Add(_trainingMenu);
+            }
+
         }
 
         public void OpenTreatmentWindow(Patient _currentPatient)
         {
-            OpenningWindow.Children.Clear();
-            OpenningWindow.Background = null;
+            //OpenningWindow.Background = null;
             using (TreatmentMenu _treatmentMenu = new TreatmentMenu(_currentPatient))
             {
-                OpenningWindow.Children.Add(_treatmentMenu);
+                _treatmentMenu.MainWindow = this;
+                this.Content = _treatmentMenu;
             }
-            //TreatmentMenu _treatmentMenu = new TreatmentMenu(_currentPatient);
-            //OpenningWindow.Children.Add(_treatmentMenu);
         }
     }
 }

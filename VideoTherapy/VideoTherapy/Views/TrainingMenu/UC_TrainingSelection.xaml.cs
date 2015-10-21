@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VideoTherapy_Objects;
+
 
 namespace VideoTherapy.Views.TrainingMenu
 {
@@ -20,9 +22,17 @@ namespace VideoTherapy.Views.TrainingMenu
     /// </summary>
     public partial class UC_TrainingSelection : UserControl
     {
-        public UC_TrainingSelection()
+        private Patient _currentPatient;
+        private Training _currentTraining;
+
+        public UC_TrainingSelection(Patient currentPatient, Training currentTraining)
         {
             InitializeComponent();
+
+            _currentPatient = currentPatient;
+            _currentTraining = currentTraining;
+
+            DataContext = _currentTraining;
         }
     }
 }

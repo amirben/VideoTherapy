@@ -16,7 +16,7 @@ using VideoTherapy.XML;
 using VideoTherapy_Objects;
 using VideoTherapy.Views;
 using VideoTherapy.Views.TreatmentMenu;
-
+using VideoTherapy.ServerConnections;
 
 namespace VideoTherapy
 {
@@ -26,9 +26,13 @@ namespace VideoTherapy
     public partial class TreatmentMenu : UserControl, IDisposable
     {
         public Patient _currentPatient { set; get; }
-        private UC_TreatmentSelection treatmentSelection;
-        private UC_TrainingProgramSelection trainingSeleciton;
-        private UC_UserInfo userInfo;
+        public MainWindow MainWindow { set; get; }
+
+        private UC_TreatmentSelection _treatmentSelection;
+        private UC_TrainingProgramSelection _trainingSeleciton;
+        private UC_UserInfo _userInfo;
+
+        public delegate void TrainingSelectedDelegate(Training _selectedTraining);
 
         public TreatmentMenu(Patient _currentPatient)
         {
@@ -40,23 +44,34 @@ namespace VideoTherapy
 
         private void TreatmentMenu_Loaded(object sender, RoutedEventArgs e)
         {
-            treatmentSelection = new UC_TreatmentSelection(_currentPatient.PatientTreatment);
-            trainingSeleciton = new UC_TrainingProgramSelection(_currentPatient.PatientTreatment.TrainingList);
-            userInfo = new UC_UserInfo(_currentPatient);
-            
-            TreatmentMenuGrid.Children.Add(treatmentSelection);
-            TreatmentMenuGrid.Children.Add(trainingSeleciton);
-            TreatmentMenuGrid.Children.Add(userInfo);
+            _treatmentSelection = new UC_TreatmentSelection(_currentPatient.PatientTreatment);
+            _trainingSeleciton = new UC_TrainingProgramSelection(_currentPatient.PatientTreatment.TrainingList);
+            _userInfo = new UC_UserInfo(_currentPatient);
 
-            Grid.SetColumn(treatmentSelection, 0);
-            Grid.SetColumn(trainingSeleciton, 1);
-            Grid.SetColumn(userInfo, 2);
+            TrainingSelectedDelegate trainingSelected = new TrainingSelectedDelegate(_trainingSeleciton_trainingSelectedEvent);
+            _trainingSeleciton.trainingSelectedEvent += _trainingSeleciton_trainingSelectedEvent;
+
+            TreatmentMenuGrid.Children.Add(_treatmentSelection);
+            TreatmentMenuGrid.Children.Add(_trainingSeleciton);
+            TreatmentMenuGrid.Children.Add(_userInfo);
+
+            Grid.SetColumn(_treatmentSelection, 0);
+            Grid.SetColumn(_trainingSeleciton, 1);
+            Grid.SetColumn(_userInfo, 2);
+        }
+
+        private async void _trainingSeleciton_trainingSelectedEvent(Training _selectedTraining)
+        {
+            //Console.WriteLine(_selectedTraining);
+            string json = await ApiConnection.GetTrainingApiAsync(_selectedTraining.TrainingId);
+            JSONConvertor.GettingPatientTraining(_selectedTraining, json);
+
+            MainWindow.OpenTrainingWindow(_currentPatient, _selectedTraining);
         }
 
         public void Dispose()
         {
-            //throw new NotImplementedException();
-            
+            Console.WriteLine("Treatment window disposed");
         }
     }
 }

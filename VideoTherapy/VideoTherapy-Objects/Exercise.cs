@@ -8,6 +8,7 @@ namespace VideoTherapy_Objects
 {
     public class Exercise
     {
+        public int ExerciseId { set; get; }
         public int ExerciseNum { set; get; }
         public String ExerciseName { set; get; }
         public int Repetitions { set; get; }

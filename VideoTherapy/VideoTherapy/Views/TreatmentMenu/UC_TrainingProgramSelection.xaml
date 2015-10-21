@@ -143,7 +143,13 @@
         
 
         <!--Treatment List-->
-        <ListBox x:Name="TreatmentTrainingList" Grid.Row="1" BorderBrush="Transparent" Background="Transparent" Margin="26,15" ItemsSource="{Binding}" ItemTemplate="{DynamicResource TrainingImageDataTemplate}" ItemsPanel="{DynamicResource TrainingImageItemsPanelTemplate}" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+        <ListBox x:Name="TreatmentTrainingList" Grid.Row="1" BorderBrush="Transparent" Background="Transparent" Margin="26,15" ItemsSource="{Binding}" ItemTemplate="{DynamicResource TrainingImageDataTemplate}" ItemsPanel="{DynamicResource TrainingImageItemsPanelTemplate}" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <EventSetter Event="MouseDoubleClick" Handler="DoubleClickHandler"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
     </Grid>
     
 </UserControl>

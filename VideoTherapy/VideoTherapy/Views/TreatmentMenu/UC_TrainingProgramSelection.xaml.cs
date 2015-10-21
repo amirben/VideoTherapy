@@ -29,6 +29,8 @@ namespace VideoTherapy.Views.TreatmentMenu
         private List<Training> _treatmentList;
         private List<Training> _currentTrainingList;
 
+        public event VideoTherapy.TreatmentMenu.TrainingSelectedDelegate trainingSelectedEvent;
+
         public UC_TrainingProgramSelection(List<Training> _trainingList)
         {
             InitializeComponent();
@@ -47,6 +49,14 @@ namespace VideoTherapy.Views.TreatmentMenu
         {
             _currentTrainingList = _trainingList;
             TreatmentTrainingList.DataContext = _trainingList;
+        }
+
+        public void DoubleClickHandler(object sender, MouseEventArgs e)
+        {
+            var selectedTraining = sender as ListBoxItem;
+            var training = (Training)selectedTraining.DataContext;
+
+            trainingSelectedEvent(training);
         }
     }
 }

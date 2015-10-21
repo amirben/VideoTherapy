@@ -22,16 +22,21 @@ namespace VideoTherapy.Views.TrainingMenu
     /// </summary>
     public partial class UC_ExerciseSelection : UserControl
     {
-        public UC_ExerciseSelection()
+        private Training _currentTraining;
+
+        public UC_ExerciseSelection(Training currentTraining)
         {
             InitializeComponent();
+
+            _currentTraining = currentTraining;
 
             this.Loaded += UC_ExerciseSelection_Loaded;
         }
 
         private void UC_ExerciseSelection_Loaded(object sender, RoutedEventArgs e)
         {
-            ExercisesListUI.DataContext = createDemoExercises();
+            
+            ExercisesListUI.DataContext = _currentTraining.ExerciseList;
         }
 
         private List<Exercise> createDemoExercises()

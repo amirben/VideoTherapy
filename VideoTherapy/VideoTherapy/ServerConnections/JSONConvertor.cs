@@ -68,6 +68,27 @@ namespace VideoTherapy.ServerConnections
                 newTraining.TrainingThumbs = currentObj["thumbnail"].ToString();
             }
         }
+
+        public static void GettingPatientTraining(Training _training, string _JSONcontent)
+        {
+            dynamic d =
+                    (JsonConvert.DeserializeObject<IDictionary<string, object>>(_JSONcontent))["data"];
+
+            _training.ExerciseList = new List<Exercise>();
+            foreach (var item in d.sessions)
+            {
+                Exercise newExercise = new Exercise();
+               
+                newExercise.ExerciseName = item.exerciseLabel;
+                newExercise.ExerciseId = item.exerciseId;
+                newExercise.ExerciseThumbs = item.exerciseThumbnail;
+                newExercise.VideoPath = item.exerciseVideo;
+                newExercise.Repetitions = item.repeats;
+                newExercise.ExerciseNum = item.sessionId;
+
+                _training.ExerciseList.Add(newExercise);
+            }
+        }
     }
 }
 

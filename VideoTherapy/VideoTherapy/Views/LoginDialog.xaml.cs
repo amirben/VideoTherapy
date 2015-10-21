@@ -28,7 +28,7 @@ namespace VideoTherapy
     public partial class LoginDialog : UserControl
     {
         private bool _hideRequest = false;
-        private MainWindow mainWindow;
+        private MainWindow _mainWindow;
 
 
         public bool IsLogin { set; get;}
@@ -43,9 +43,9 @@ namespace VideoTherapy
 
         public void SetMainWindow(MainWindow mainWindow)
         {
-            this.mainWindow = mainWindow;
-
+            this._mainWindow = mainWindow;
         }
+
         private async void LoginBtn_Click(object sender, RoutedEventArgs e)
         {
             //String email = emailTxt.Text;
@@ -64,7 +64,7 @@ namespace VideoTherapy
             JSONConvertor.GettingPatientTreatment(_currentPatient, treatmentData);
             //todo get patient current therapist
 
-            mainWindow.OpenTreatmentWindow(_currentPatient);
+            _mainWindow.OpenTreatmentWindow(_currentPatient);
             HideHandlerDialog();
         }
 

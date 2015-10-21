@@ -15,35 +15,53 @@ using System.Windows.Shapes;
 
 using VideoTherapy.Views.TrainingMenu;
 using VideoTherapy.Views;
+using VideoTherapy_Objects;
 
 namespace VideoTherapy
 {
     /// <summary>
     /// Interaction logic for TrainingMenu.xaml
     /// </summary>
-    public partial class TrainingMenu : UserControl
+    public partial class TrainingMenu : UserControl, IDisposable
     {
-        public TrainingMenu()
+        public Patient _currentPatient { set; get; }
+        public Training _currentTraining { set; get; }
+
+        public MainWindow MainWindow { set; get; }
+
+        private UC_TrainingSelection _trainingSelection;
+        private UC_ExerciseSelection _exerciseSelection;
+        private UC_UserInfo _userInfo;
+
+        public TrainingMenu(Patient currentPatient, Training currentTraining)
         {
             InitializeComponent();
+
+            _currentPatient = currentPatient;
+            _currentTraining = currentTraining;
 
             this.Loaded += TrainingMenu_Loaded;
         }
 
+        public void Dispose()
+        {
+            
+        }
+
         private void TrainingMenu_Loaded(object sender, RoutedEventArgs e)
         {
-            UC_TrainingSelection trainingSelection = new UC_TrainingSelection();
-            UC_ExerciseSelection exerciseSelection = new UC_ExerciseSelection();
-            UC_UserInfo userInfo = new UC_UserInfo(null);
+            _trainingSelection = new UC_TrainingSelection(_currentPatient, _currentTraining);
+            _exerciseSelection = new UC_ExerciseSelection(_currentTraining);
+            _userInfo = new UC_UserInfo(_currentPatient);
 
 
-            TrainingMenuGrid.Children.Add(trainingSelection);
-            TrainingMenuGrid.Children.Add(exerciseSelection);
-            TrainingMenuGrid.Children.Add(userInfo);
+            TrainingMenuGrid.Children.Add(_trainingSelection);
+            TrainingMenuGrid.Children.Add(_exerciseSelection);
+            TrainingMenuGrid.Children.Add(_userInfo);
 
-            Grid.SetColumn(trainingSelection, 0);
-            Grid.SetColumn(exerciseSelection, 1);
-            Grid.SetColumn(userInfo, 2);
+            Grid.SetColumn(_trainingSelection, 0);
+            Grid.SetColumn(_exerciseSelection, 1);
+            Grid.SetColumn(_userInfo, 2);
         }
     }
 }

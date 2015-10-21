@@ -31,7 +31,7 @@
                         </Border>
                     </Button.Content>
                 </Button>
-                <TextBlock x:Name="CurrentTrainingLbl" HorizontalAlignment="Center" Text="Training #1" VerticalAlignment="Center" TextAlignment="Center" FontSize="58"  Margin="70,0,210.6,10"  Foreground="White" FontWeight="Bold" FontFamily="Roboto"/>
+                <TextBlock x:Name="CurrentTrainingLbl" HorizontalAlignment="Center" Text="{Binding TrainingNumber, StringFormat='Training #{0}'}" VerticalAlignment="Center" TextAlignment="Center" FontSize="58"  Margin="70,0,210.6,10"  Foreground="White" FontWeight="Bold" FontFamily="Roboto"/>
                 <!--Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}"-->
 
                 <Button x:Name="ForwardBtn" HorizontalAlignment="Right" Height="45" Width="45" Margin="0,0,20,15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" >
