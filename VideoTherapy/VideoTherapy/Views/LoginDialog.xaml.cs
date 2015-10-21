@@ -17,6 +17,9 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Web.Script.Serialization;
 
+using VideoTherapy.ServerConnections;
+using VideoTherapy_Objects;
+
 namespace VideoTherapy
 {
     /// <summary>
@@ -24,13 +27,9 @@ namespace VideoTherapy
     /// </summary>
     public partial class LoginDialog : UserControl
     {
-        private UIElement _parent;
         private bool _hideRequest = false;
         private MainWindow mainWindow;
 
-        private string apiUri = "https://videotherapy.co/dev/vt/api/dispatcher.php";
-        private string appLogin = "app-login";
-        private string clientKey = "8e28b8db-6395-4417-9df9-10dd0efb5ef9";
 
         public bool IsLogin { set; get;}
 
@@ -49,28 +48,23 @@ namespace VideoTherapy
         }
         private async void LoginBtn_Click(object sender, RoutedEventArgs e)
         {
-            String email = emailTxt.Text;
-            String password = passwordTxt.Password;
+            //String email = emailTxt.Text;
+            //String password = passwordTxt.Password;
 
-            Dictionary<string, string> pairs = new Dictionary<string, string>();
-            pairs.Add("api", appLogin);
-            pairs.Add("clientKey", clientKey);
-            pairs.Add("email", email);
-            pairs.Add("password", password);
+            string email = "amir.ben@gmail.com";
+            string password = "123456789";
 
-            using (HttpClient client = new HttpClient())
-            {
-                string json = new JavaScriptSerializer().Serialize((object)pairs);
-                HttpContent contentPost = new StringContent(json, Encoding.UTF8);
+            string loginData = await ApiConnection.AppLoginApiAsync(email, password);
+            Patient _currentPatient = JSONConvertor.CreatePatient(loginData);
 
-                var response = await client.PostAsync(apiUri, contentPost);
-                var x = response.EnsureSuccessStatusCode();
+            string userData = await ApiConnection.GetUserDataApiAsync(_currentPatient.AccountId);
+            JSONConvertor.GettingPatientData(_currentPatient, userData);
 
-                string content = await response.Content.ReadAsStringAsync();
+            string treatmentData = await ApiConnection.GetUserTrainingApiAsync(_currentPatient.AccountId);
+            JSONConvertor.GettingPatientTreatment(_currentPatient, treatmentData);
+            //todo get patient current therapist
 
-                mainWindow.OpenTreatmentWindow();
-            }
-
+            mainWindow.OpenTreatmentWindow(_currentPatient);
             HideHandlerDialog();
         }
 
@@ -103,7 +97,6 @@ namespace VideoTherapy
         {
             _hideRequest = true;
             Visibility = Visibility.Hidden;
-            //_parent.IsEnabled = true;
         }
     }
 }

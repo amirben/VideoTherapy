@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,6 +36,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Kinect, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Kinect.VisualGestureBuilder, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=x86" />
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -61,6 +68,8 @@
     <Compile Include="ExerciseView.xaml.cs">
       <DependentUpon>ExerciseView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Kinect\BackgroundRemovalTool.cs" />
+    <Compile Include="Kinect\DrawSkeleton.cs" />
     <Compile Include="Model-View\CircularProgress.cs" />
     <Compile Include="TrainingMenu.xaml.cs">
       <DependentUpon>TrainingMenu.xaml</DependentUpon>
@@ -68,6 +77,8 @@
     <Compile Include="TreatmentMenu.xaml.cs">
       <DependentUpon>TreatmentMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ServerConnections\ApiConnection.cs" />
+    <Compile Include="ServerConnections\JSONConvertor.cs" />
     <Compile Include="Utils\TrainingValueToColorConvert.cs" />
     <Compile Include="Views\TrainingMenu\UC_ExerciseSelection.xaml.cs">
       <DependentUpon>UC_ExerciseSelection.xaml</DependentUpon>
@@ -75,10 +86,10 @@
     <Compile Include="Views\TrainingMenu\UC_TrainingSelection.xaml.cs">
       <DependentUpon>UC_TrainingSelection.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UC_TrainingProgramSelection.xaml.cs">
+    <Compile Include="Views\TreatmentMenu\UC_TrainingProgramSelection.xaml.cs">
       <DependentUpon>UC_TrainingProgramSelection.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UC_TreatmentSelection.xaml.cs">
+    <Compile Include="Views\TreatmentMenu\UC_TreatmentSelection.xaml.cs">
       <DependentUpon>UC_TreatmentSelection.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginDialog.xaml.cs">
@@ -108,11 +119,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UC_TrainingProgramSelection.xaml">
+    <Page Include="Views\TreatmentMenu\UC_TrainingProgramSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UC_TreatmentSelection.xaml">
+    <Page Include="Views\TreatmentMenu\UC_TreatmentSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -155,6 +166,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -205,7 +217,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\ExerciseScreen\" />
-    <Folder Include="Views\TreatmentMenu\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

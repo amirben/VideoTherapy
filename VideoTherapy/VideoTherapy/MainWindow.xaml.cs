@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.Threading;
 using System.Windows.Threading;
 
+using VideoTherapy_Objects;
 
 namespace VideoTherapy
 {
@@ -39,14 +40,24 @@ namespace VideoTherapy
             //DataContext = ld;
             //OpenningWindow.Children.Add(ld);
 
+            OpenLoginPopUp();
+
             //OpenTreatmentWindow();
 
-            OpenTrainingWindow();
+            //OpenTrainingWindow();
 
 
             //OpenExerciseWindow();
         }
 
+        private void OpenLoginPopUp()
+        {
+            LoginDialog ld = new LoginDialog();
+
+            ld.SetMainWindow(this);
+            DataContext = ld;
+            OpenningWindow.Children.Add(ld);
+        }
         private void OpenExerciseWindow()
         {
             OpenningWindow.Children.Clear();
@@ -61,11 +72,16 @@ namespace VideoTherapy
             OpenningWindow.Children.Add(new TrainingMenu());
         }
 
-        public void OpenTreatmentWindow()
+        public void OpenTreatmentWindow(Patient _currentPatient)
         {
             OpenningWindow.Children.Clear();
             OpenningWindow.Background = null;
-            OpenningWindow.Children.Add(new TreatmentMenu());
+            using (TreatmentMenu _treatmentMenu = new TreatmentMenu(_currentPatient))
+            {
+                OpenningWindow.Children.Add(_treatmentMenu);
+            }
+            //TreatmentMenu _treatmentMenu = new TreatmentMenu(_currentPatient);
+            //OpenningWindow.Children.Add(_treatmentMenu);
         }
     }
 }

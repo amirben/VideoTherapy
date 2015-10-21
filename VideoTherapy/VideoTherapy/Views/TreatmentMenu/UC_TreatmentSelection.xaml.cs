@@ -13,18 +13,27 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-
-namespace VideoTherapy
+using VideoTherapy_Objects;
+namespace VideoTherapy.Views.TreatmentMenu
 {
     /// <summary>
     /// Interaction logic for UC_TreatmentSelection.xaml
     /// </summary>
     public partial class UC_TreatmentSelection : UserControl
     {
-        public UC_TreatmentSelection()
+        private Treatment _currentTreatment;
+
+        public UC_TreatmentSelection(Treatment _currentTreatment)
         {
             InitializeComponent();
 
+            SetCurrentTreatment(_currentTreatment);
+            TreatmentSelection.DataContext = _currentTreatment;
+        }
+
+        public void SetCurrentTreatment(Treatment newTreatment)
+        {
+            _currentTreatment = newTreatment;
         }
         
     }

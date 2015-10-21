@@ -16,13 +16,13 @@
         </StackPanel>
 
         <StackPanel Background="#7F000000" >
-            <Image Source="..\Images\patient.jpeg" Height="120" Width="120" Margin="5,5,5,0" >
+            <Image Source="{Binding ImageThumb}" Height="120" Width="120" Margin="5,5,5,0" >
                 <Image.Clip>
                     <EllipseGeometry Center="60,60" RadiusX="50" RadiusY="50" />
                 </Image.Clip>
             </Image>
 
-            <TextBlock Text="John Doe" Foreground="White" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold"/>
+            <TextBlock Text="{Binding FullName}" Foreground="White" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold"/>
             <TextBlock Text="Active User" Foreground="White" HorizontalAlignment="Center" FontSize="16" Margin="0,0,0,20"/>
         </StackPanel>
 

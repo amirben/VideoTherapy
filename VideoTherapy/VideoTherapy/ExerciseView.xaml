@@ -8,8 +8,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
     <Grid>
-        <MediaElement Source="C:\Users\amirb\Desktop\Afeka\VideoTherapy\Prototype\videos\lower_limbs_aerobic.mp4" Stretch="Fill" />
-            <Grid>
+        <MediaElement x:Name="ExerciseVideo" Source="C:\Users\amirb\Desktop\Afeka\VideoTherapy\Prototype\videos\squat with band- standing.mp4" Stretch="Fill" LoadedBehavior="Manual" UnloadedBehavior="Stop"/>
+        <Grid x:Name="KinectFrame"  HorizontalAlignment="Right">
+            <Image x:Name="KinectShilloute" Source="{Binding ImageSource}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="235,10,-235,-10"/>
+            <Image x:Name="KinectSkeleton" Source="{Binding ImageSource}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="200,10,-220,-10"/>
+        </Grid>
+        
+
+        <Grid Visibility="Hidden">
 
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Bottom">
                 <StackPanel x:Name="WaitForStartLbl" Background="#7F000000" Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
@@ -32,11 +38,11 @@
                     </Border>
 
                 </StackPanel>
-                
-            </StackPanel>
-                
 
-                
+            </StackPanel>
+
+
+
 
             <StackPanel x:Name="ExerciseDetailsAndStatus" Orientation="Vertical" DockPanel.Dock="Left" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20" >
 
@@ -52,6 +58,7 @@
                         <TextBlock x:Name="CurrentTrainingLbl" HorizontalAlignment="Stretch" Text="Training #1" VerticalAlignment="Top" TextAlignment="Left" FontSize="24"  Margin="50,10,0.2,0"  Foreground="White" FontWeight="Bold"/>
                         <!--Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}"-->
                     </Grid>
+
                     <TextBlock x:Name="CurrentExerciseLbl" HorizontalAlignment="Stretch" Text="Exercise #1" VerticalAlignment="Center" TextAlignment="Left" FontSize="34"  Margin="50,0,0,0" FontWeight="Bold" Foreground="White" />
                     <TextBlock x:Name="ExerciseNameLbl" HorizontalAlignment="Stretch" Text="Body Posture" VerticalAlignment="Center" TextAlignment="Left" FontSize="20"  Margin="50,0,0,0" FontWeight="Bold" Foreground="White" />
 
@@ -62,8 +69,13 @@
                                 <ControlTemplate>
                                     <DockPanel>
                                         <Grid DockPanel.Dock="Top" Margin="0,0,0,10">
-                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" Foreground="White" Text="93" />
-                                            <mv:CircularProgress   Stroke="#ff3f80" StrokeThickness="4" Height="100" Width="100" Margin="5" Value="93" HorizontalAlignment="Center"/>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0">
+                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" Foreground="White" Text="93" />
+                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20" Foreground="White" Text="%" Margin="0,7,0,0" />
+                                            </StackPanel>
+                                            
+                                            <mv:CircularProgress   Stroke="#7F000000" StrokeThickness="6" Height="100" Width="100" Margin="5" Value="100" HorizontalAlignment="Center"/>
+                                            <mv:CircularProgress   Stroke="#ff3f80" StrokeThickness="6" Height="100" Width="100" Margin="5" Value="93" HorizontalAlignment="Center" isCircle="True"/>
                                         </Grid>
 
                                         <TextBlock DockPanel.Dock="Bottom" Foreground="White" FontFamily="Roboto" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Overall&#10;Motion Quality" TextAlignment="Center"/>
@@ -77,8 +89,14 @@
                                 <ControlTemplate>
                                     <DockPanel>
                                         <Grid DockPanel.Dock="Top" Margin="0,0,0,10">
-                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" Foreground="White" Text="67" />
-                                            <mv:CircularProgress   Stroke="#4fc3f7" StrokeThickness="4" Height="100" Width="100" Margin="5" Value="67" HorizontalAlignment="Center"/>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0">
+                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" Foreground="White" Text="67" />
+                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20" Foreground="White" Text="%" Margin="0,7,0,0" />
+                                            </StackPanel>
+                                           
+                                            <mv:CircularProgress   Stroke="#7F000000" StrokeThickness="6" Height="100" Width="100" Margin="5" Value="100" HorizontalAlignment="Center"/>
+                                            <mv:CircularProgress   Stroke="#4fc3f7" StrokeThickness="6" Height="100" Width="100" Margin="5" Value="67" HorizontalAlignment="Center" isCircle="True"/>
+                                            
                                         </Grid>
 
                                         <TextBlock DockPanel.Dock="Bottom" Foreground="White" FontFamily="Roboto" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Exercise&#10;Motion Quality" TextAlignment="Center"/>
@@ -96,7 +114,9 @@
                                 <DockPanel>
                                     <Grid DockPanel.Dock="Top" Margin="8">
                                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="65" Foreground="White" Text="4/5" />
-                                        <mv:CircularProgress   Stroke="#80c683" StrokeThickness="8" Height="200" Width="200" Margin="5" Value="80" HorizontalAlignment="Center"/>
+                                        <mv:CircularProgress   Stroke="#7F000000" StrokeThickness="8" Height="200" Width="200" Margin="5" Value="100" HorizontalAlignment="Center"/>
+                                        <mv:CircularProgress   Stroke="#80c683" StrokeThickness="8" Height="200" Width="200" Margin="5" Value="80" HorizontalAlignment="Center" isCircle="True"/>
+                                        
                                     </Grid>
 
                                     <TextBlock DockPanel.Dock="Bottom" Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Exercise Repetitions" Margin="0,20,0,0"/>
@@ -110,7 +130,7 @@
 
             <Border DockPanel.Dock="Right" Width="220" HorizontalAlignment="Right" VerticalAlignment="Top" Background="#7F000000" CornerRadius="45" Margin="15">
                 <DockPanel x:Name="UserProfile">
-                    
+
                     <Image x:Name="UserImage" Source=".\Images\patient.jpeg" Margin="5" Height="80" Width="80" HorizontalAlignment="Right" DockPanel.Dock="Right" >
                         <Image.Clip>
                             <EllipseGeometry Center="40,40" RadiusX="40" RadiusY="40" />
@@ -119,11 +139,7 @@
                     <TextBlock x:Name="UserName" Text="John Doe" HorizontalAlignment="Center" VerticalAlignment="Center" DockPanel.Dock="Right" FontSize="20" FontWeight="Bold" Foreground="White"/>
                 </DockPanel>
             </Border>
-
-
-
-
-            </Grid>
+        </Grid>
     </Grid>
-    
+
 </UserControl>

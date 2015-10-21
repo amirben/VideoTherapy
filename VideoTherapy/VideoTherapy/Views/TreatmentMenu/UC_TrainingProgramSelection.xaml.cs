@@ -14,30 +14,39 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VideoTherapy_Objects;
 
+using VideoTherapy.Views.TreatmentMenu;
 
 using VideoTherapy.XML;
 
 
-namespace VideoTherapy.Views
+namespace VideoTherapy.Views.TreatmentMenu
 {
     /// <summary>
     /// Interaction logic for UC_TrainingProgramSelection.xaml
     /// </summary>
     public partial class UC_TrainingProgramSelection : UserControl
     {
-        private List<Treatment> _treatmentList;
+        private List<Training> _treatmentList;
+        private List<Training> _currentTrainingList;
 
-        public UC_TrainingProgramSelection()
+        public UC_TrainingProgramSelection(List<Training> _trainingList)
         {
             InitializeComponent();
 
+            SetTrainingList(_trainingList);
             this.Loaded += UC_TrainingProgramSelection_Loaded;
         }
 
         private void UC_TrainingProgramSelection_Loaded(object sender, RoutedEventArgs e)
         {
-            _treatmentList = ObjectReader.GetAllTreatments();
-            TreatmentTrainingList.DataContext = _treatmentList[0].TrainingList;
+            //_treatmentList = ObjectReader.GetAllTreatments();
+            //TreatmentTrainingList.DataContext = _treatmentList[0].TrainingList;
+        }
+
+        public void SetTrainingList(List<Training> _trainingList)
+        {
+            _currentTrainingList = _trainingList;
+            TreatmentTrainingList.DataContext = _trainingList;
         }
     }
 }

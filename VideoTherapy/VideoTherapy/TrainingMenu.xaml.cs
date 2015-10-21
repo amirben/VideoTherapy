@@ -34,7 +34,7 @@ namespace VideoTherapy
         {
             UC_TrainingSelection trainingSelection = new UC_TrainingSelection();
             UC_ExerciseSelection exerciseSelection = new UC_ExerciseSelection();
-            UC_UserInfo userInfo = new UC_UserInfo();
+            UC_UserInfo userInfo = new UC_UserInfo(null);
 
 
             TrainingMenuGrid.Children.Add(trainingSelection);

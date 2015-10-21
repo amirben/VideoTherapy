@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="VideoTherapy.UC_TreatmentSelection"
+﻿<UserControl x:Class="VideoTherapy.Views.TreatmentMenu.UC_TreatmentSelection"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -16,31 +16,51 @@
                 <Button x:Name="BackwardBtn" HorizontalAlignment="Left" Height="45" Width="45" Margin="20,15,0,15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
                     <Button.Content>
                         <Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" Background="#4fc3f7" >
-                            <Image Source="..\Images\backward.png" Height="25" Width="25" ></Image>
+                            <Image Source="..\..\Images\backward.png" Height="25" Width="25" ></Image>
                         </Border>
                     </Button.Content>
                 </Button>
-                <TextBlock x:Name="CurrentTreatmentLbl" HorizontalAlignment="Center" Text="Treatment #1" VerticalAlignment="Center" TextAlignment="Center" FontSize="58"  Margin="0,15"  Foreground="White" FontWeight="Bold" FontFamily="Roboto"/>
+            <TextBlock x:Name="CurrentTreatmentLbl" HorizontalAlignment="Center" Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}" VerticalAlignment="Center" TextAlignment="Center" FontSize="58"  Margin="0,15"  Foreground="White" FontWeight="Bold" FontFamily="Roboto"/>
                 <!--Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}"-->
 
                 <Button x:Name="ForwardBtn" HorizontalAlignment="Right" Height="45" Width="45" Margin="0,15,20,15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" >
                     <Button.Content>
                         <Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" Background="#4fc3f7" >
-                            <Image Source="..\Images\forward.png" Height="25" Width="25" ></Image>
+                            <Image Source="..\..\Images\forward.png" Height="25" Width="25" ></Image>
                         </Border>
                     </Button.Content>
                 </Button>
         </Grid>
             
         <DockPanel x:Name="CalenderTimeline" Margin="10">
-            <ProgressBar x:Name="CalenderProgressBar" Margin="15,0" Height="4" Value="50" DockPanel.Dock="Top">
+            <ProgressBar x:Name="CalenderProgressBar" Margin="15,0" Height="9" Value="70" DockPanel.Dock="Top">
                 <ProgressBar.Template>
                     <ControlTemplate>
-                        <Grid x:Name="Root">
+                        <Grid x:Name="TemplateRoot" Height="8">
+                            <DockPanel>
+                                <Rectangle Name="PART_Track" Fill="Black" Height="4">
+                                </Rectangle>
+                                <!--<Rectangle Name="Mask" MinWidth="{TemplateBinding Width}" Fill="Black" Height="4"/>-->
+
+                            </DockPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Name="PART_Indicator" StrokeThickness="1" Height="4" HorizontalAlignment="Left">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="#ff8300"></SolidColorBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+
+                                <Ellipse Width="8" Height="8" Fill="#ff8300"  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="-4,0,0,0" ></Ellipse>
+                            </StackPanel>
+                            
+                        </Grid>
+                        
+                        
+                        <!--<Grid x:Name="Root">
                             <Border Name="PART_Track"  BorderBrush="Black" BorderThickness="2" />
                             <Border Name="PART_Indicator" BorderBrush="#ff8300" BorderThickness="2" HorizontalAlignment="Left" />
                             <Ellipse Width="10" Height="10" Fill="Yellow"  VerticalAlignment="Center" ></Ellipse>
-                        </Grid>
+                        </Grid>-->
                     </ControlTemplate>
                 </ProgressBar.Template>
             </ProgressBar>
@@ -55,7 +75,11 @@
                     <ControlTemplate>
                         <DockPanel>
                             <Grid DockPanel.Dock="Top" Margin="8">
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="67" />
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0">
+                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="67" />
+                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="36" Foreground="White" Text="%" />
+                                </StackPanel>
+                                
                                 <mv:CircularProgress   Stroke="#7F000000" StrokeThickness="6" Height="180" Width="180" Margin="5" Value="100" HorizontalAlignment="Center"/>
                                 <mv:CircularProgress   Stroke="#4fc3f7" StrokeThickness="6" Height="180" Width="180" Margin="5" Value="67" HorizontalAlignment="Center" isCircle="True"/>
                                 
@@ -72,7 +96,10 @@
                     <ControlTemplate>
                         <DockPanel>
                             <Grid DockPanel.Dock="Top" Margin="8">
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="91" />
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0">
+                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="91" />
+                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="36" Foreground="White" Text="%" />
+                                </StackPanel>
                                 <mv:CircularProgress Stroke="#7F000000" StrokeThickness="6" Height="180" Width="180" Margin="5" Value="100" HorizontalAlignment="Center" isCircle="False"/>
                                 <mv:CircularProgress Stroke="#80c683" StrokeThickness="6" Height="180" Width="180" Margin="5" Value="91" HorizontalAlignment="Center" isCircle="True"/>
                                 
@@ -95,7 +122,7 @@
             </StackPanel.Resources>
             
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,5,10,-5">
-                <Image Source="..\Images\therapist.JPG" Height="140" Width="140" Margin="5,5,5,0" >
+                <Image Source="..\..\Images\therapist.JPG" Height="140" Width="140" Margin="5,5,5,0" >
                     <Image.Clip>
                         <EllipseGeometry Center="60,60" RadiusX="60" RadiusY="60" />
                     </Image.Clip>

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using VideoTherapy_Objects;
 namespace VideoTherapy.Views
 {
     /// <summary>
@@ -20,9 +21,15 @@ namespace VideoTherapy.Views
     /// </summary>
     public partial class UC_UserInfo : UserControl
     {
-        public UC_UserInfo()
+        private Patient _currentPatient;
+
+        public UC_UserInfo(Patient _currentPatient)
         {
             InitializeComponent();
+            this._currentPatient = _currentPatient;
+            this.DataContext = this._currentPatient;
         }
+
+        
     }
 }

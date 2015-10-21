@@ -8,6 +8,7 @@ namespace VideoTherapy_Objects
 {
     public class Training
     {
+        public int TrainingId { set; get; }
         public int TrainingNumber { set; get; }
         public string TrainingName { set; get; }
         public int Repetitions { set; get; }
