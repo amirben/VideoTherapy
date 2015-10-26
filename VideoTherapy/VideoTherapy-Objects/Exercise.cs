@@ -14,5 +14,13 @@ namespace VideoTherapy_Objects
         public int Repetitions { set; get; }
         public string ExerciseThumbs { set; get; }
         public string VideoPath { set; get; }
+
+        //for demo video
+        public Boolean isDemo { set; get; }
+        public Boolean isShow { set; get; }
+
+        //for download - because there are repeated videos & images
+        public Boolean isDuplicate { set; get; }
+        public Boolean Downloaded { set; get; }
     }
 }

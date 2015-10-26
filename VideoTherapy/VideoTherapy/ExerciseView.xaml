@@ -6,16 +6,16 @@
              xmlns:local="clr-namespace:VideoTherapy"
              xmlns:mv="clr-namespace:VideoTherapy.Model_View"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="600">
+             d:DesignHeight="800" d:DesignWidth="1400">
     <Grid>
-        <MediaElement x:Name="ExerciseVideo" Source="C:\Users\amirb\Desktop\Afeka\VideoTherapy\Prototype\videos\squat with band- standing.mp4" Stretch="Fill" LoadedBehavior="Manual" UnloadedBehavior="Stop"/>
+        <MediaElement x:Name="ExerciseVideo" Source="{Binding VideoPath}" Stretch="Fill" LoadedBehavior="Manual" UnloadedBehavior="Stop"/>
         <Grid x:Name="KinectFrame"  HorizontalAlignment="Right">
-            <Image x:Name="KinectShilloute" Source="{Binding ImageSource}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="235,10,-235,-10"/>
-            <Image x:Name="KinectSkeleton" Source="{Binding ImageSource}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="200,10,-220,-10"/>
+            <Image x:Name="KinectShilloute" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="235,10,-235,-10"/>
+            <Image x:Name="KinectSkeleton"  VerticalAlignment="Center" HorizontalAlignment="Right" Margin="200,10,-220,-10"/>
         </Grid>
         
 
-        <Grid Visibility="Hidden">
+        <Grid Visibility="Visible">
 
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Bottom">
                 <StackPanel x:Name="WaitForStartLbl" Background="#7F000000" Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
@@ -25,17 +25,27 @@
 
                     <Label Foreground="White" FontFamily="Roboto" FontSize="20" Margin="5,15,15,15">Place your body on the figure to start</Label>
                 </StackPanel>
+                
                 <StackPanel x:Name="VideoControls" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20">
-                    <Border CornerRadius="30" Height="60" Width="60" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
-                        <Image x:Name="PrevVideo"  Source="Images\rewind.png" Height="20" Width="20" ></Image>
-                    </Border>
-
-                    <Border CornerRadius="42" Height="85" Width="85" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
-                        <Image x:Name="PausePlayVideo"  Source="Images\pause.png" Height="50" Width="50" ></Image>
-                    </Border>
-                    <Border CornerRadius="30" Height="60" Width="60" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
-                        <Image x:Name="NextVideo"  Source="Images\next.png" Height="20" Width="20" />
-                    </Border>
+                    <ContentControl Cursor="Hand" MouseDown="PrevVideoClick">
+                        <Border CornerRadius="30" Height="60" Width="60" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
+                            <Image x:Name="PrevVideo"  Source="Images\rewind.png" Height="20" Width="20" ></Image>
+                        </Border>
+                    </ContentControl>
+                   
+                    <ContentControl Cursor="Hand" MouseDown="PlayPauseClick">
+                        <Border CornerRadius="42" Height="85" Width="85" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
+                            <Image x:Name="PlayPauseVideo"  Source="Images\pause.png" Height="50" Width="50" ></Image>
+                        </Border>
+                    </ContentControl>
+                    
+                    
+                    <ContentControl MouseDown="NextVideoClick"  Cursor="Hand">
+                        <Border CornerRadius="30" Height="60" Width="60" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
+                            <Image x:Name="NextVideo"  Source="Images\next.png"  Height="20" Width="20"/>
+                        </Border>
+                    </ContentControl>
+                    
 
                 </StackPanel>
 
@@ -55,14 +65,15 @@
                                 </Border>
                             </Button.Content>
                         </Button>
-                        <TextBlock x:Name="CurrentTrainingLbl" HorizontalAlignment="Stretch" Text="Training #1" VerticalAlignment="Top" TextAlignment="Left" FontSize="24"  Margin="50,10,0.2,0"  Foreground="White" FontWeight="Bold"/>
+                        <TextBlock x:Name="CurrentTrainingLbl" HorizontalAlignment="Stretch" Text="{Binding TrainingNumber, StringFormat='Training #{0}'}" VerticalAlignment="Top" TextAlignment="Left" FontSize="24"  Margin="50,10,0.2,0"  Foreground="White" FontWeight="Bold"/>
                         <!--Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}"-->
                     </Grid>
+                    
+                    <TextBlock x:Name="CurrentExerciseLbl" HorizontalAlignment="Stretch" Text="{Binding ExerciseNum, StringFormat='Exercise #{0}'}" VerticalAlignment="Center" TextAlignment="Left" FontSize="34"  Margin="50,0,0,0" FontWeight="Bold" Foreground="White" />
+                    <TextBlock x:Name="ExerciseNameLbl" HorizontalAlignment="Stretch" Text="{Binding ExerciseName}" VerticalAlignment="Center" TextAlignment="Left" FontSize="20"  Margin="48,0,0,0" FontWeight="Bold" Foreground="White" />
+                    
 
-                    <TextBlock x:Name="CurrentExerciseLbl" HorizontalAlignment="Stretch" Text="Exercise #1" VerticalAlignment="Center" TextAlignment="Left" FontSize="34"  Margin="50,0,0,0" FontWeight="Bold" Foreground="White" />
-                    <TextBlock x:Name="ExerciseNameLbl" HorizontalAlignment="Stretch" Text="Body Posture" VerticalAlignment="Center" TextAlignment="Left" FontSize="20"  Margin="50,0,0,0" FontWeight="Bold" Foreground="White" />
-
-                    <StackPanel x:Name="TreatmentScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">
+                    <StackPanel x:Name="TrainingScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">
 
                         <ProgressBar x:Name="OverallMotionQualityProgressBar" Margin="15,14,30,20">
                             <ProgressBar.Template>
@@ -131,12 +142,12 @@
             <Border DockPanel.Dock="Right" Width="220" HorizontalAlignment="Right" VerticalAlignment="Top" Background="#7F000000" CornerRadius="45" Margin="15">
                 <DockPanel x:Name="UserProfile">
 
-                    <Image x:Name="UserImage" Source=".\Images\patient.jpeg" Margin="5" Height="80" Width="80" HorizontalAlignment="Right" DockPanel.Dock="Right" >
+                    <Image x:Name="UserImage" Source="{Binding ImageThumb}" Margin="5" Height="80" Width="80" HorizontalAlignment="Right" DockPanel.Dock="Right" >
                         <Image.Clip>
                             <EllipseGeometry Center="40,40" RadiusX="40" RadiusY="40" />
                         </Image.Clip>
                     </Image>
-                    <TextBlock x:Name="UserName" Text="John Doe" HorizontalAlignment="Center" VerticalAlignment="Center" DockPanel.Dock="Right" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                    <TextBlock x:Name="UserName" Text="{Binding FullName}" HorizontalAlignment="Center" VerticalAlignment="Center" DockPanel.Dock="Right" FontSize="20" FontWeight="Bold" Foreground="White"/>
                 </DockPanel>
             </Border>
         </Grid>

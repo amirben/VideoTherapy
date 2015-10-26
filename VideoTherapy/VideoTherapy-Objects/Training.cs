@@ -15,6 +15,8 @@ namespace VideoTherapy_Objects
         public int TrainingCompleted { set; get; }
         public string LastViewed { set; get; }
         public string TrainingThumbs { set; get; }
-        public List<Exercise> ExerciseList { set; get; }
+        public List<Exercise> Playlist { set; get; }
+
+        public Boolean Downloaded { set; get;}
     }
 }

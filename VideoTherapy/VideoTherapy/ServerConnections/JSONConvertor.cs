@@ -35,8 +35,7 @@ namespace VideoTherapy.ServerConnections
             _patient.Age = Int32.Parse((string) o.data.age);
             _patient.ImageThumb = o.data.profilePhoto;
             _patient.BirthDay = Convert.ToDateTime((string) o.data.birthday);
-
-            //_patient.UserProfileLink = o.data.userprofile
+            _patient.UserProfileLink = o.data.profileUrl;
         }
 
         public static void GettingPatientTreatment(Patient _patient, string _JSONcontent)
@@ -74,19 +73,46 @@ namespace VideoTherapy.ServerConnections
             dynamic d =
                     (JsonConvert.DeserializeObject<IDictionary<string, object>>(_JSONcontent))["data"];
 
-            _training.ExerciseList = new List<Exercise>();
+            _training.Playlist = new List<Exercise>();
+            int numOfExercises = 1;
+
             foreach (var item in d.sessions)
             {
-                Exercise newExercise = new Exercise();
-               
-                newExercise.ExerciseName = item.exerciseLabel;
-                newExercise.ExerciseId = item.exerciseId;
-                newExercise.ExerciseThumbs = item.exerciseThumbnail;
-                newExercise.VideoPath = item.exerciseVideo;
-                newExercise.Repetitions = item.repeats;
-                newExercise.ExerciseNum = item.sessionId;
+                Exercise demoExercise = new Exercise();
+                demoExercise.ExerciseName = item.exerciseLabel;
+                demoExercise.ExerciseId = item.exerciseId;
+                demoExercise.ExerciseThumbs = item.exerciseThumbnail;
+                demoExercise.VideoPath = item.exerciseVideoDemo;
+                demoExercise.ExerciseNum = numOfExercises;
+                demoExercise.isDemo = true;
 
-                _training.ExerciseList.Add(newExercise);
+                _training.Playlist.Add(demoExercise);
+
+                numOfExercises++;
+
+                int x = item.repeats;
+                for (int i = 0; i < x; i++)
+                {
+                    Exercise newExercise = new Exercise();
+
+                    newExercise.ExerciseName = item.exerciseLabel;
+                    newExercise.ExerciseId = item.exerciseId;
+                    newExercise.ExerciseThumbs = item.exerciseThumbnail;
+                    newExercise.VideoPath = item.exerciseVideo;
+                    newExercise.Repetitions = item.repeats;
+                    newExercise.ExerciseNum = numOfExercises;
+
+                    //for future download for not duplicate the same file
+                    if (i != 0)
+                    {
+                        newExercise.isDuplicate = true;
+                    }
+
+                    _training.Playlist.Add(newExercise);
+                    numOfExercises++;
+                }
+
+                
             }
         }
     }

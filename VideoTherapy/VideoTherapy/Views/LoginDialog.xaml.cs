@@ -62,6 +62,10 @@ namespace VideoTherapy
 
             string treatmentData = await ApiConnection.GetUserTrainingApiAsync(_currentPatient.AccountId);
             JSONConvertor.GettingPatientTreatment(_currentPatient, treatmentData);
+
+            DownloadCache _downloadCache = new DownloadCache(_currentPatient);
+            _downloadCache.DownloadTreatment();
+            
             //todo get patient current therapist
 
             _mainWindow.OpenTreatmentWindow(_currentPatient);

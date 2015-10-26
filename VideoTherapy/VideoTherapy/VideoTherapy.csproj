@@ -71,6 +71,7 @@
     <Compile Include="Kinect\BackgroundRemovalTool.cs" />
     <Compile Include="Kinect\DrawSkeleton.cs" />
     <Compile Include="Model-View\CircularProgress.cs" />
+    <Compile Include="ServerConnections\DownloadCache.cs" />
     <Compile Include="TrainingMenu.xaml.cs">
       <DependentUpon>TrainingMenu.xaml</DependentUpon>
     </Compile>

@@ -33,6 +33,8 @@ namespace VideoTherapy
         private UC_ExerciseSelection _exerciseSelection;
         private UC_UserInfo _userInfo;
 
+        public delegate void StartPlaylistDelegate(Training currentTraining);
+
         public TrainingMenu(Patient currentPatient, Training currentTraining)
         {
             InitializeComponent();
@@ -54,6 +56,9 @@ namespace VideoTherapy
             _exerciseSelection = new UC_ExerciseSelection(_currentTraining);
             _userInfo = new UC_UserInfo(_currentPatient);
 
+            StartPlaylistDelegate startPlaylistDelegate = new StartPlaylistDelegate(_trainingSelection__startPlaylist);
+            _trainingSelection._startPlaylist += _trainingSelection__startPlaylist;
+
 
             TrainingMenuGrid.Children.Add(_trainingSelection);
             TrainingMenuGrid.Children.Add(_exerciseSelection);
@@ -62,6 +67,11 @@ namespace VideoTherapy
             Grid.SetColumn(_trainingSelection, 0);
             Grid.SetColumn(_exerciseSelection, 1);
             Grid.SetColumn(_userInfo, 2);
+        }
+
+        private void _trainingSelection__startPlaylist(Training currentTraining)
+        {
+            MainWindow.OpenExerciseWindow(_currentPatient, currentTraining);
         }
     }
 }

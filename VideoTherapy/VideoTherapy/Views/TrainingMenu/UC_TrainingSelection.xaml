@@ -43,7 +43,7 @@
                 </Button>
             </Grid>
 
-            <StackPanel x:Name="TreatmentScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,45,0,0">
+            <StackPanel x:Name="TrainingScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,45,0,0">
                 <ProgressBar x:Name="MotionQualityProgressBar" Margin="10,15,40,15">
                     <ProgressBar.Template>
                         <ControlTemplate>
@@ -80,7 +80,7 @@
         </StackPanel>
 
         
-        <Button Height="160" DockPanel.Dock="Bottom" Background="#7F4FC3F7" BorderBrush="Transparent" BorderThickness="0" Foreground="White" Content="Start &gt;" FontSize="110" FontWeight="Bold" Margin="15,140,15,15"></Button>
+        <Button Height="160" DockPanel.Dock="Bottom" Background="#7F4FC3F7" BorderBrush="Transparent" BorderThickness="0" Foreground="White" Content="Start &gt;" FontSize="110" FontWeight="Bold" Margin="15,140,15,15" Click="StartButton"></Button>
     </DockPanel>
     
     

@@ -25,53 +25,66 @@ namespace VideoTherapy
     /// Interaction logic for ExerciseView.xaml
     /// </summary>
     /// 
-    public partial class ExerciseView : UserControl
+    public partial class ExerciseView : UserControl, IDisposable
     {
         public Exercise CurrentExercise { set; get; }
 
-        public List<Exercise> ExerciseList { set; get; }
+        public List<Exercise> Playlist { set; get; }
+
+        public Patient CurrentPatient;
+        public Training CurrentTraining;
+
+        public MainWindow MainWindow { set; get; }
+
+        private int _currentExerciseIndex;
+        private Boolean _playPause;
 
         KinectSensor _sensor;
         MultiSourceFrameReader _reader;
 
-        
         BackgroundRemovalTool _backgroundRemovalTool;
         DrawSkeleton _drawSkeleton;
 
-
         //Temp - just for videos
-        DispatcherTimer _timer;
-        int counter = 0;
+        //DispatcherTimer _timer;
+        //int counter = 0;
 
-        public ExerciseView()
+        public ExerciseView(Patient currentPatient, Training currentTraining)
         {
             InitializeComponent();
 
-            DataContext = this;
+            CurrentPatient = currentPatient;
+            CurrentTraining = currentTraining;
+
+            Playlist = currentTraining.Playlist;
+            CurrentExercise = Playlist[0];
+
+            DataContext = CurrentExercise;
+            UserProfile.DataContext = CurrentPatient;
+            CurrentTrainingLbl.DataContext = CurrentTraining;
+
             this.Loaded += ExerciseView_Loaded;
 
-            _timer = new DispatcherTimer();
-            _timer.Interval = new TimeSpan(0, 0, 0, 1);
-            _timer.Tick += _timer_Tick;
-
-            
+            //_timer = new DispatcherTimer();
+            //_timer.Interval = new TimeSpan(0, 0, 0, 1);
+            //_timer.Tick += _timer_Tick;
         }
 
         private void _timer_Tick(object sender, EventArgs e)
         {
-            counter++;
-            if (counter == 4)
-            {
-                ExerciseVideo.Pause();
-            }
-            if (counter == 9)
-            {
-                _timer.Stop();
+            //counter++;
+            //if (counter == 4)
+            //{
+            //    ExerciseVideo.Pause();
+            //}
+            //if (counter == 9)
+            //{
+            //    _timer.Stop();
 
-                WaitForStartLbl.Visibility = Visibility.Hidden ;
-                KinectSkeleton.Source = null;
-                ExerciseVideo.Play();
-            }
+            //    WaitForStartLbl.Visibility = Visibility.Hidden ;
+            //    KinectSkeleton.Source = null;
+            //    ExerciseVideo.Play();
+            //}
         }
 
         private void ExerciseView_Loaded(object sender, RoutedEventArgs e)
@@ -92,8 +105,9 @@ namespace VideoTherapy
             }
 
 
-            _timer.Start();
+            //_timer.Start();
             ExerciseVideo.Play();
+            _playPause = true;
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -127,6 +141,57 @@ namespace VideoTherapy
                 }
             }
         }
-        
+
+        public void Dispose()
+        {
+        }
+
+
+        private void NextVideoClick(object sender, MouseButtonEventArgs e)
+        {
+            if (!(_currentExerciseIndex + 1 >= Playlist.Count))
+            {
+                _currentExerciseIndex++;
+                CurrentExercise = Playlist[_currentExerciseIndex];
+
+                DataContext = CurrentExercise;
+                ExerciseVideo.Play();
+            }
+
+            Console.WriteLine(_currentExerciseIndex);
+        }
+
+        private void PrevVideoClick(object sender, MouseButtonEventArgs e)
+        {
+            if (!(_currentExerciseIndex <= 0))
+            {
+                _currentExerciseIndex--;
+
+                CurrentExercise = Playlist[_currentExerciseIndex];
+
+                DataContext = CurrentExercise;
+                ExerciseVideo.Play();
+            }
+
+            Console.WriteLine(_currentExerciseIndex);
+        }
+
+        private void PlayPauseClick(object sender, MouseButtonEventArgs e)
+        {
+            if (_playPause)
+            {
+                ExerciseVideo.Pause();
+                _playPause = false;
+                PlayPauseVideo.Source = new BitmapImage(new Uri("Images\\play.png", UriKind.RelativeOrAbsolute));
+                PlayPauseVideo.Margin = new Thickness(8,0,0,0);
+            }
+            else
+            {
+                ExerciseVideo.Play();
+                _playPause = true;
+                PlayPauseVideo.Source = new BitmapImage(new Uri("Images\\pause.png", UriKind.RelativeOrAbsolute));
+                PlayPauseVideo.Margin = new Thickness(0, 0, 0, 0);
+            }
+        }
     }
 }

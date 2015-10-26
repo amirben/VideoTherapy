@@ -28,8 +28,23 @@ namespace VideoTherapy.Views
             InitializeComponent();
             this._currentPatient = _currentPatient;
             this.DataContext = this._currentPatient;
+
+            LinktToProfile.RequestNavigate += LinktToProfile_RequestNavigate;
+
         }
 
-        
+        private void LinktToProfile_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("chrome.exe", e.Uri.ToString());
+            }
+            // for default case that there is no chrome
+            catch(Exception e1)
+            {
+                System.Diagnostics.Process.Start(e.Uri.ToString());
+            }
+           
+        }
     }
 }

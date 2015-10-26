@@ -66,6 +66,9 @@ namespace VideoTherapy
             string json = await ApiConnection.GetTrainingApiAsync(_selectedTraining.TrainingId);
             JSONConvertor.GettingPatientTraining(_selectedTraining, json);
 
+            DownloadCache cache = new DownloadCache(_currentPatient);
+            cache.DownloadTraining(_currentPatient, _currentPatient.PatientTreatment.TrainingList.IndexOf(_selectedTraining));
+
             MainWindow.OpenTrainingWindow(_currentPatient, _selectedTraining);
         }
 

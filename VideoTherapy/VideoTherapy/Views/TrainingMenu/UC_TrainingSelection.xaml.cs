@@ -25,6 +25,8 @@ namespace VideoTherapy.Views.TrainingMenu
         private Patient _currentPatient;
         private Training _currentTraining;
 
+        public event VideoTherapy.TrainingMenu.StartPlaylistDelegate _startPlaylist;
+
         public UC_TrainingSelection(Patient currentPatient, Training currentTraining)
         {
             InitializeComponent();
@@ -33,6 +35,11 @@ namespace VideoTherapy.Views.TrainingMenu
             _currentTraining = currentTraining;
 
             DataContext = _currentTraining;
+        }
+
+        private void StartButton(object sender, RoutedEventArgs e)
+        {
+            _startPlaylist(_currentTraining);
         }
     }
 }

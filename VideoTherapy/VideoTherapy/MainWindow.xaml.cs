@@ -36,6 +36,8 @@ namespace VideoTherapy
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             OpenLoginPopUp();
+
+            //OpenExerciseWindow();
         }
 
         private void OpenLoginPopUp()
@@ -48,9 +50,9 @@ namespace VideoTherapy
         }
         private void OpenExerciseWindow()
         {
-            OpenningWindow.Children.Clear();
-            OpenningWindow.Background = null;
-            OpenningWindow.Children.Add(new ExerciseView());
+            //OpenningWindow.Children.Clear();
+            //OpenningWindow.Background = null;
+            //OpenningWindow.Children.Add(new ExerciseView());
         }
 
         public void OpenTrainingWindow(Patient _currentPatient, Training _selectedTraining)
@@ -74,6 +76,16 @@ namespace VideoTherapy
             {
                 _treatmentMenu.MainWindow = this;
                 this.Content = _treatmentMenu;
+            }
+        }
+
+        public void OpenExerciseWindow(Patient _currentPatient, Training _currentTraining)
+        {
+            //OpenningWindow.Background = null;
+            using (ExerciseView _exerciseView = new ExerciseView(_currentPatient, _currentTraining))
+            {
+                _exerciseView.MainWindow = this;
+                this.Content = _exerciseView;
             }
         }
     }

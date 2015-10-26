@@ -10,5 +10,6 @@ namespace VideoTherapy_Objects
     {
         public int TreatmentNumber { set; get; }
         public List<Training> TrainingList { set; get; }
+        public Training CurrentTraining { set; get; }
     }
 }
