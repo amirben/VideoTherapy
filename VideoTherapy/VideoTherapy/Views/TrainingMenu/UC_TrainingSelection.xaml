@@ -44,38 +44,46 @@
             </Grid>
 
             <StackPanel x:Name="TrainingScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,45,0,0">
-                <ProgressBar x:Name="MotionQualityProgressBar" Margin="10,15,40,15">
-                    <ProgressBar.Template>
-                        <ControlTemplate>
-                            <DockPanel>
-                                <Grid DockPanel.Dock="Top" Margin="8">
-                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="60" Foreground="White" Text="67" />
-                                    <mv:CircularProgress   Stroke="#7F000000" StrokeThickness="8" Height="200" Width="200" Margin="5" Value="100" HorizontalAlignment="Center" />
-                                    <mv:CircularProgress   Stroke="#4fc3f7" StrokeThickness="8" Height="200" Width="200" Margin="5" Value="67" HorizontalAlignment="Center" isCircle="True"/>
-                                    
+                <Grid x:Name="MotionQualityGrid"  Margin="0,0,15,0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,-40,0,0">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="67" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="36" Foreground="White" Text="%" />
+                    </StackPanel>
+
+                    <ProgressBar x:Name="MotionQualityProgressBar" Margin="10,0,10,45" Value="20">
+                        <ProgressBar.Template>
+                            <ControlTemplate>
+                                <Grid>
+                                    <mv:CircularProgress   Stroke="#7F000000" StrokeThickness="6" Height="180" Width="180" Margin="5" Value="100" HorizontalAlignment="Center"/>
+                                    <mv:CircularProgress   Stroke="#4fc3f7" StrokeThickness="6" Height="180" Width="180" Margin="5" Value="{Binding Path=Value, RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Center" isCircle="True"/>
                                 </Grid>
+                            </ControlTemplate>
+                        </ProgressBar.Template>
+                    </ProgressBar>
 
-                                <TextBlock DockPanel.Dock="Bottom" Foreground="White" FontFamily="Roboto" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Motion Quality"/>
-                            </DockPanel>
-                        </ControlTemplate>
-                    </ProgressBar.Template>
-                </ProgressBar>
+                    <TextBlock  Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Motion Quality" Margin="0,20, 0, 0"/>
+                </Grid>
 
-                <ProgressBar x:Name="RepetitionsProgressBar" Margin="40,15,10,15">
-                    <ProgressBar.Template>
-                        <ControlTemplate>
-                            <DockPanel>
-                                <Grid DockPanel.Dock="Top" Margin="8">
-                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="60" Foreground="White" Text="91" />
-                                    <mv:CircularProgress   Stroke="#7F000000" StrokeThickness="8" Height="200" Width="200" Margin="5" Value="100" HorizontalAlignment="Center" />
-                                    <mv:CircularProgress Stroke="#80c683" StrokeThickness="8" Height="200" Width="200" Margin="5" Value="91" HorizontalAlignment="Center" isCircle="True"/>
+
+                <Grid x:Name="RepetitionsGrid" Margin="15,0,0,0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,-40,0,0">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="91" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="36" Foreground="White" Text="%" />
+                    </StackPanel>
+
+                    <ProgressBar x:Name="RepetitionsProgressBar" Margin="10,0,10,45" Value="91">
+                        <ProgressBar.Template>
+                            <ControlTemplate>
+                                <Grid>
+                                    <mv:CircularProgress Stroke="#7F000000" StrokeThickness="6" Height="180" Width="180" Margin="5" Value="100" HorizontalAlignment="Center" isCircle="False"/>
+                                    <mv:CircularProgress Stroke="#80c683" StrokeThickness="6" Height="180" Width="180" Margin="5" Value="{Binding Path=Value, RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Center" isCircle="True"/>
                                 </Grid>
+                            </ControlTemplate>
+                        </ProgressBar.Template>
+                    </ProgressBar>
 
-                                <TextBlock DockPanel.Dock="Bottom" Foreground="White" FontFamily="Roboto" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Repetitions"/>
-                            </DockPanel>
-                        </ControlTemplate>
-                    </ProgressBar.Template>
-                </ProgressBar>
+                    <TextBlock Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Repetitions" Margin="0,20, 0, 0"/>
+                </Grid>
             </StackPanel>
         </StackPanel>
 

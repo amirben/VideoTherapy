@@ -82,11 +82,6 @@
                                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" Foreground="White" FontSize="26" Opacity="1" Text="{Binding TrainingCompleted}"/>
                                 <Line VerticalAlignment="Stretch"  Stroke="White" Margin="8,0" Y2="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"  StrokeThickness="2"/>
                                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" Foreground="White" FontSize="26" Opacity="1" Text="{Binding Repetitions}"/>
-                                <!--<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" Foreground="White" FontSize="26" Opacity="1" >
-                                    <Run ></Run>
-                                    <Run Text=" | "></Run>
-                                    <Run Text="{Binding Repetitions}"></Run>    
-                                </TextBlock>-->
                             </StackPanel>
                             
                         </Border>

@@ -85,6 +85,7 @@ namespace VideoTherapy.ServerConnections
             }
 
             _barrier.SignalAndWait();
+            Console.WriteLine("-----> finished download");
         }
 
         /// <summary>
@@ -121,15 +122,15 @@ namespace VideoTherapy.ServerConnections
         {
             try
             {
-                //lock (theLock)
-                //{
-                //    Console.WriteLine("From : =>");
-                //    Console.WriteLine(_from);
-                //    Console.WriteLine("To : =>");
-                //    Console.WriteLine(_to);
-                //    Console.WriteLine();
-                //}
-                
+                lock (theLock)
+                {
+                    Console.WriteLine("From : =>");
+                    Console.WriteLine(_from);
+                    Console.WriteLine("To : =>");
+                    Console.WriteLine(_to);
+                    Console.WriteLine();
+                }
+
                 using (WebClient webClient = new WebClient())
                 {
                     webClient.DownloadFile(_from, _to);
