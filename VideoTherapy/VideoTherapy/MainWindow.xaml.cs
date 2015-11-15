@@ -15,7 +15,7 @@ using System.Threading;
 using System.Windows.Threading;
 
 using VideoTherapy.Views;
-using VideoTherapy_Objects;
+using VideoTherapy.Objects;
 
 namespace VideoTherapy
 {

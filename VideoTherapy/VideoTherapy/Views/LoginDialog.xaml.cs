@@ -18,7 +18,7 @@ using System.Windows.Threading;
 using System.Web.Script.Serialization;
 
 using VideoTherapy.ServerConnections;
-using VideoTherapy_Objects;
+using VideoTherapy.Objects;
 
 namespace VideoTherapy
 {

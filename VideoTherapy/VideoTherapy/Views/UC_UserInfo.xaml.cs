@@ -13,7 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using VideoTherapy_Objects;
+using VideoTherapy.Objects;
+
 namespace VideoTherapy.Views
 {
     /// <summary>

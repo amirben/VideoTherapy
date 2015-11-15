@@ -13,7 +13,7 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Height="80" Margin="0,0,0,15">
                 <Button x:Name="BackToTreatmentBtn" HorizontalAlignment="Left" Height="45" Width="45" Margin="20,15,0,0" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
                     <Button.Content>
-                        <Image Height="30" Width="30" Source="../../images/go.png" ></Image>
+                        <Image Height="30" Width="30" Source="../../images/back.png" ></Image>
                     </Button.Content>
                 </Button>
 
@@ -26,9 +26,10 @@
             <Grid HorizontalAlignment="Stretch" Height="80"  >
                 <Button x:Name="BackwardBtn" HorizontalAlignment="Left" Height="45" Width="45" Margin="20,0,0,15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
                     <Button.Content>
-                        <Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" Background="#4fc3f7" >
-                            <Image Source="..\..\Images\backward.png" Height="25" Width="25" ></Image>
-                        </Border>
+                        <Image Source="..\..\Images\arrow_left.png" Height="40" Width="40" ></Image>
+                        <!--<Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" >
+                            <Image Source="..\..\Images\arrow_left.png" Height="40" Width="40" ></Image>
+                        </Border>-->
                     </Button.Content>
                 </Button>
                 <TextBlock x:Name="CurrentTrainingLbl" HorizontalAlignment="Center" Text="{Binding TrainingNumber, StringFormat='Training #{0}'}" VerticalAlignment="Center" TextAlignment="Center" FontSize="58"  Margin="70,0,210.6,10"  Foreground="White" FontWeight="Bold" FontFamily="Roboto"/>
@@ -36,9 +37,10 @@
 
                 <Button x:Name="ForwardBtn" HorizontalAlignment="Right" Height="45" Width="45" Margin="0,0,20,15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" >
                     <Button.Content>
-                        <Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" Background="#4fc3f7" >
-                            <Image Source="..\..\Images\forward.png" Height="25" Width="25" ></Image>
-                        </Border>
+                        <Image Source="..\..\Images\arrow_right.png" Height="40" Width="40" ></Image>
+                        <!--<Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" Background="#4fc3f7" >
+                            <Image Source="..\..\Images\arrow_right.png" Height="25" Width="25" ></Image>
+                        </Border>-->
                     </Button.Content>
                 </Button>
             </Grid>
@@ -61,7 +63,7 @@
                         </ProgressBar.Template>
                     </ProgressBar>
 
-                    <TextBlock  Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Motion Quality" Margin="0,20, 0, 0"/>
+                    <TextBlock  Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Training Quality" Margin="34,0,21.6,0.2"/>
                 </Grid>
 
 
@@ -82,7 +84,7 @@
                         </ProgressBar.Template>
                     </ProgressBar>
 
-                    <TextBlock Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Repetitions" Margin="0,20, 0, 0"/>
+                    <TextBlock Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Training Score" Margin="0,20, 0, 0"/>
                 </Grid>
             </StackPanel>
         </StackPanel>

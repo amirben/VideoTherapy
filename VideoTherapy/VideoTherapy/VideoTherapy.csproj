@@ -16,7 +16,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -77,6 +77,14 @@
     <Compile Include="Kinect Utils\BackgroundRemovalTool.cs" />
     <Compile Include="Kinect Utils\DrawSkeleton.cs" />
     <Compile Include="Model-View\CircularProgress.cs" />
+    <Compile Include="Objects\Exercise.cs" />
+    <Compile Include="Objects\Patient.cs" />
+    <Compile Include="Objects\Round.cs" />
+    <Compile Include="Objects\Therapist.cs" />
+    <Compile Include="Objects\Training.cs" />
+    <Compile Include="Objects\Treatment.cs" />
+    <Compile Include="Objects\User.cs" />
+    <Compile Include="Objects\VTGesture.cs" />
     <Compile Include="ServerConnections\DownloadCache.cs" />
     <Compile Include="TrainingMenu.xaml.cs">
       <DependentUpon>TrainingMenu.xaml</DependentUpon>
@@ -86,7 +94,11 @@
     </Compile>
     <Compile Include="ServerConnections\ApiConnection.cs" />
     <Compile Include="ServerConnections\JSONConvertor.cs" />
+    <Compile Include="Utils\Scoring.cs" />
     <Compile Include="Utils\TrainingValueToColorConvert.cs" />
+    <Compile Include="Views\ExerciseScreen\SummaryPopUp.xaml.cs">
+      <DependentUpon>SummaryPopUp.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TrainingMenu\UC_ExerciseSelection.xaml.cs">
       <DependentUpon>UC_ExerciseSelection.xaml</DependentUpon>
     </Compile>
@@ -115,6 +127,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TreatmentMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExerciseScreen\SummaryPopUp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -218,19 +234,17 @@
     <Resource Include="Images\rewind.png" />
     <Resource Include="Images\next.png" />
     <Resource Include="Images\go.png" />
+    <Resource Include="Images\arrow_left.png" />
+    <Resource Include="Images\arrow_right.png" />
+    <Resource Include="Images\back.png" />
+    <Resource Include="Images\connected.png" />
+    <Resource Include="Images\disconnected.png" />
+    <Resource Include="Images\shutdown.png" />
     <Content Include="XML\TreatmentsList.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\VideoTherapy-Objects\VideoTherapy-Objects.csproj">
-      <Project>{26139272-4dab-4fbe-bbf1-40c2b409817d}</Project>
-      <Name>VideoTherapy-Objects</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\ExerciseScreen\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

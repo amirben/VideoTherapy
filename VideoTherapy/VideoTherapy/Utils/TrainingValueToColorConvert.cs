@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Markup;
-using VideoTherapy_Objects;
+using VideoTherapy.Objects;
 
 namespace VideoTherapy.Utils
 {

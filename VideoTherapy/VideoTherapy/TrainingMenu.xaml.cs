@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 
 using VideoTherapy.Views.TrainingMenu;
 using VideoTherapy.Views;
-using VideoTherapy_Objects;
+using VideoTherapy.Objects;
 
 namespace VideoTherapy
 {

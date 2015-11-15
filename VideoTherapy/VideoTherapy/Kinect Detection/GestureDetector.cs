@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Kinect;
 using Microsoft.Kinect.VisualGestureBuilder;
-using VideoTherapy_Objects;
+using VideoTherapy.Objects;
 
 namespace VideoTherapy.Kinect_Detection
 {
@@ -30,6 +30,7 @@ namespace VideoTherapy.Kinect_Detection
 
         private Gesture ContinuousGestureData = null;
 
+        public Boolean StopDetecion { set; get; }
 
         //Constractor
         public GestureDetector(KinectSensor _sensor, GestureAnalysis _gestureAnalysis, Exercise _currentExercise)
@@ -46,6 +47,7 @@ namespace VideoTherapy.Kinect_Detection
 
             this._sensor = _sensor;
             this._gestureAnalysis = _gestureAnalysis;
+
 
             // create the vgb source. The associated body tracking ID will be set when a valid body frame arrives from the sensor.
             vgbFrameSource = new VisualGestureBuilderFrameSource(_sensor, 0);
@@ -86,6 +88,9 @@ namespace VideoTherapy.Kinect_Detection
                     }
                 }
             }
+
+
+            StopDetecion = false;
         }
 
         public void GestureDetectionToAnalyze()
@@ -132,7 +137,7 @@ namespace VideoTherapy.Kinect_Detection
                             }
 
                             //update the analyzer
-                            if (continuousResult != null && discreteResult != null)
+                            if (continuousResult != null && discreteResult != null && !StopDetecion)
                             {
                                 _gestureAnalysis.UpdateGestureResult(gesture.Name, discreteResult, progress);
                                 //Console.WriteLine("Gesture {0}, confidance {1}, progress", gesture.Name, discreteResult.Confidence, progress);
