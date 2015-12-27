@@ -48,25 +48,32 @@ namespace VideoTherapy
 
         private async void LoginBtn_Click(object sender, RoutedEventArgs e)
         {
+            //todo - check input text
             //String email = emailTxt.Text;
             //String password = passwordTxt.Password;
 
             string email = "amir.ben@gmail.com";
             string password = "123456789";
 
+            //retrive the user id
+            //todo - check for errors from server
             string loginData = await ApiConnection.AppLoginApiAsync(email, password);
             Patient _currentPatient = JSONConvertor.CreatePatient(loginData);
 
-            string userData = await ApiConnection.GetUserDataApiAsync(_currentPatient.AccountId);
+            string userData = await ApiConnection.GetUserDataApiAsync(_currentPatient.AccountId, ApiConnection.PATIENT_LEVEL);
             JSONConvertor.GettingPatientData(_currentPatient, userData);
 
-            string treatmentData = await ApiConnection.GetUserTrainingApiAsync(_currentPatient.AccountId);
+            string treatmentData = await ApiConnection.GetTreatmentApiAsync(_currentPatient.PatientTreatment.TreatmentId);
             JSONConvertor.GettingPatientTreatment(_currentPatient, treatmentData);
 
+            //todo get patient current therapist
+            string therapistData = await ApiConnection.GetUserDataApiAsync(_currentPatient.PatientTreatment.TreatmentTherapist.AccountId, ApiConnection.THERAPIST_LEVEL);
+            JSONConvertor.GettingTherapistData(_currentPatient.PatientTreatment.TreatmentTherapist, therapistData);
+            _currentPatient.PatientTreatment.TreatmentTherapist.StartDate = _currentPatient.PatientTreatment.StartDate;
+
+            //downloading current images for treatment screen
             DownloadCache _downloadCache = new DownloadCache(_currentPatient);
             _downloadCache.DownloadTreatment();
-            
-            //todo get patient current therapist
 
             _mainWindow.OpenTreatmentWindow(_currentPatient);
             HideHandlerDialog();

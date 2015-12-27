@@ -9,11 +9,22 @@ using Newtonsoft.Json;
 
 namespace VideoTherapy.ServerConnections
 {
+
     /// <summary>
     /// Class used for connecting to the server API
     /// </summary>
     public static class ApiConnection
     {
+        /// <summary>
+        /// Level of patient for connection to server
+        /// </summary>
+        public static readonly int PATIENT_LEVEL = 100;
+
+        /// <summary>
+        /// Level of therapist for connection to server
+        /// </summary>
+        public static readonly int THERAPIST_LEVEL = 1;
+
         /// <summary>
         /// Uri of the server
         /// </summary>
@@ -33,7 +44,7 @@ namespace VideoTherapy.ServerConnections
         /// <summary>
         /// Enum that represent the types of the API
         /// </summary>
-        private enum ApiType { AppLogin, GetUserData, GetUserTraining, GetTraining };
+        private enum ApiType { AppLogin, GetUserData, GetTreatment, GetTraining };
 
         /// <summary>
         /// Initializes a new dictionary that represent the tuples for the REST-api request
@@ -72,8 +83,8 @@ namespace VideoTherapy.ServerConnections
                     ApiTypeString = "get-user-data";
                     break;
 
-                case ApiType.GetUserTraining:
-                    ApiTypeString = "get-user-training";
+                case ApiType.GetTreatment:
+                    ApiTypeString = "get-treatment";
                     break;
 
                 case ApiType.GetTraining:
@@ -121,20 +132,21 @@ namespace VideoTherapy.ServerConnections
         /// Requesting the user details (name, image and etc.), returning JSON with the content of the patient details
         /// </summary>
         /// <param name="_accountId">User account id</param>
-        public static async Task<string> GetUserDataApiAsync(int _accountId)
+        /// /// <param name="_level">The type of the user (patient of therapist)</param>
+        public static async Task<string> GetUserDataApiAsync(int _accountId, int _level)
         {
-            Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.GetUserData, "accountId", Convert.ToString(_accountId), "level", "1");
+            Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.GetUserData, "accountId", Convert.ToString(_accountId), "level", Convert.ToString(_level));
 
             return await ConnectingApiAsync(_pairs);
         }
 
         /// <summary>
-        /// Request the user training list, returning JSON with the content of the training list
+        /// Request the user treatment, returning JSON with the content of the treatment
         /// </summary>
-        /// <param name="_patientId">Patient id</param>
-        public static async Task<string> GetUserTrainingApiAsync(int _patientId)
+        /// <param name="_treatmentId">Patient id</param>
+        public static async Task<string> GetTreatmentApiAsync(int _treatmentId)
         {
-            Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.GetUserTraining, "patientId", Convert.ToString(_patientId), "status", "1");
+            Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.GetTreatment, "treatmentId", Convert.ToString(_treatmentId));
 
             return await ConnectingApiAsync(_pairs);
         }

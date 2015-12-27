@@ -67,8 +67,8 @@
                 </ProgressBar.Template>
             </ProgressBar>
 
-            <TextBlock x:Name="StartDate" Text="16.8.15" Foreground="White" FontFamily="Roboto" FontSize="16" DockPanel.Dock="Right" TextAlignment="Right" Margin="15,5,15,0"></TextBlock>
-            <TextBlock x:Name="EndDate" Text="9.8.15" Foreground="White" FontFamily="Roboto" FontSize="16" DockPanel.Dock="Left" Margin="15,5,15,0"></TextBlock>
+            <TextBlock x:Name="EndDate" Text="16.8.15" Foreground="White" FontFamily="Roboto" FontSize="16" DockPanel.Dock="Right" TextAlignment="Right" Margin="15,5,15,0"></TextBlock>
+            <TextBlock x:Name="StartDate" Text="{Binding StartDate}" Foreground="White" FontFamily="Roboto" FontSize="16" DockPanel.Dock="Left" Margin="15,5,15,0"></TextBlock>
         </DockPanel>
 
         <StackPanel x:Name="TreatmentScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
@@ -125,16 +125,16 @@
             </StackPanel.Resources>
             
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,5,10,-5">
-                <Image Source="..\..\Images\therapist.JPG" Height="140" Width="140" Margin="5,5,5,0" >
+                <Image Source="{Binding ImageThumb}" Height="140" Width="140" Margin="5,5,5,0" >
                     <Image.Clip>
                         <EllipseGeometry Center="60,60" RadiusX="60" RadiusY="60" />
                     </Image.Clip>
                 </Image>
                 
                 <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0,15,0,0">
-                    <TextBlock Text="Dr. Gibson" FontSize="20" FontWeight="Bold" />
+                    <TextBlock Text="{Binding FullName}" FontSize="20" FontWeight="Bold" />
                     <TextBlock Text="Physical Therapist" FontSize="18"/>
-                    <TextBlock Text="Your Therapist Since | 7.5.15" Opacity="0.5" FontSize="16"/>
+                    <TextBlock Text="{Binding StartDate, StringFormat='Your Therapist Since | {0}'}" Opacity="0.5" FontSize="16"/>
                 </StackPanel>
             </StackPanel>
 

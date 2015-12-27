@@ -8,8 +8,7 @@ namespace VideoTherapy.Objects
 {
     public class Patient : User
     {
-        public string UserProfileLink { set; get; }
-        public Therapist PhisicalTherapist { set; get; }
+        //public Therapist PhisicalTherapist { set; get; }
         public Treatment PatientTreatment { set; get; }
     }
 }

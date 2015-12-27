@@ -29,6 +29,8 @@ namespace VideoTherapy.Views.TreatmentMenu
 
             SetCurrentTreatment(_currentTreatment);
             TreatmentSelection.DataContext = _currentTreatment;
+            TherapistInfo.DataContext = _currentTreatment.TreatmentTherapist;
+            CalenderTimeline.DataContext = _currentTreatment;
         }
 
         public void SetCurrentTreatment(Treatment newTreatment)

@@ -94,6 +94,7 @@
     </Compile>
     <Compile Include="ServerConnections\ApiConnection.cs" />
     <Compile Include="ServerConnections\JSONConvertor.cs" />
+    <Compile Include="Utils\DateFormat.cs" />
     <Compile Include="Utils\Scoring.cs" />
     <Compile Include="Utils\TrainingValueToColorConvert.cs" />
     <Compile Include="Views\ExerciseScreen\SummaryPopUp.xaml.cs">
