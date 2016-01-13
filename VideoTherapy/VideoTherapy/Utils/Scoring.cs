@@ -46,6 +46,8 @@ namespace VideoTherapy.Utils
             return avg;
         }
 
+
+        // check to be how much from how much in precents = num of repeationg succes
         public static float GetExerciseScore(Exercise CurrentExercise)
         {
             float avg = 0;
@@ -65,6 +67,7 @@ namespace VideoTherapy.Utils
             return avg;
         }
 
+        //todo - ExerciceQuality - like in the above, need to change
 
         public static float GetTrainingScore(Training CurrentTraining)
         {

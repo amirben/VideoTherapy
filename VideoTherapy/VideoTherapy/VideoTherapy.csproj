@@ -16,7 +16,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -79,6 +79,7 @@
     <Compile Include="Model-View\CircularProgress.cs" />
     <Compile Include="Objects\Exercise.cs" />
     <Compile Include="Objects\Patient.cs" />
+    <Compile Include="Objects\Question.cs" />
     <Compile Include="Objects\Round.cs" />
     <Compile Include="Objects\Therapist.cs" />
     <Compile Include="Objects\Training.cs" />
@@ -97,6 +98,15 @@
     <Compile Include="Utils\DateFormat.cs" />
     <Compile Include="Utils\Scoring.cs" />
     <Compile Include="Utils\TrainingValueToColorConvert.cs" />
+    <Compile Include="Views\ExerciseScreen\PausePopUp.xaml.cs">
+      <DependentUpon>PausePopUp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExerciseScreen\QuestionFinishedPopUp.xaml.cs">
+      <DependentUpon>QuestionFinishedPopUp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExerciseScreen\QuestionnairePopUp.xaml.cs">
+      <DependentUpon>QuestionnairePopUp.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ExerciseScreen\SummaryPopUp.xaml.cs">
       <DependentUpon>SummaryPopUp.xaml</DependentUpon>
     </Compile>
@@ -128,6 +138,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TreatmentMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExerciseScreen\PausePopUp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExerciseScreen\QuestionFinishedPopUp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExerciseScreen\QuestionnairePopUp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -241,6 +263,12 @@
     <Resource Include="Images\connected.png" />
     <Resource Include="Images\disconnected.png" />
     <Resource Include="Images\shutdown.png" />
+    <Resource Include="Images\paused.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\info.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="XML\TreatmentsList.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Newtonsoft.Json.Linq;
 using VideoTherapy.Objects;
 using VideoTherapy.Utils;
 
@@ -95,6 +96,33 @@ namespace VideoTherapy.ServerConnections
                 newTraining.TrainingName = currentObj["label"].ToString();
                 newTraining.TrainingId = Int32.Parse(currentObj["id"].ToString());
                 newTraining.TrainingThumbs = currentObj["thumbnail"].ToString();
+                
+                //todo - yoav need to change the api
+                newTraining.LastViewed = currentObj["timeCreated"].ToString();
+
+                //check if there is calEvents exist
+                object tempCalEvents;
+                currentObj.TryGetValue("calEventsUsage", out tempCalEvents);
+
+                //if (tempCalEvents is JArray)
+                //{
+                //    Console.WriteLine("empty");
+                //}
+                if (tempCalEvents is JObject)
+                {
+                    Dictionary<string, string> calEvents = JsonConvert.DeserializeObject<Dictionary<string, string>>(tempCalEvents.ToString());
+                    newTraining.Repetitions = Int32.Parse(calEvents["total"].ToString());
+                    newTraining.TrainingCompleted = Int32.Parse(calEvents["completed"].ToString());
+                }
+
+                //check if this training is the upcoming one
+                Object checkUpComming = false;
+                currentObj.TryGetValue("upcomingEvent", out checkUpComming);
+                if (checkUpComming != null && (Boolean) checkUpComming)
+                {
+                    _patient.PatientTreatment.CurrentTraining = newTraining;
+                }
+
             }
         }
 

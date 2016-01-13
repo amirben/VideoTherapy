@@ -14,5 +14,29 @@ namespace VideoTherapy.Objects
         public List<Training> TrainingList { set; get; }
         public Training CurrentTraining { set; get; }
         public string StartDate { set; get; }
+
+        public Training NextTraining()
+        {
+            int next = TrainingList.IndexOf(CurrentTraining);
+            if (next + 1 < TrainingList.Count)
+            {
+                CurrentTraining = TrainingList[next + 1];
+            }
+
+            return CurrentTraining;
+        }
+
+        public Training PrevTraining()
+        {
+            int prev = TrainingList.IndexOf(CurrentTraining);
+            if (prev - 1 >= 0)
+            {
+                CurrentTraining = TrainingList[prev - 1];
+            }
+
+            return CurrentTraining;
+        }
     }
+
+    
 }

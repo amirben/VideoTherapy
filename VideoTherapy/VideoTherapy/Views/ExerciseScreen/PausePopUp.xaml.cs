@@ -15,28 +15,21 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-using VideoTherapy.Objects;
-
 namespace VideoTherapy.Views.ExerciseScreen
 {
     /// <summary>
-    /// Interaction logic for SummaryPopUp.xaml
+    /// Interaction logic for PausePopUp.xaml
     /// </summary>
-    public partial class SummaryPopUp : UserControl
+    public partial class PausePopUp : UserControl
     {
         private bool _hideRequest = false;
-        public Patient CurrentPatient;
-        public Training CurrentTraining;
 
-        public ExerciseView ExerciseView;
-
-        public SummaryPopUp()
+        public PausePopUp()
         {
             InitializeComponent();
-
             Visibility = Visibility.Visible;
-        }
 
+        }
 
         public void ShowHandlerDialog()
         {
@@ -71,18 +64,8 @@ namespace VideoTherapy.Views.ExerciseScreen
 
         public void SetSize(int height, int width)
         {
-            SummaryPopUpStackpanel.Width = width;
-            SummaryPopUpStackpanel.Height = height;
-        }
-
-        private void OpenQuestionsButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            ExerciseView.ClosedSummaryPopUp(true);
-        }
-
-        private void GoBackToTreatment_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            ExerciseView.ClosedSummaryPopUp(false);
+            PausePopUpStackpanel.Width = width;
+            PausePopUpStackpanel.Height = height;
         }
     }
 }

@@ -34,6 +34,9 @@ namespace VideoTherapy
         private UC_UserInfo _userInfo;
 
         public delegate void StartPlaylistDelegate(Training currentTraining);
+        public delegate void BackToTreatment();
+        public delegate void PrevTraining();
+        public delegate void NextTraining();
 
         public TrainingMenu(Patient currentPatient, Training currentTraining)
         {
@@ -54,11 +57,16 @@ namespace VideoTherapy
         {
             _trainingSelection = new UC_TrainingSelection(_currentPatient, _currentTraining);
             _exerciseSelection = new UC_ExerciseSelection(_currentTraining);
+
             _userInfo = new UC_UserInfo(_currentPatient);
+            _userInfo.ShowRecommended = false;
+            //_userInfo.CurrentTraining = _currentTraining;
 
-            StartPlaylistDelegate startPlaylistDelegate = new StartPlaylistDelegate(_trainingSelection__startPlaylist);
-            _trainingSelection._startPlaylist += _trainingSelection__startPlaylist;
-
+            StartPlaylistDelegate startPlaylistDelegate = new StartPlaylistDelegate(_trainingSelection_StartPlaylist);
+            _trainingSelection.StartPlaylist += _trainingSelection_StartPlaylist;
+            _trainingSelection.BackToTreatment += _trainingSelection_BackToTreatment;
+            _trainingSelection.PrevTraining += _trainingSelection_PrevTraining;
+            _trainingSelection.NextTraining += _trainingSelection_NextTraining;
 
             TrainingMenuGrid.Children.Add(_trainingSelection);
             TrainingMenuGrid.Children.Add(_exerciseSelection);
@@ -69,7 +77,27 @@ namespace VideoTherapy
             Grid.SetColumn(_userInfo, 2);
         }
 
-        private void _trainingSelection__startPlaylist(Training currentTraining)
+        private void _trainingSelection_NextTraining()
+        {
+            _currentTraining = _currentPatient.PatientTreatment.NextTraining();
+            _trainingSelection.DataContext = _currentTraining;
+            _exerciseSelection.DataContext = _currentTraining;
+
+        }
+
+        private void _trainingSelection_PrevTraining()
+        {
+            _currentTraining = _currentPatient.PatientTreatment.PrevTraining();
+            _trainingSelection.DataContext = _currentTraining;
+            _exerciseSelection.DataContext = _currentTraining;
+        }
+
+        private void _trainingSelection_BackToTreatment()
+        {
+            MainWindow.OpenTreatmentWindow(_currentPatient);
+        }
+
+        private void _trainingSelection_StartPlaylist(Training currentTraining)
         {
             MainWindow.OpenExerciseWindow(_currentPatient, currentTraining);
         }

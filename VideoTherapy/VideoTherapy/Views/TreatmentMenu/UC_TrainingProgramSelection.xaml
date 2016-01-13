@@ -72,8 +72,19 @@
         <DataTemplate x:Key="TrainingImageDataTemplate">
             <StackPanel HorizontalAlignment="Left" Width="240" Margin="15, 10">
                 <Grid>
-                    <Image Source="{Binding TrainingThumbs}" RenderTransformOrigin="20,2" >
-                    </Image>
+                    <Grid Background="White">
+                        <Image Source="{Binding TrainingThumbs}" RenderTransformOrigin="20,2" Margin="-60,0,75,0" >
+                            <Image.Clip>
+                                <RectangleGeometry Rect="60,0,400,400"></RectangleGeometry>
+                            </Image.Clip>
+                            <Image.OpacityMask>
+                                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5" >
+                                    <GradientStop Color="White" Offset="0.5"/>
+                                    <GradientStop Color="Transparent" Offset="0.95"/>
+                                </LinearGradientBrush>
+                            </Image.OpacityMask>
+                        </Image>
+                    </Grid>
                     <!--<Ellipse Height="80" Width="80" Fill="Black" Opacity="0.4" Stroke="White" StrokeThickness="2"></Ellipse>-->
 
                     <Border Style="{StaticResource BorderStyle}" BorderThickness="4" CornerRadius="50" Height="80" Width="80" HorizontalAlignment="Right" Margin="0,0,20,0">
@@ -83,7 +94,7 @@
                                 <Line VerticalAlignment="Stretch"  Stroke="White" Margin="8,0" Y2="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"  StrokeThickness="2"/>
                                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" Foreground="White" FontSize="26" Opacity="1" Text="{Binding Repetitions}"/>
                             </StackPanel>
-                            
+
                         </Border>
                     </Border>
                 </Grid>
@@ -94,7 +105,7 @@
                             <Setter Property="FontSize" Value="10"></Setter>
                         </Style>
                     </StackPanel.Resources>
-                    
+
                     <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" Height="30" Margin="5,5,5,-5" FontWeight="SemiBold">
                         <Run Text="Training #"></Run>
                         <Run Text="{Binding TrainingNumber}"></Run>
@@ -109,6 +120,7 @@
                 </StackPanel>
 
             </StackPanel>
+
         </DataTemplate>
 
         <ItemsPanelTemplate x:Key="TrainingImageItemsPanelTemplate">

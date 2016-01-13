@@ -61,6 +61,19 @@ namespace VideoTherapy
         // flag to asses if a body is currently tracked
         private bool bodyTracked = false;
 
+        //pause popup
+        private PausePopUp pausePopUp;
+
+        //summary popup
+        private SummaryPopUp summary;
+
+        // questionnaire popup
+        private QuestionnairePopUp questionnairePopUp;
+
+        //questionnaire finished popup
+        private QuestionFinishedPopUp questionnaireFinishedPopUp;
+
+        //delegates
         public delegate void NextRoundUpdataDelegate();
         public delegate void StopDetectionDelegate();
         public delegate void StartGestureDetected();
@@ -168,13 +181,13 @@ namespace VideoTherapy
             }
         }
 
-        
+      
 
         private void ExerciseView_Loaded(object sender, RoutedEventArgs e)
         {
             
             _sensor = KinectSensor.GetDefault();
-
+            //todo - check, not working
             if (_sensor != null)
             {
                 _sensor.Open();
@@ -273,6 +286,12 @@ namespace VideoTherapy
                     }
                 }
 
+                //todo - check it
+                else
+                {
+                    OpenPausePopUp();
+                }
+
             }
 
 
@@ -367,7 +386,7 @@ namespace VideoTherapy
 
         private void OpenSummaryPopUp()
         {
-            SummaryPopUp summary = new SummaryPopUp();
+            summary = new SummaryPopUp();
             int width = (int)(ActualWidth / 2.5);
             int height = (int)(ActualHeight * 0.75);
 
@@ -377,14 +396,99 @@ namespace VideoTherapy
 
             summary.CurrentTraining = CurrentTraining;
             summary.CurrentPatient = CurrentPatient;
+            summary.ExerciseView = this;
 
             ExerciseWindow.Children.Add(summary);
         }
 
-        private void OpenPausePopUp()
+        public void ClosedSummaryPopUp(Boolean goToQuestions)
         {
+            ExerciseWindow.Children.Remove(summary);
+            summary = null;
+
+            //if the user decided to answer the questions
+            if (goToQuestions)
+            {
+                OpenQuestionnairePopUp();
+            }
+            else
+            {
+                MainWindow.OpenTreatmentWindow(this.CurrentPatient);
+            }
+                
+        }
+
+        private void OpenQuestionnairePopUp()
+        {
+            questionnairePopUp = new QuestionnairePopUp();
+
+            int width = (int)(ActualWidth / 2.5);
+            int height = (int)(ActualHeight * 0.75);
+
+            questionnairePopUp.SetSize(height, width);
+
+            questionnairePopUp.ExerciseView = this;
+
+            ExerciseWindow.Children.Add(questionnairePopUp);
+        }
+
+        public void CloseQuestionnairePopUp(Boolean isFinished)
+        {
+            ExerciseWindow.Children.Remove(questionnairePopUp);
+
+            //in case that the user finished his questionnaire
+            if (isFinished)
+            {
+                OpenQuestionnaireFinishedPopUp();
+            }
+            else
+            {
+                MainWindow.OpenTreatmentWindow(this.CurrentPatient);
+            }
+                
+        }
+
+        private void OpenQuestionnaireFinishedPopUp()
+        {
+            questionnaireFinishedPopUp = new QuestionFinishedPopUp();
+
+            int width = (int)(ActualWidth / 2);
+            int height = (int)(ActualHeight * 0.55);
+
+            questionnaireFinishedPopUp.SetSize(height, width);
+            questionnaireFinishedPopUp.ExerciseView = this;
+
+            ExerciseWindow.Children.Add(questionnaireFinishedPopUp);
 
         }
+        
+        public void CloseQuestionnaireFinishedPopUp()
+        {
+            ExerciseWindow.Children.Remove(questionnaireFinishedPopUp);
+
+            MainWindow.OpenTreatmentWindow(this.CurrentPatient);
+        }
+
+        private void OpenPausePopUp()
+        {
+            pausePopUp = new PausePopUp();
+            int width = (int)(ActualWidth * 0.5);
+            int height = (int)(ActualHeight * 0.35);
+
+            pausePopUp.SetSize(height, width);
+
+            //todo - stop training + video
+
+            ExerciseWindow.Children.Add(pausePopUp);
+        }
+
+        private void ClosePausePopUp()
+        {
+            ExerciseWindow.Children.Remove(pausePopUp);
+
+            //todo - resume tracking
+        }
+
         
         private void CloseAllComponents()
         {
@@ -469,8 +573,5 @@ namespace VideoTherapy
 
         }
 
-       
-
-        
     }
 }

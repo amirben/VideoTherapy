@@ -14,22 +14,27 @@ namespace VideoTherapy.Utils
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-           Training training = (Training)System.Convert.ChangeType(value, typeof(Training));
 
-            if (training.TrainingCompleted == 0)
+            if (value is Training)
             {
-                return 0;
-            }
+                Training training = (Training)System.Convert.ChangeType(value, typeof(Training));
 
-            if (training.Repetitions == training.TrainingCompleted)
-            {
-                return 1;
-            }
+                if (training.TrainingCompleted == 0)
+                {
+                    return 0;
+                }
 
-            if (training.Repetitions > training.TrainingCompleted)
-            {
-                return -1;
+                if (training.Repetitions == training.TrainingCompleted)
+                {
+                    return 1;
+                }
+
+                if (training.Repetitions > training.TrainingCompleted)
+                {
+                    return -1;
+                }
             }
+            
 
             return -1;
         }

@@ -25,7 +25,10 @@ namespace VideoTherapy.Views.TrainingMenu
         private Patient _currentPatient;
         private Training _currentTraining;
 
-        public event VideoTherapy.TrainingMenu.StartPlaylistDelegate _startPlaylist;
+        public event VideoTherapy.TrainingMenu.StartPlaylistDelegate StartPlaylist;
+        public event VideoTherapy.TrainingMenu.BackToTreatment BackToTreatment;
+        public event VideoTherapy.TrainingMenu.NextTraining NextTraining;
+        public event VideoTherapy.TrainingMenu.PrevTraining PrevTraining;
 
         public UC_TrainingSelection(Patient currentPatient, Training currentTraining)
         {
@@ -39,7 +42,23 @@ namespace VideoTherapy.Views.TrainingMenu
 
         private void StartButton(object sender, RoutedEventArgs e)
         {
-            _startPlaylist(_currentTraining);
+            StartPlaylist(_currentTraining);
+        }
+
+        private void NextTrainingBtn_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            NextTraining();
+
+        }
+
+        private void BackTrainingBtn_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            PrevTraining();
+        }
+
+        private void BackToTreatmentBtn_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            BackToTreatment();
         }
     }
 }

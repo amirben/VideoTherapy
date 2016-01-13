@@ -28,7 +28,8 @@ namespace VideoTherapy.ServerConnections
         /// <summary>
         /// Uri of the server
         /// </summary>
-        private readonly static string apiUri = "https://videotherapy.co/dev/vt/api/dispatcher.php";
+        /// https://videotherapy.co/dev/vt/api/dispatcher.php
+        private readonly static string apiUri = "https://videotherapy.co/vt/api/dispatcher.php";
 
         /// <summary>
         /// The type of the Api that need to be use
@@ -106,12 +107,17 @@ namespace VideoTherapy.ServerConnections
                 //string json = new JavaScriptSerializer().Serialize((object) _pairs);
                 HttpContent contentPost = new StringContent(json, Encoding.UTF8);
 
+
+                //todo -check error
                 var response = await client.PostAsync(apiUri, contentPost);
                 var x = response.EnsureSuccessStatusCode();
 
                 content = await response.Content.ReadAsStringAsync();
 
             }
+
+           
+
 
             return content;
         }
@@ -146,7 +152,9 @@ namespace VideoTherapy.ServerConnections
         /// <param name="_treatmentId">Patient id</param>
         public static async Task<string> GetTreatmentApiAsync(int _treatmentId)
         {
-            Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.GetTreatment, "treatmentId", Convert.ToString(_treatmentId));
+            string byUsage = "byUsage";
+            string byUsageValue = "1";
+            Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.GetTreatment, "treatmentId", Convert.ToString(_treatmentId), byUsage, byUsageValue);
 
             return await ConnectingApiAsync(_pairs);
         }

@@ -34,6 +34,7 @@ namespace VideoTherapy
 
         public delegate void TrainingSelectedDelegate(Training _selectedTraining);
 
+
         public TreatmentMenu(Patient _currentPatient)
         {
             InitializeComponent();
@@ -46,10 +47,16 @@ namespace VideoTherapy
         {
             _treatmentSelection = new UC_TreatmentSelection(_currentPatient.PatientTreatment);
             _trainingSeleciton = new UC_TrainingProgramSelection(_currentPatient.PatientTreatment.TrainingList);
-            _userInfo = new UC_UserInfo(_currentPatient);
 
             TrainingSelectedDelegate trainingSelected = new TrainingSelectedDelegate(_trainingSeleciton_trainingSelectedEvent);
             _trainingSeleciton.trainingSelectedEvent += _trainingSeleciton_trainingSelectedEvent;
+
+            _userInfo = new UC_UserInfo(_currentPatient);
+            _userInfo.ShowRecommended = true;
+            _userInfo.CurrentTraining = _currentPatient.PatientTreatment.CurrentTraining;
+            _userInfo.trainingSelectedEvent += _trainingSeleciton_trainingSelectedEvent;
+                    
+           
 
             TreatmentMenuGrid.Children.Add(_treatmentSelection);
             TreatmentMenuGrid.Children.Add(_trainingSeleciton);

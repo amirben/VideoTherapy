@@ -62,9 +62,9 @@
                 </StackPanel>
 
 
-                <TextBlock Background="#4fc3f7" Foreground="White" FontSize="46" FontWeight="Bold" TextAlignment="Center" Padding="8" Margin="15,30,15,10" Text="Tell us how it was &gt;"/>
+                <TextBlock x:Name="OpenQuestionsButton" Background="#4fc3f7" Foreground="White" FontSize="46" FontWeight="Bold" TextAlignment="Center" Padding="8" Margin="15,30,15,10" Text="Tell us how it was &gt;" MouseLeftButtonDown="OpenQuestionsButton_MouseLeftButtonDown"/>
 
-                <TextBlock Foreground="White" FontSize="30" TextAlignment="Center" Opacity="0.5" Margin= "0,5">
+                <TextBlock x:Name="GoBackToTreatment" Foreground="White" FontSize="30" TextAlignment="Center" Opacity="0.5" Margin= "0,5" MouseLeftButtonDown="GoBackToTreatment_MouseLeftButtonDown">
             <Run Text="&lt; "/>
             <Underline>
                 <Run Text="Go back to treatment screen"/>

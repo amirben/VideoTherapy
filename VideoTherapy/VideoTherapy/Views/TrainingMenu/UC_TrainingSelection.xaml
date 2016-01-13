@@ -11,11 +11,12 @@
     <DockPanel Background="#7F000000" Margin="15,15,7,15">
         <StackPanel DockPanel.Dock="Top" Orientation="Vertical"  >
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Height="80" Margin="0,0,0,15">
-                <Button x:Name="BackToTreatmentBtn" HorizontalAlignment="Left" Height="45" Width="45" Margin="20,15,0,0" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
+                <Image  x:Name="BackToTreatmentBtn" HorizontalAlignment="Left" Height="40" Width="40" Source="../../images/back.png"  Margin="20,15,0,0" MouseLeftButtonDown="BackToTreatmentBtn_MouseLeftButtonDown"></Image>
+                <!--<Button  x:Name="BackToTreatmentBtn" HorizontalAlignment="Left" Height="45" Width="45" Margin="20,15,0,0" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
                     <Button.Content>
-                        <Image Height="30" Width="30" Source="../../images/back.png" ></Image>
+                        
                     </Button.Content>
-                </Button>
+                </Button>-->
 
                 <TextBlock Text="Treatment" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30,15,15,0" Foreground="White" FontSize="48"  FontWeight="Bold"  >
 
@@ -24,25 +25,28 @@
             </StackPanel>
 
             <Grid HorizontalAlignment="Stretch" Height="80"  >
-                <Button x:Name="BackwardBtn" HorizontalAlignment="Left" Height="45" Width="45" Margin="20,0,0,15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
+                <Image x:Name="BackTrainingBtn" Source="..\..\Images\arrow_left.png" HorizontalAlignment="Left" Height="45" Width="45" Margin="20,0,0,15" MouseLeftButtonDown="BackTrainingBtn_MouseLeftButtonDown"></Image>
+                <!--<Button   Height="45" Width="45"  Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
                     <Button.Content>
-                        <Image Source="..\..\Images\arrow_left.png" Height="40" Width="40" ></Image>
-                        <!--<Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" >
+                        
+                        --><!--<Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" >
                             <Image Source="..\..\Images\arrow_left.png" Height="40" Width="40" ></Image>
-                        </Border>-->
+                        </Border>--><!--
                     </Button.Content>
-                </Button>
+                </Button>-->
                 <TextBlock x:Name="CurrentTrainingLbl" HorizontalAlignment="Center" Text="{Binding TrainingNumber, StringFormat='Training #{0}'}" VerticalAlignment="Center" TextAlignment="Center" FontSize="58"  Margin="70,0,210.6,10"  Foreground="White" FontWeight="Bold" FontFamily="Roboto"/>
                 <!--Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}"-->
 
-                <Button x:Name="ForwardBtn" HorizontalAlignment="Right" Height="45" Width="45" Margin="0,0,20,15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" >
+                <Image x:Name="NextTrainingBtn" HorizontalAlignment="Right"  Source="..\..\Images\arrow_right.png" Height="45" Width="45" Margin="0,0,20,15" MouseLeftButtonDown="NextTrainingBtn_MouseLeftButtonDown"></Image>
+                
+                <!--<Button Height="45" Width="45"  Background="Transparent" BorderThickness="0" BorderBrush="Transparent" >
                     <Button.Content>
-                        <Image Source="..\..\Images\arrow_right.png" Height="40" Width="40" ></Image>
-                        <!--<Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" Background="#4fc3f7" >
+                       
+                        --><!--<Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" Background="#4fc3f7" >
                             <Image Source="..\..\Images\arrow_right.png" Height="25" Width="25" ></Image>
-                        </Border>-->
+                        </Border>--><!--
                     </Button.Content>
-                </Button>
+                </Button>-->
             </Grid>
 
             <StackPanel x:Name="TrainingScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,45,0,0">
