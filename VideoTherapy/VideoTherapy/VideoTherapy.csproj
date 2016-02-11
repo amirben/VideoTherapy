@@ -16,7 +16,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -95,7 +95,9 @@
     </Compile>
     <Compile Include="ServerConnections\ApiConnection.cs" />
     <Compile Include="ServerConnections\JSONConvertor.cs" />
+    <Compile Include="Utils\CalculateMD5Hash.cs" />
     <Compile Include="Utils\DateFormat.cs" />
+    <Compile Include="Utils\HttpsReplaceToHttp.cs" />
     <Compile Include="Utils\Scoring.cs" />
     <Compile Include="Utils\TrainingValueToColorConvert.cs" />
     <Compile Include="Views\ExerciseScreen\PausePopUp.xaml.cs">
@@ -269,11 +271,20 @@
     <Resource Include="Images\info.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\close.png" />
+    <Resource Include="Images\login.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\default_patient.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\close3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="XML\TreatmentsList.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

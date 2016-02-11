@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:VideoTherapy.Views"
              xmlns:convert="clr-namespace:VideoTherapy.Utils"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="800" d:DesignWidth="500">
 
     <UserControl.Resources>
 

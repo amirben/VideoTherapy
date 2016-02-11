@@ -14,7 +14,7 @@ namespace VideoTherapy.ServerConnections
     /// <summary>
     /// Class used for download temporery images and videos
     /// </summary>
-    public class DownloadCache
+    public class DownloadCache : IDisposable
     {
         private Barrier _barrier;
         private Patient _patient;
@@ -38,7 +38,9 @@ namespace VideoTherapy.ServerConnections
             _barrier = new Barrier(1);
 
             string newDir = CreateDir(dir, _patient.AccountId.ToString());
+            //create treatment dir (it if needed)
             newDir = CreateDir(newDir, _patient.PatientTreatment.TreatmentNumber.ToString());
+            //create training dir (it if needed)
             newDir = CreateDir(newDir, _patient.PatientTreatment.TrainingList[_trainingIndex].TrainingId.ToString());
 
             int size = _patient.PatientTreatment.TrainingList[_trainingIndex].Playlist.Count;
@@ -50,37 +52,38 @@ namespace VideoTherapy.ServerConnections
 
                 string exercisePath = newDir + "\\" + exercise.ExerciseId;
 
-                string videoPath = exercisePath;
+                //string videoPath = exercisePath;
                 string imagePath = exercisePath;
 
                 if (exercise.isDemo)
                 {
-                    videoPath += "_demo";
+                    //videoPath += "_demo";
                     imagePath += "_demo";
                 }
 
-                videoPath += ".mp4";
+                //videoPath += ".mp4";
                 imagePath += ".png";
 
                 //To download once the file
                 if (!exercise.isDuplicate)
                 {
                     //download video
-                    string _from1 = exercise.VideoPath;
-                    Thread temp1 = new Thread(() => DownloadFile(_from1, videoPath));
+                    //string _from1 = exercise.VideoPath;
+                    //Thread temp1 = new Thread(() => DownloadFile(_from1, videoPath));
 
                     //download image
                     string _from2 = exercise.ExerciseThumbs;
                     Thread temp2 = new Thread(() => DownloadFile(_from2, imagePath));
 
-                    _barrier.AddParticipants(2);
+                    _barrier.AddParticipants(1);
+                    //_barrier.AddParticipants(2);
 
-                    temp1.Start();
+                    //temp1.Start();
                     temp2.Start();
                 }
 
                 //Duplicate the path to the rest of them
-                _patient.PatientTreatment.TrainingList[_trainingIndex].Playlist[temp].VideoPath = videoPath;
+                //_patient.PatientTreatment.TrainingList[_trainingIndex].Playlist[temp].VideoPath = videoPath;
                 _patient.PatientTreatment.TrainingList[_trainingIndex].Playlist[temp].ExerciseThumbs = imagePath;
             }
 
@@ -94,15 +97,17 @@ namespace VideoTherapy.ServerConnections
         /// </summary>
         public void DownloadTreatment()
         {
+            //crearte dir for user (if not already created)
             string newDir = CreateDir(dir, _patient.AccountId.ToString());
             newDir = CreateDir(newDir, _patient.PatientTreatment.TreatmentNumber.ToString());
 
+            //initilaize the barrier
             int size = _patient.PatientTreatment.TrainingList.Count;
             _barrier = new Barrier(size + 1);
+
             for (int i = 0; i < size; i++)
             {
                 int temp = i;
-
                 //Thread tempThread = new Thread(() =>
                 //                _patient.PatientTreatment.TrainingList[temp].TrainingThumbs = DownloadImageFile(_patient, newDir, ref temp));
 
@@ -118,18 +123,47 @@ namespace VideoTherapy.ServerConnections
             
         }
 
+        public void DownloadAllTreatmentImages()
+        {
+            //Downloading all thumbs in treatment
+            DownloadTreatment();
+            
+            //download all thumbs in each training
+
+            foreach(Training t in _patient.PatientTreatment.TrainingList)
+            {
+                DownloadTraining(_patient, _patient.PatientTreatment.TrainingList.IndexOf(t));
+            }
+
+        }
+
+        public void DownloadGDBfile(Exercise _exercise)
+        {
+            _barrier = new Barrier(1);
+
+            string newDir = CreateDir(dir, _patient.AccountId.ToString());
+            newDir = CreateDir(newDir, _patient.PatientTreatment.TreatmentNumber.ToString());
+            newDir = CreateDir(newDir, _patient.PatientTreatment.CurrentTraining.TrainingId.ToString());
+            newDir = CreateDir(newDir, _exercise.ExerciseId.ToString());
+
+            newDir += "\\" + _exercise.ExerciseId + ".gdb";
+
+            DownloadFile(_exercise.DBUrl, newDir);
+            _exercise.DBPath = newDir;
+        }
+
         private void DownloadFile(string _from, string _to)
         {
             try
             {
-                lock (theLock)
-                {
-                    Console.WriteLine("From : =>");
-                    Console.WriteLine(_from);
-                    Console.WriteLine("To : =>");
-                    Console.WriteLine(_to);
-                    Console.WriteLine();
-                }
+                //lock (theLock)
+                //{
+                //    Console.WriteLine("From : =>");
+                //    Console.WriteLine(_from);
+                //    Console.WriteLine("To : =>");
+                //    Console.WriteLine(_to);
+                //    Console.WriteLine();
+                //}
 
                 using (WebClient webClient = new WebClient())
                 {
@@ -222,5 +256,9 @@ namespace VideoTherapy.ServerConnections
             return "";
         }
 
+        public void Dispose()
+        {
+            _barrier.Dispose();
+        }
     }
 }

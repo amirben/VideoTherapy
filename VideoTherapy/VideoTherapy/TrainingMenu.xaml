@@ -18,6 +18,5 @@
             <ImageBrush ImageSource="Images\city_sunny_background.jpg"></ImageBrush>
         </Grid.Background>
 
-
     </Grid>
 </UserControl>

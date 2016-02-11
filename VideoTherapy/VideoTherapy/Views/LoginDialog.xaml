@@ -5,31 +5,122 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:VideoTherapy"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="900" d:DesignWidth="600"
              x:Name="root">
 
     <Grid Visibility="{Binding Visibility}">
-        <Border Background="#90000000" Visibility="{Binding Visibility}">
-            <Border  BorderThickness="1" CornerRadius="10,10,10,10" VerticalAlignment="Center"
+        <Image Stretch="Fill" Source="..\Images\login.png"/>
+        <Border Background="#00000000" Visibility="{Binding Visibility}"  >
+            <Border  Background="#FFF4F3F3" BorderBrush="#FFF4F3F3" BorderThickness="2" CornerRadius="4,4,4,4" VerticalAlignment="Center"
 					HorizontalAlignment="Center">
-                
-                <Grid Background="LightGray"  Margin="3" >
-                    <Label Content="Sign In" Margin="10,0,10,246" FontSize="30" HorizontalAlignment="Center"/>
-                    <Separator RenderTransformOrigin="0.519,0.356" Margin="10,0,10,292.2" Height="53" VerticalAlignment="Bottom"/>
-                    <Label Content="Tell us who you are?" FontSize="15" Margin="78,56,78,274.2" />
 
-                    <Image Source="/images/patient.png" Height="78" VerticalAlignment="Bottom" Margin="0,0,-3.4,189.6"/>
+                <Grid x:Name="LoginPopup" >
+                    <Grid.Resources>
+                        <Style TargetType="TextBox">
+                            <Setter Property="FontFamily" Value="Roboto"/>
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-                    <Label Content="Email" Margin="10,180,10,163.2"/>
-                    <TextBox x:Name="emailTxt" Margin="10,211,10,140.2" Height="18"></TextBox>
-                    <Label Content="Password" Margin="10,234,0,110.2"/>
-                    <PasswordBox x:Name="passwordTxt" Margin="10,259,10,92.2" Height="18"></PasswordBox>
-                    <CheckBox Margin="10,282,0,65.2">Remember Me!</CheckBox>
-                    <Button Name="LoginBtn" Content="Login" Margin="78,309,78,37.2" Background="LightGreen" Click="LoginBtn_Click" />
-                    <TextBlock  Margin="78,332,78,10.2">
+                    <Image x:Name="CloseButton"  Source="..\Images\close3.png" HorizontalAlignment="Right" VerticalAlignment="top" Height="12" Width="12" Margin="8,8" MouseLeftButtonDown="CloseButton_MouseLeftButtonDown"></Image>
+
+                    <Label Grid.Row="0" Content="Login" HorizontalAlignment="Center" Margin="10,5" FontSize="36" />
+                    <Line  Grid.Row="1" Stroke="Gray" HorizontalAlignment="Stretch" Margin="10,0" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"  StrokeThickness="0.5" />
+                    <Label x:Name="welcomeMessege" Grid.Row="2" Content="Tell us who you are?" FontSize="22" FontWeight="Light" HorizontalAlignment="Center" Margin="10,7"/>
+
+
+                    <Image x:Name="userImg" Grid.Row="3" Source="/images/default_patient.png" Height="140" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,15">
+                        <Image.Clip>
+                            <EllipseGeometry  Center="70,70" RadiusX="70" RadiusY="70"/>
+                        </Image.Clip>
+                    </Image>
+                    <Ellipse Grid.Row="3" Height="142" Width="142" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,20" Stroke="#4fc3f7" StrokeThickness="2"></Ellipse>
+
+                    <Label x:Name="userFullName" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,15,0,-5" FontWeight="Light" FontSize="14"></Label>
+                    
+                    <Grid Grid.Row="4" HorizontalAlignment="Stretch" Margin="12,16,12,8">
+                        <TextBox Name="emailTxt" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="White"
+                                 Foreground="Gray" BorderThickness="1" BorderBrush="#4fc3f7" FontSize="14"  Height="24" TextChanged="emailTxt_TextChanged"/>
+                        <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF808080" IsHitTestVisible="False"
+                                 BorderThickness="0" FontStyle="Italic" FontSize="12" Text="Your E-mail" IsReadOnly="True" Focusable="False">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding ElementName=emailTxt, Path=IsKeyboardFocusWithin}" Value="False"/>
+                                                <Condition Binding="{Binding ElementName=emailTxt, Path=Text.IsEmpty}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </MultiDataTrigger>
+                                        <DataTrigger Binding="{Binding ElementName=emailTxt, Path=IsKeyboardFocusWithin}" Value="True">
+                                            <Setter Property="Visibility" Value="Hidden"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ElementName=emailTxt, Path=Text.IsEmpty}" Value="False">
+                                            <Setter Property="Visibility" Value="Hidden"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </Grid>
+
+                    <!--<Label Content="Password" Margin="10,234,0,110.2"/>-->
+                    <Grid Grid.Row="5" HorizontalAlignment="Stretch" Margin="12,8">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid >
+                            <PasswordBox x:Name="passwordTxt" Height="24" FontSize="12"  Foreground="Gray" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="White" BorderThickness="1" BorderBrush="#4fc3f7" PasswordChanged="passwordTxt_PasswordChanged"></PasswordBox>
+                            <TextBox x:Name="passwordHint" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF808080" 
+                                 IsHitTestVisible="False" BorderThickness="0" FontStyle="Italic" FontSize="12" Text="Password" IsReadOnly="True">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding ElementName=passwordTxt, Path=IsKeyboardFocusWithin}" Value="False"/>
+                                                    <Condition Binding="{Binding IsEmptyPass}" Value="true"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </MultiDataTrigger>
+                                            <DataTrigger Binding="{Binding ElementName=passwordTxt, Path=IsKeyboardFocusWithin}" Value="True">
+                                                <Setter Property="Visibility" Value="Hidden"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsEmptyPass}" Value="false">
+                                                <Setter Property="Visibility" Value="Hidden"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </Grid>
+                        <Label Grid.Row="2" x:Name="wrongInputLbl" Visibility="Hidden" Foreground="Red" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="10">Wrong email or password</Label>
+                    </Grid>
+
+
+                    <Grid Grid.Row="6" Margin="10,0" HorizontalAlignment="Center" >
+                        <CheckBox x:Name="SaveConfig" Grid.Row="2" FontSize="12">Remember Me!</CheckBox>
+                    </Grid>
+                    
+                    <Button BorderThickness="0" Grid.Row="7" Name="LoginBtn" Content="Login" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,4" Padding="18,6" Foreground="White" Background="#80c683" Click="LoginBtn_Click"/>
+
+                    
+                    <!--<TextBlock  HorizontalAlignment="Center" Margin="10,5" >
                         Need an account? 
                         <Hyperlink NavigateUri="www.videotherapy.co">Signup</Hyperlink>
-                    </TextBlock>
+                    </TextBlock>-->
                     
                 </Grid>
 

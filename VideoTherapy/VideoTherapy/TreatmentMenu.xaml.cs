@@ -17,6 +17,7 @@ using VideoTherapy.Objects;
 using VideoTherapy.Views;
 using VideoTherapy.Views.TreatmentMenu;
 using VideoTherapy.ServerConnections;
+using VideoTherapy;
 
 namespace VideoTherapy
 {
@@ -34,6 +35,8 @@ namespace VideoTherapy
 
         public delegate void TrainingSelectedDelegate(Training _selectedTraining);
 
+        public event MainWindow.CloseAppDelegate CloseApp;
+        public event MainWindow.LogOutDelegate LogOut;
 
         public TreatmentMenu(Patient _currentPatient)
         {
@@ -53,10 +56,11 @@ namespace VideoTherapy
 
             _userInfo = new UC_UserInfo(_currentPatient);
             _userInfo.ShowRecommended = true;
-            _userInfo.CurrentTraining = _currentPatient.PatientTreatment.CurrentTraining;
+            _userInfo.RecomendedTraining = _currentPatient.PatientTreatment.RecommendedTraining;
             _userInfo.trainingSelectedEvent += _trainingSeleciton_trainingSelectedEvent;
-                    
-           
+            _userInfo.closeApp += CloseApp;
+            _userInfo.logOut += LogOut;
+
 
             TreatmentMenuGrid.Children.Add(_treatmentSelection);
             TreatmentMenuGrid.Children.Add(_trainingSeleciton);
@@ -70,13 +74,28 @@ namespace VideoTherapy
         private async void _trainingSeleciton_trainingSelectedEvent(Training _selectedTraining)
         {
             //Console.WriteLine(_selectedTraining);
-            string json = await ApiConnection.GetTrainingApiAsync(_selectedTraining.TrainingId);
-            JSONConvertor.GettingPatientTraining(_selectedTraining, json);
+            //string json = await ApiConnection.GetTrainingApiAsync(_selectedTraining.TrainingId);
+            //JSONConvertor.GettingPatientTraining(_selectedTraining, json);
 
-            DownloadCache cache = new DownloadCache(_currentPatient);
-            cache.DownloadTraining(_currentPatient, _currentPatient.PatientTreatment.TrainingList.IndexOf(_selectedTraining));
+            //todo - use "using"
+            //DownloadCache cache = new DownloadCache(_currentPatient);
+            //cache.DownloadTraining(_currentPatient, _currentPatient.PatientTreatment.TrainingList.IndexOf(_selectedTraining));
 
+
+            //-------------------------------===================----------------------
+            //Training temp = _currentPatient.PatientTreatment.CurrentTraining;
+            //foreach (Exercise tempExe in temp.Playlist)
+            //{
+            //    //check if it is not demo and not duplicated video (to download once the gdb)
+            //    if (!tempExe.isDemo && !tempExe.isDuplicate)
+            //    {
+            //        //todo - download the gestures (gdb)
+            //    }
+            //}
+            _currentPatient.PatientTreatment.CurrentTraining = _selectedTraining;
             MainWindow.OpenTrainingWindow(_currentPatient, _selectedTraining);
+            //todo - download gdb's
+
         }
 
         public void Dispose()

@@ -13,26 +13,37 @@ namespace VideoTherapy.Objects
         public Therapist TreatmentTherapist { set; get; }
         public List<Training> TrainingList { set; get; }
         public Training CurrentTraining { set; get; }
+        public Training RecommendedTraining { set; get; }
         public string StartDate { set; get; }
 
         public Training NextTraining()
         {
-            int next = TrainingList.IndexOf(CurrentTraining);
-            if (next + 1 < TrainingList.Count)
+            if (!TrainingList.Last().Equals(CurrentTraining))
             {
-                CurrentTraining = TrainingList[next + 1];
+                CurrentTraining = TrainingList[TrainingList.IndexOf(CurrentTraining) + 1];
             }
+
+            //int next = TrainingList.IndexOf(CurrentTraining);
+            //if (next + 1 < TrainingList.Count)
+            //{
+            //    CurrentTraining = TrainingList[next + 1];
+            //}
 
             return CurrentTraining;
         }
 
         public Training PrevTraining()
         {
-            int prev = TrainingList.IndexOf(CurrentTraining);
-            if (prev - 1 >= 0)
+            if (!TrainingList.First().Equals(CurrentTraining))
             {
-                CurrentTraining = TrainingList[prev - 1];
+                CurrentTraining = TrainingList[TrainingList.IndexOf(CurrentTraining) - 1];
             }
+
+            //int prev = TrainingList.IndexOf(CurrentTraining);
+            //if (prev - 1 >= 0)
+            //{
+            //    CurrentTraining = TrainingList[prev - 1];
+            //}
 
             return CurrentTraining;
         }

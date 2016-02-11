@@ -61,7 +61,8 @@ namespace VideoTherapy.Kinect_Detection
             }
 
             // load all gestures from the gesture database
-            using (var database = new VisualGestureBuilderDatabase(@"C:\Users\amirb\Desktop\Afeka\VideoTherapy\VideoTherapy - Client\VideoTherapy\VideoTherapy\VideoTherapy\DB\squat.gbd"))
+            using (var database = new VisualGestureBuilderDatabase(_currentExercise.DBPath))
+            //using (var database = new VisualGestureBuilderDatabase(@"C:\Users\amirb\Desktop\Afeka\VideoTherapy\VideoTherapy - Client\VideoTherapy\VideoTherapy\VideoTherapy\DB\squat.gbd"))
             //using (var database = new VisualGestureBuilderDatabase(_currentExercise.DBPath))
             {
                 vgbFrameSource.AddGestures(database.AvailableGestures);

@@ -16,6 +16,7 @@ using System.Windows.Threading;
 
 using VideoTherapy.Views;
 using VideoTherapy.Objects;
+using VideoTherapy.ServerConnections;
 
 namespace VideoTherapy
 {
@@ -25,6 +26,9 @@ namespace VideoTherapy
     public partial class MainWindow : Window
     {
         private bool authenticated = false;
+
+        public delegate void CloseAppDelegate();
+        public delegate void LogOutDelegate();
 
         public MainWindow()
         {
@@ -37,17 +41,46 @@ namespace VideoTherapy
         {
             OpenLoginPopUp();
 
-            //OpenExerciseWindow();
+            //CloseAppDelegate closeApp = new CloseAppDelegate(CloseApp);
+            //LogOutDelegate logOut = new LogOutDelegate(LogOut);
         }
 
-        private void OpenLoginPopUp()
+        private void CloseApp()
         {
-            LoginDialog ld = new LoginDialog();
-
-            ld.SetMainWindow(this);
-            DataContext = ld;
-            OpenningWindow.Children.Add(ld);
+            Close();
         }
+
+        private void LogOut()
+        {
+            OpenLoginPopUp(true);
+        }
+
+        public void OpenLoginPopUp()
+        {
+            OpenLoginPopUp(false);
+        }
+
+        public void OpenLoginPopUp(bool deleteConfig)
+        {
+            using (LoginDialog ld = new LoginDialog())
+            {
+                if (deleteConfig)
+                {
+                    ld.DeleteConfigFile();
+                }
+
+                int width = (int)(ActualWidth / 4);
+                int height = (int)(ActualHeight * 0.55);
+
+                ld.SetSize(width, height);
+                ld.CloseApp += CloseApp;
+                ld.MainWindow = this;
+                this.Content = ld;
+            }
+
+               
+        }
+
         private void OpenExerciseWindow()
         {
             //OpenningWindow.Children.Clear();
@@ -59,14 +92,14 @@ namespace VideoTherapy
         {
             //OpenningWindow.Children.Clear();
             //OpenningWindow.Background = null;
-
             using (TrainingMenu _trainingMenu = new TrainingMenu(_currentPatient, _selectedTraining))
             {
                 _trainingMenu.MainWindow = this;
+                _trainingMenu.CloseApp += CloseApp;
+                _trainingMenu.LogOut += LogOut;
                 this.Content = _trainingMenu;
                 //OpenningWindow.Children.Add(_trainingMenu);
             }
-
         }
 
         public void OpenTreatmentWindow(Patient _currentPatient)
@@ -74,19 +107,40 @@ namespace VideoTherapy
             //OpenningWindow.Background = null;
             using (TreatmentMenu _treatmentMenu = new TreatmentMenu(_currentPatient))
             {
+                _treatmentMenu.CloseApp += CloseApp;
+                _treatmentMenu.LogOut += LogOut;
                 _treatmentMenu.MainWindow = this;
                 this.Content = _treatmentMenu;
             }
         }
 
-        public void OpenExerciseWindow(Patient _currentPatient, Training _currentTraining)
+        public async void OpenExerciseWindow(Patient _currentPatient, Training _currentTraining)
         {
+            //download the gestures and .gdb files for the current training
+            foreach (var exercise in _currentTraining.Playlist)
+            {
+                if (!exercise.isDemo && !exercise.isDuplicate)
+                {
+                    string json = await ApiConnection.GetExerciseGesturesApiAsync(exercise.ExerciseId);
+                    JSONConvertor.GettingExerciseGesture(exercise, json);
+
+                    using (DownloadCache dc = new DownloadCache(_currentPatient))
+                    {
+                        dc.DownloadGDBfile(exercise);
+                    }
+                }
+
+            }
+
             //OpenningWindow.Background = null;
             using (ExerciseView _exerciseView = new ExerciseView(_currentPatient, _currentTraining))
             {
                 _exerciseView.MainWindow = this;
+                _exerciseView.CloseApp += CloseApp;
                 this.Content = _exerciseView;
             }
         }
+
+
     }
 }

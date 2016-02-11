@@ -38,6 +38,10 @@ namespace VideoTherapy
         public delegate void PrevTraining();
         public delegate void NextTraining();
 
+        //close app
+        public event MainWindow.CloseAppDelegate CloseApp;
+        public event MainWindow.LogOutDelegate LogOut;
+
         public TrainingMenu(Patient currentPatient, Training currentTraining)
         {
             InitializeComponent();
@@ -60,6 +64,8 @@ namespace VideoTherapy
 
             _userInfo = new UC_UserInfo(_currentPatient);
             _userInfo.ShowRecommended = false;
+            _userInfo.closeApp += CloseApp;
+            _userInfo.logOut += LogOut;
             //_userInfo.CurrentTraining = _currentTraining;
 
             StartPlaylistDelegate startPlaylistDelegate = new StartPlaylistDelegate(_trainingSelection_StartPlaylist);
@@ -81,7 +87,7 @@ namespace VideoTherapy
         {
             _currentTraining = _currentPatient.PatientTreatment.NextTraining();
             _trainingSelection.DataContext = _currentTraining;
-            _exerciseSelection.DataContext = _currentTraining;
+            _exerciseSelection.ExercisesListUI.DataContext = _currentTraining.Playlist;
 
         }
 
@@ -89,7 +95,7 @@ namespace VideoTherapy
         {
             _currentTraining = _currentPatient.PatientTreatment.PrevTraining();
             _trainingSelection.DataContext = _currentTraining;
-            _exerciseSelection.DataContext = _currentTraining;
+            _exerciseSelection.ExercisesListUI.DataContext = _currentTraining.Playlist;
         }
 
         private void _trainingSelection_BackToTreatment()

@@ -9,7 +9,8 @@
              d:DesignHeight="800" d:DesignWidth="1400">
     <Grid x:Name="ExerciseWindow">
 
-        <MediaElement x:Name="ExerciseVideo" Source="{Binding VideoPath}" Stretch="Fill" LoadedBehavior="Manual" UnloadedBehavior="Stop" Margin="-6,0,6,0" MediaEnded="ExerciseVideo_MediaEnded"/>
+        <!--Source="{Binding VideoPath}" Margin="-6,0,6,0"-->
+        <MediaElement x:Name="ExerciseVideo" Source="{Binding VideoPath}" Stretch="Fill" LoadedBehavior="Manual" UnloadedBehavior="Stop"  MediaEnded="ExerciseVideo_MediaEnded"/>
             <Grid x:Name="KinectFrame"  HorizontalAlignment="Right" Grid.ColumnSpan="2147483647" Grid.RowSpan="2147483647">
             <Image x:Name="KinectShilloute" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="235,10,-235,-10"/>
             <Image x:Name="KinectSkeleton"  VerticalAlignment="Center" HorizontalAlignment="Right" Margin="200,10,-220,-10"/>
@@ -25,27 +26,27 @@
 
                     <Label Foreground="White" FontFamily="Roboto" FontSize="20" Margin="5,15,15,15">Place your body on the figure to start</Label>
                 </StackPanel>
-                
+
                 <StackPanel x:Name="VideoControls" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20">
                     <ContentControl Cursor="Hand" MouseDown="PrevVideoClick">
                         <Border CornerRadius="30" Height="60" Width="60" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
                             <Image x:Name="PrevVideo"  Source="Images\rewind.png" Height="20" Width="20" ></Image>
                         </Border>
                     </ContentControl>
-                   
+
                     <ContentControl Cursor="Hand" MouseDown="PlayPauseClick">
                         <Border CornerRadius="42" Height="85" Width="85" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
                             <Image x:Name="PlayPauseVideo"  Source="Images\pause.png" Height="50" Width="50" ></Image>
                         </Border>
                     </ContentControl>
-                    
-                    
+
+
                     <ContentControl MouseDown="NextVideoClick"  Cursor="Hand">
                         <Border CornerRadius="30" Height="60" Width="60" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
                             <Image x:Name="NextVideo"  Source="Images\next.png"  Height="20" Width="20"/>
                         </Border>
                     </ContentControl>
-                    
+
 
                 </StackPanel>
 
@@ -67,10 +68,10 @@
                         <TextBlock x:Name="CurrentTrainingLbl" HorizontalAlignment="Stretch" Text="{Binding TrainingNumber, StringFormat='Training #{0}'}" VerticalAlignment="Top" TextAlignment="Left" FontSize="24"  Margin="50,10,0.2,0"  Foreground="White" FontWeight="Bold"/>
                         <!--Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}"-->
                     </Grid>
-                    
+
                     <TextBlock x:Name="CurrentExerciseLbl" HorizontalAlignment="Stretch" Text="{Binding ExerciseNum, StringFormat='Exercise #{0}'}" VerticalAlignment="Center" TextAlignment="Left" FontSize="34"  Margin="50,0,0,0" FontWeight="Bold" Foreground="White" />
                     <TextBlock x:Name="ExerciseNameLbl" TextWrapping="Wrap" HorizontalAlignment="Stretch" Text="{Binding ExerciseName}" VerticalAlignment="Center" TextAlignment="Left" FontSize="20"  Margin="46,0,0,0" FontWeight="Bold" Foreground="White" />
-                    
+
 
                     <StackPanel x:Name="ExerciseTotalScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0" >
                         <Grid x:Name="RoundMotionQualityGrid"  Margin="0,0,15,0" HorizontalAlignment="Center">
@@ -138,23 +139,34 @@
 
                         <TextBlock Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Exercise Repetitions" Margin="0,15"/>
                     </Grid>
-                    
+
                 </StackPanel>
 
             </StackPanel>
 
-            <Border DockPanel.Dock="Right" Width="220" HorizontalAlignment="Right" VerticalAlignment="Top" Background="#7F000000" CornerRadius="45" Margin="15">
-                <DockPanel x:Name="UserProfile">
+            <Grid  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="15" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Border DockPanel.Dock="Right" Width="220" Background="#7F000000" CornerRadius="45" >
+                    <DockPanel x:Name="UserProfile">
+                        <Image x:Name="UserImage" Source="{Binding ImageThumb}" Margin="5" Height="80" Width="80" HorizontalAlignment="Right" DockPanel.Dock="Right" >
+                            <Image.Clip>
+                                <EllipseGeometry Center="40,40" RadiusX="40" RadiusY="40" />
+                            </Image.Clip>
+                        </Image>
+                        <TextBlock x:Name="UserName" Text="{Binding FullName}" HorizontalAlignment="Center" VerticalAlignment="Center" DockPanel.Dock="Right" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                    </DockPanel>
+                </Border>
 
-                    <Image x:Name="UserImage" Source="{Binding ImageThumb}" Margin="5" Height="80" Width="80" HorizontalAlignment="Right" DockPanel.Dock="Right" >
-                        <Image.Clip>
-                            <EllipseGeometry Center="40,40" RadiusX="40" RadiusY="40" />
-                        </Image.Clip>
-                    </Image>
-                    <TextBlock x:Name="UserName" Text="{Binding FullName}" HorizontalAlignment="Center" VerticalAlignment="Center" DockPanel.Dock="Right" FontSize="20" FontWeight="Bold" Foreground="White"/>
-                </DockPanel>
-            </Border>
+                <Image x:Name="CloseButton" Grid.Column="2" Source=".\Images\close.png" HorizontalAlignment="Center" VerticalAlignment="Center" Height="70" Width="70" Margin="5,0" MouseLeftButtonDown="CloseButton_MouseDown"></Image>
+
+            </Grid>
+
+
         </Grid>
+
     </Grid>
 
 </UserControl>

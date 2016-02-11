@@ -13,8 +13,10 @@
         
         <Grid x:Name="OpenningWindow">
             <Grid.Background>
-                <ImageBrush Stretch="Fill" ImageSource="Images\login_background.png" AlignmentY="Top" AlignmentX="Center" />
+                <ImageBrush Stretch="Fill" ImageSource="Images\login.png" AlignmentY="Top" AlignmentX="Center" />
             </Grid.Background>
+
+            
         </Grid>
 
         <!--<local:LoginDialog x:Name="LoginDialog" Visibility="Hidden"/>-->

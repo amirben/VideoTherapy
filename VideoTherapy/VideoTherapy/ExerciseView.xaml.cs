@@ -81,6 +81,8 @@ namespace VideoTherapy
         private DispatcherTimer UITimerChange;
         private Boolean StopDetection = false;
 
+        //close app
+        public event MainWindow.CloseAppDelegate CloseApp;
 
         private int temp = 0;
 
@@ -103,15 +105,12 @@ namespace VideoTherapy
 
             //CurrentExercise.PropertyChanged += CurrentExercise_PropertyChanged;
 
-            //TEMP!!
-            //Todo
-            ForDemo();
-
             //Data context update
             UpdateDataContext();
 
-            this.Loaded += ExerciseView_Loaded;
-           
+            //this.Loaded += ExerciseView_Loaded;
+            InitGestureDetection();
+
             UITimerChange = new DispatcherTimer();
             UITimerChange.Interval = new TimeSpan(0, 0, 0, 1, 0);
             UITimerChange.Tick += UITimerChange_Tick;
@@ -163,25 +162,6 @@ namespace VideoTherapy
             //RoundMotionQualityGrid.DataContext = CurrentExercise.CurrentRound;
         }
 
-        private void printStatus()
-        {
-
-            Console.WriteLine("================ In View =================");
-            Console.WriteLine("Current round {0}", CurrentExercise.CurrentRound.RoundNumber);
-            Console.WriteLine("Current round in exe {0}", CurrentExercise.RoundIndex);
-            Console.WriteLine("Current exe " + CurrentExercise.GetHashCode());
-            Console.WriteLine(CurrentExercise.CurrentRound.RoundProgress);
-            Console.WriteLine(CurrentExercise.CurrentRound.RoundSuccess);
-            foreach (var item in CurrentExercise.CurrentRound.GestureList)
-            {
-                Console.WriteLine(item.Key);
-                Console.WriteLine(item.Value.IsSuccess);
-                Console.WriteLine(item.Value.ProgressValue);
-                Console.WriteLine();
-            }
-        }
-
-      
 
         private void ExerciseView_Loaded(object sender, RoutedEventArgs e)
         {
@@ -201,16 +181,53 @@ namespace VideoTherapy
 
                 //Gesture detection
                 Exercise tempExercise = CurrentExercise;
-                Console.WriteLine(tempExercise.GetHashCode());
                 _gestureAnalysis = new GestureAnalysis(ref tempExercise);
                 _gestureDetector = new GestureDetector(_sensor, _gestureAnalysis, CurrentExercise);
 
                 _gestureAnalysis.startGestureDeteced += _gestureAnalysis_startGestureDeteced;
 
+                //ExerciseVideo.Source = new Uri("http://mil01.objectstorage.softlayer.net/v1/AUTH_2bc94b1c-c83f-4247-b43c-c1dfaf29db00/vtexercisevideos2/he/82.mp4");              
+                  
                 //_timer.Start();
                 ExerciseVideo.Play();
                 _playPause = true;
             }
+
+        }
+
+        private void InitGestureDetection()
+        {
+            if (!CurrentExercise.isDemo)
+            {
+                _sensor = KinectSensor.GetDefault();
+                //todo - check, not working
+                if (_sensor != null)
+                {
+                    _sensor.Open();
+
+                    // 2) Initialize the background removal tool.
+                    _backgroundRemovalTool = new BackgroundRemovalTool(_sensor.CoordinateMapper);
+                    _drawSkeleton = new DrawSkeleton(_sensor, (int)(KinectSkeleton.Width), (int)(KinectSkeleton.Height));
+
+                    _reader = _sensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.BodyIndex | FrameSourceTypes.Body);
+                    _reader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
+
+                    //Gesture detection
+                    Exercise tempExercise = CurrentExercise;
+                    
+                    _gestureAnalysis = new GestureAnalysis(ref tempExercise);
+                    _gestureDetector = new GestureDetector(_sensor, _gestureAnalysis, CurrentExercise);
+
+                    _gestureAnalysis.startGestureDeteced += _gestureAnalysis_startGestureDeteced;
+
+                    CurrentExercise.CreateRounds();
+
+                    //_timer.Start();
+                    ExerciseVideo.Play();
+                    _playPause = true;
+                }
+            }
+            
 
         }
 
@@ -286,10 +303,10 @@ namespace VideoTherapy
                     }
                 }
 
-                //todo - check it
+                //todo - update the logic of pop-up pause
                 else
                 {
-                    OpenPausePopUp();
+                    //OpenPausePopUp();
                 }
 
             }
@@ -342,6 +359,28 @@ namespace VideoTherapy
 
         public void Dispose()
         {
+            if (_gestureDetector != null)
+            {
+                _gestureDetector.Dispose();
+            }
+
+            if (_reader != null)
+            {
+                _reader.Dispose();
+            }
+
+            if (_gestureAnalysis != null)
+            {
+                _gestureAnalysis = null;
+            }
+
+            if (_sensor != null)
+            {
+                _sensor.Close();
+                _sensor = null;
+            }
+
+
         }
 
         private void PlayNextVideo()
@@ -355,23 +394,23 @@ namespace VideoTherapy
                 KinectShilloute.Source = null;
                 KinectSkeleton.Source = null;
 
+                //NEW
+                Dispose();
+                InitGestureDetection();
+
                 DataContext = CurrentExercise;
-                _gestureAnalysis.CurrentExercise = CurrentExercise;
+                //_gestureAnalysis.CurrentExercise = CurrentExercise;
 
                 NextRoundUpdataDelegate nextRoundUpdateDelegate = new NextRoundUpdataDelegate(UpdateDataContext);
                 CurrentExercise.NextRoundUpdateUIEvent += CurrentExercise_NextRoundUpdateUIEvet;
                 //CurrentExercise.NextRoundUpdateUIEvent += new NextRoundUpdataDelegate(UpdateDataContext);
                 CurrentExercise.StopDetectionEvent += CurrentExercise_StopDetectionEvent;
-              
 
-                //FOR DEMO!!!
-                ForDemo();
 
                 UpdateDataContext();
                 ExerciseStatus.DataContext = CurrentExercise.CurrentRound;
                 RoundIndexText.DataContext = CurrentExercise.CurrentRound;
                 RoundMotionQualityGrid.DataContext = CurrentExercise.CurrentRound;
-
 
                 ExerciseVideo.Play();
             }
@@ -384,6 +423,8 @@ namespace VideoTherapy
             }
         }
 
+        #region popups
+    
         private void OpenSummaryPopUp()
         {
             summary = new SummaryPopUp();
@@ -488,28 +529,9 @@ namespace VideoTherapy
 
             //todo - resume tracking
         }
+        #endregion
 
-        
-        private void CloseAllComponents()
-        {
-            ExerciseVideo.Stop();
-            StopDetection = true;
-            
-            //clearing the view
-            KinectShilloute.Source = null;
-            KinectSkeleton.Source = null;
-
-            if (_reader != null)
-            {
-                _reader.Dispose();
-            }
-
-            if (_sensor != null)
-            {
-                _sensor.Close();
-            }
-        }
-
+        #region events
         private void NextVideoClick(object sender, MouseButtonEventArgs e)
         {
             PlayNextVideo();
@@ -530,8 +552,8 @@ namespace VideoTherapy
 
                 DataContext = CurrentExercise;
 
-                //FOR DEMO!!!
-                ForDemo();
+                ////FOR DEMO!!!
+                //ForDemo();
 
 
                 ExerciseVideo.Play();
@@ -561,17 +583,71 @@ namespace VideoTherapy
             PlayNextVideo();
         }
 
+        private void CloseButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CloseApp();
+        }
+        #endregion
+
+        private void CloseAllComponents()
+        {
+            ExerciseVideo.Stop();
+            StopDetection = true;
+
+            //clearing the view
+            KinectShilloute.Source = null;
+            KinectSkeleton.Source = null;
+
+            if (_reader != null)
+            {
+                _reader.Dispose();
+            }
+
+            if (_sensor != null)
+            {
+                _sensor.Close();
+            }
+        }
 
 
+
+        //=====================================
         //PLEASE DELETE AFTER DEMO
+        //sqaut
         private void ForDemo()
         {
             CurrentExercise.Repetitions = 5;
-            CurrentExercise.createGestures();
+            CurrentExercise.DBPath = CurrentExercise.createGestures();
             CurrentExercise.CreateRounds();
-
 
         }
 
+        private void ForDemo2()
+        {
+            CurrentExercise.Repetitions = 5;
+            CurrentExercise.DBPath = CurrentExercise.CreateGestures2();
+            CurrentExercise.CreateRounds();
+
+        }
+
+        private void printStatus()
+        {
+
+            Console.WriteLine("================ In View =================");
+            Console.WriteLine("Current round {0}", CurrentExercise.CurrentRound.RoundNumber);
+            Console.WriteLine("Current round in exe {0}", CurrentExercise.RoundIndex);
+            Console.WriteLine("Current exe " + CurrentExercise.GetHashCode());
+            Console.WriteLine(CurrentExercise.CurrentRound.RoundProgress);
+            Console.WriteLine(CurrentExercise.CurrentRound.RoundSuccess);
+            foreach (var item in CurrentExercise.CurrentRound.GestureList)
+            {
+                Console.WriteLine(item.Key);
+                Console.WriteLine(item.Value.IsSuccess);
+                Console.WriteLine(item.Value.ProgressValue);
+                Console.WriteLine();
+            }
+        }
+
+        //=====================================
     }
 }

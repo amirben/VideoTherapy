@@ -29,7 +29,7 @@ namespace VideoTherapy.ServerConnections
         /// Uri of the server
         /// </summary>
         /// https://videotherapy.co/dev/vt/api/dispatcher.php
-        private readonly static string apiUri = "https://videotherapy.co/vt/api/dispatcher.php";
+        private readonly static string apiUri = "http://dev.videotherapy.co/vt/api/dispatcher.php";
 
         /// <summary>
         /// The type of the Api that need to be use
@@ -45,7 +45,7 @@ namespace VideoTherapy.ServerConnections
         /// <summary>
         /// Enum that represent the types of the API
         /// </summary>
-        private enum ApiType { AppLogin, GetUserData, GetTreatment, GetTraining };
+        private enum ApiType { AppLogin, GetUserData, GetTreatment, GetTraining, GetExerciseGestures, ReportExercise };
 
         /// <summary>
         /// Initializes a new dictionary that represent the tuples for the REST-api request
@@ -90,6 +90,14 @@ namespace VideoTherapy.ServerConnections
 
                 case ApiType.GetTraining:
                     ApiTypeString = "get-training";
+                    break;
+
+                case ApiType.GetExerciseGestures:
+                    ApiTypeString = "get-exercise-gestures";
+                    break;
+
+                case ApiType.ReportExercise:
+                    ApiTypeString = "report-treatment-session-usage";
                     break;
             }
         }
@@ -169,5 +177,26 @@ namespace VideoTherapy.ServerConnections
 
             return await ConnectingApiAsync(_pairs);
         }
+
+        /// <summary>
+        /// Request the gestures for exercise, returning JSON with the content of the gestures
+        /// </summary>
+        /// <param name="_exerciseId">Active instance of the KinectSensor</param>
+        public static async Task<string> GetExerciseGesturesApiAsync(int _exerciseId)
+        {
+            Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.GetExerciseGestures, "exerciseId", Convert.ToString(_exerciseId));
+
+            return await ConnectingApiAsync(_pairs);
+        }
+
+        /// <summary>
+        /// Request the gestures for exercise, returning JSON with the content of the gestures
+        /// </summary>
+        /// <param name="_exerciseId">Active instance of the KinectSensor</param>
+        public static async Task<string> PostExerciseRepotApiAsync()
+        {
+            return null;
+        }
+
     }
 }

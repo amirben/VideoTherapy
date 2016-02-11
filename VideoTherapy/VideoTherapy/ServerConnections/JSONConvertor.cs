@@ -79,7 +79,6 @@ namespace VideoTherapy.ServerConnections
             _patient.PatientTreatment.TrainingList = new List<Training>();
 
             string json = d["trainings"].ToString();
-            Console.WriteLine(json);
             List<object> trainingListJson = JsonConvert.DeserializeObject<List<object>>(json);
 
 
@@ -120,7 +119,7 @@ namespace VideoTherapy.ServerConnections
                 currentObj.TryGetValue("upcomingEvent", out checkUpComming);
                 if (checkUpComming != null && (Boolean) checkUpComming)
                 {
-                    _patient.PatientTreatment.CurrentTraining = newTraining;
+                    _patient.PatientTreatment.RecommendedTraining = newTraining;
                 }
 
             }
@@ -136,11 +135,13 @@ namespace VideoTherapy.ServerConnections
 
             foreach (var item in d.sessions)
             {
+                //For demo
                 Exercise demoExercise = new Exercise();
                 demoExercise.ExerciseName = item.exerciseLabel;
                 demoExercise.ExerciseId = item.exerciseId;
                 demoExercise.ExerciseThumbs = item.exerciseThumbnail;
-                demoExercise.VideoPath = item.exerciseVideoDemo;
+                string tt = item.exerciseVideoDemo;
+                demoExercise.VideoPath = new Uri(HttpsReplaceToHttp.ReplaceHttpsToHttp(tt));
                 demoExercise.ExerciseNum = numOfExercises;
                 demoExercise.isDemo = true;
 
@@ -148,7 +149,9 @@ namespace VideoTherapy.ServerConnections
 
                 numOfExercises++;
 
-                int x = item.repeats;
+                //duplicate the exercise if there are repeats for him by therapist
+                //sessRepeats - number of duplicates exercise
+                int x = item.sessRepeats;
                 for (int i = 0; i < x; i++)
                 {
                     Exercise newExercise = new Exercise();
@@ -156,8 +159,9 @@ namespace VideoTherapy.ServerConnections
                     newExercise.ExerciseName = item.exerciseLabel;
                     newExercise.ExerciseId = item.exerciseId;
                     newExercise.ExerciseThumbs = item.exerciseThumbnail;
-                    newExercise.VideoPath = item.exerciseVideo;
-                    newExercise.Repetitions = item.repeats;
+                    tt = item.exerciseVideo;
+                    newExercise.VideoPath = new Uri(HttpsReplaceToHttp.ReplaceHttpsToHttp(tt));
+                    newExercise.Repetitions = item.exerciseCycles;
                     newExercise.ExerciseNum = numOfExercises;
 
                     //for future download for not duplicate the same file
@@ -170,7 +174,44 @@ namespace VideoTherapy.ServerConnections
                     numOfExercises++;
                 }
 
+                _training.Playlist.Last().isLastDuplicate = true;
+
                 
+            }
+        }
+
+        public static void GettingExerciseGesture(Exercise _exercise, string _JSONcontent)
+        {
+            dynamic d = (JsonConvert.DeserializeObject<IDictionary<string, object>>(_JSONcontent))["data"];
+
+            _exercise.ContinuousGestureName = d.gesture_progress_name;
+            _exercise.isTrackable = d.is_trackable == 1 ? true : false;
+            _exercise.DBUrl = d.file;
+
+            _exercise.StartGesutre = new VTGesture();
+            _exercise.StartGesutre.GestureName = Convert.ToString(d.start_gesture_name);
+            _exercise.StartGesutre.ConfidanceTrshold = 0.2f;
+
+            string json = d["gesture_list"].ToString();
+            List<object> gestureList = JsonConvert.DeserializeObject<List<object>>(json);
+
+            _exercise.VTGestureList = new List<VTGesture>();
+            foreach (var item in gestureList)
+            {
+                VTGesture gesture = new VTGesture();
+
+                json = item.ToString();
+                Dictionary<string, object> currentObj = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+
+                gesture.GestureName = currentObj["gestureName"].ToString();
+                gesture.MinProgressValue = (float) Double.Parse(currentObj["startGestureValue"].ToString());
+                gesture.MaxProgressValue = (float)Double.Parse(currentObj["endGestureValue"].ToString());
+                gesture.TrsholdProgressValue = (float)Double.Parse(currentObj["progressThd"].ToString());
+                gesture.ConfidanceTrshold = (float)Double.Parse(currentObj["confidenceThd"].ToString());
+                gesture.IsTrack = currentObj["isTrackableItem"].ToString().Equals("1") ? true : false;
+
+
+                _exercise.VTGestureList.Add(gesture);
             }
         }
     }
