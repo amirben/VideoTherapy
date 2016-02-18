@@ -34,7 +34,9 @@
                         </Border>--><!--
                     </Button.Content>
                 </Button>-->
-                <TextBlock x:Name="CurrentTrainingLbl" HorizontalAlignment="Center" Text="{Binding TrainingNumber, StringFormat='Training #{0}'}" VerticalAlignment="Center" TextAlignment="Center" FontSize="58"  Margin="70,0,210.6,10"  Foreground="White" FontWeight="Bold" FontFamily="Roboto"/>
+                <TextBlock x:Name="CurrentTrainingLbl" HorizontalAlignment="Center" Text="{Binding TrainingNumber, StringFormat='Training #{0}'}" 
+                           VerticalAlignment="Center" TextAlignment="Center" FontSize="50"  
+                           Margin="70,0,210.6,10"  Foreground="White" FontWeight="Bold" FontFamily="Roboto"/>
                 <!--Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}"-->
 
                 <Image x:Name="NextTrainingBtn" HorizontalAlignment="Right"  Source="..\..\Images\arrow_right.png" Height="45" Width="45" Margin="0,0,20,15" MouseLeftButtonDown="NextTrainingBtn_MouseLeftButtonDown"></Image>
@@ -56,7 +58,7 @@
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="36" Foreground="White" Text="%" />
                     </StackPanel>
 
-                    <ProgressBar x:Name="MotionQualityProgressBar" Margin="10,0,10,45" Value="20">
+                    <ProgressBar x:Name="MotionQualityProgressBar" Margin="10,0,10,45" Value="67">
                         <ProgressBar.Template>
                             <ControlTemplate>
                                 <Grid>
@@ -94,9 +96,9 @@
         </StackPanel>
 
         
-        <Button Height="160" DockPanel.Dock="Bottom" Background="#7F4FC3F7" BorderBrush="Transparent" 
+        <Button Height="160" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Background="#7F4FC3F7" BorderBrush="Transparent" 
                 BorderThickness="0" Foreground="White" Content="Start &gt;" FontSize="110" 
-                FontWeight="Bold" Margin="15,140,15,15" Click="StartButton"></Button>
+                FontWeight="Bold" Margin="15,15,15,15" Click="StartButton"></Button>
         
     </DockPanel>
     

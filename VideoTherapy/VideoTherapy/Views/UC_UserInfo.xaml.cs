@@ -96,24 +96,32 @@ namespace VideoTherapy.Views
         {
             if (sensor.IsAvailable)
             {
-                KinectStatusLbl.Text = "KINECT 2.0 connected";
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri("./../images/connected.png", UriKind.Relative);
-                bitmap.EndInit();
+                //KinectStatusLbl.Text = "KINECT 2.0 connected";
+                //BitmapImage bitmap = new BitmapImage();
+                //bitmap.BeginInit();
+                //bitmap.UriSource = new Uri("./../images/connected.png", UriKind.Relative);
+                //bitmap.EndInit();
 
-                KinectStatusImg.Source = bitmap;
+                //KinectStatusImg.Source = bitmap;
+                ShowKinectStatus.Visibility = Visibility.Visible;
+                KinectNotConnectedStatus.Visibility = Visibility.Collapsed;
             }
             else
             {
-                KinectStatusLbl.Text = "KINECT 2.0 not connected";
+                //BitmapImage bitmap = new BitmapImage();
+                //bitmap.BeginInit();
+                //bitmap.UriSource = new Uri("./../images/disconnected.png", UriKind.Relative);
+                //bitmap.EndInit();
 
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri("./../images/disconnected.png", UriKind.Relative);
-                bitmap.EndInit();
+                //KinectStatusImg.Source = bitmap;
 
-                KinectStatusImg.Source = bitmap;
+
+                //KinectStatusLbl.Text = "KINECT 2.0 not connected";
+
+                ShowKinectStatus.Visibility = Visibility.Collapsed;
+                KinectNotConnectedStatus.Visibility = Visibility.Visible;
+
+
             }
 
         }

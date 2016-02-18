@@ -61,6 +61,7 @@ namespace VideoTherapy.ServerConnections
 
         public static void GettingPatientTreatment(Patient _patient, string _JSONcontent)
         {
+            //todo - run over the treatments
             dynamic d =
                     (JsonConvert.DeserializeObject<IDictionary<string, object>>(_JSONcontent))["data"];
  
@@ -68,17 +69,23 @@ namespace VideoTherapy.ServerConnections
             
             //todo - need to be change when there are more the one
             _patient.PatientTreatment.TreatmentNumber = 1;
-            _patient.PatientTreatment.TreatmentId = d.treatmentId;
+            _patient.PatientTreatment.TreatmentId = d[0].treatmentId;
             //todo - change to Date 
-            _patient.PatientTreatment.StartDate = DateFormat.FormatDate(DateTime.Parse((string)d.treatmentStartTime));
+
+            //_patient.PatientTreatment.StartDate = DateFormat.FormatDate(DateTime.Parse((string)d.treatmentStartTime));
+            //_patient.PatientTreatment.EndDate = DateFormat.FormatDate(DateTime.Parse((string)d.treatmentEndTime));
+            _patient.PatientTreatment.StartDate = DateTime.Parse((string)d[0].treatmentStartTime);
+            _patient.PatientTreatment.EndDate = DateTime.Parse((string)d[0].treatmentEndTime);
+            _patient.PatientTreatment.TreatmentProgress = DateFormat.CalcTreatementDateProgress(_patient.PatientTreatment.StartDate, _patient.PatientTreatment.EndDate);
+
 
             _patient.PatientTreatment.TreatmentTherapist = new Therapist();
-            _patient.PatientTreatment.TreatmentTherapist.AccountId = d.therapistId;
+            _patient.PatientTreatment.TreatmentTherapist.AccountId = d[0].therapistId;
 
 
             _patient.PatientTreatment.TrainingList = new List<Training>();
 
-            string json = d["trainings"].ToString();
+            string json = d[0]["trainings"].ToString();
             List<object> trainingListJson = JsonConvert.DeserializeObject<List<object>>(json);
 
 
@@ -117,7 +124,7 @@ namespace VideoTherapy.ServerConnections
                 //check if this training is the upcoming one
                 Object checkUpComming = false;
                 currentObj.TryGetValue("upcomingEvent", out checkUpComming);
-                if (checkUpComming != null && (Boolean) checkUpComming)
+                if (checkUpComming != null && (Boolean)checkUpComming)
                 {
                     _patient.PatientTreatment.RecommendedTraining = newTraining;
                 }
@@ -180,12 +187,68 @@ namespace VideoTherapy.ServerConnections
             }
         }
 
+        public static void GettingPatientTraining2(Training _training, string _JSONcontent)
+        {
+            dynamic d =
+                    (JsonConvert.DeserializeObject<IDictionary<string, object>>(_JSONcontent))["data"];
+
+            _training.Playlist2 = new Dictionary<int, List<Exercise>>();
+            int numOfExercises = 0;
+
+            //iterat over the exercise session 
+            foreach (var item in d.sessions)
+            {
+                //For demo
+                Exercise demoExercise = new Exercise();
+                demoExercise.ExerciseName = item.exerciseLabel;
+                demoExercise.ExerciseId = item.exerciseId;
+                demoExercise.ExerciseThumbs = item.exerciseThumbnail;
+                string tt = item.exerciseVideoDemo;
+                demoExercise.VideoPath = new Uri(HttpsReplaceToHttp.ReplaceHttpsToHttp(tt));
+                demoExercise.ExerciseNum = numOfExercises;
+                demoExercise.isDemo = true;
+                demoExercise.SessionId = item.sessionId;
+
+                int temp = item.sessionId;
+                _training.Playlist2[temp] = new List<Exercise>();
+                _training.Playlist2[temp].Add(demoExercise);
+
+                numOfExercises++;
+
+                //duplicate the exercise if there are repeats for him by therapist
+                //sessRepeats - number of duplicates exercise
+                int x = item.sessRepeats;
+                for (int i = 1; i <= x; i++)
+                {
+                    Exercise newExercise = new Exercise();
+
+                    newExercise.ExerciseName = item.exerciseLabel;
+                    newExercise.ExerciseId = item.exerciseId;
+                    newExercise.ExerciseThumbs = item.exerciseThumbnail;
+                    tt = item.exerciseVideo;
+                    newExercise.VideoPath = new Uri(HttpsReplaceToHttp.ReplaceHttpsToHttp(tt));
+                    newExercise.Repetitions = item.exerciseCycles;
+                    newExercise.ExerciseNum = i;
+                    newExercise.SessionId = item.sessionId;
+                    newExercise.isTrackable = item.isTrackable;
+
+                    //for future download for not duplicate the same file
+                    if (i != 0)
+                    {
+                        newExercise.isDuplicate = true;
+                    }
+
+                    _training.Playlist2[temp].Add(newExercise);
+                }
+            }
+        }
+
         public static void GettingExerciseGesture(Exercise _exercise, string _JSONcontent)
         {
             dynamic d = (JsonConvert.DeserializeObject<IDictionary<string, object>>(_JSONcontent))["data"];
 
             _exercise.ContinuousGestureName = d.gesture_progress_name;
-            _exercise.isTrackable = d.is_trackable == 1 ? true : false;
+            //_exercise.isTrackable = d.is_trackable == 1 ? true : false;
             _exercise.DBUrl = d.file;
 
             _exercise.StartGesutre = new VTGesture();

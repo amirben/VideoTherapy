@@ -19,5 +19,16 @@ namespace VideoTherapy.Utils
 
             return d.ToString();
         }
+
+        public static int CalcTreatementDateProgress(DateTime startDate, DateTime endDate)
+        {
+            TimeSpan startEnd = endDate.Subtract(startDate);
+            DateTime current = DateTime.Now;
+            TimeSpan startCorrent = current.Subtract(startDate);
+
+            double t = ((int)startCorrent.TotalDays) / (int)(startEnd.TotalDays);
+            return (int)(t * 100);
+
+        }
     }
 }

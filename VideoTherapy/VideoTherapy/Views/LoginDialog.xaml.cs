@@ -98,7 +98,7 @@ namespace VideoTherapy
 
                 userFullName.Content = user.Element("user_fullname").Value;
                 emailTxt.Text = user.Element("user_name").Value;
-                passwordTxt.Password = user.Element("pass").Value;
+                //passwordTxt.Password = user.Element("pass").Value;
 
                 SaveConfig.IsChecked = true;
 
@@ -119,6 +119,7 @@ namespace VideoTherapy
             string email = emailTxt.Text;
             string password = MD5Hash.CalculateMD5Hash(passwordTxt.Password);
 
+            //todo - remove
             Stopwatch watch = new Stopwatch();
             watch.Start();
 
@@ -176,6 +177,7 @@ namespace VideoTherapy
             {
                 wrongInputLbl.Visibility = Visibility.Hidden;
 
+                email = Uri.EscapeDataString(email);
                 string loginData = await ApiConnection.AppLoginApiAsync(email, password);
                 //todo - check errors
                 _currentPatient = JSONConvertor.CreatePatient(loginData);
@@ -239,7 +241,9 @@ namespace VideoTherapy
                 foreach (Training training in _currentPatient.PatientTreatment.TrainingList)
                 {
                     string trainingData = await ApiConnection.GetTrainingApiAsync(training.TrainingId);
-                    JSONConvertor.GettingPatientTraining(training, trainingData);
+                    //JSONConvertor.GettingPatientTraining(training, trainingData);
+
+                    JSONConvertor.GettingPatientTraining2(training, trainingData);
                 }
 
 
@@ -324,9 +328,9 @@ namespace VideoTherapy
             writer.WriteString(_currentPatient.Email);
             writer.WriteEndElement();
 
-            writer.WriteStartElement("pass");
-            writer.WriteString(passwordTxt.Password);
-            writer.WriteEndElement();
+            //writer.WriteStartElement("pass");
+            //writer.WriteString(passwordTxt.Password);
+            //writer.WriteEndElement();
 
             writer.WriteStartElement("user_img");
             writer.WriteString(_currentPatient.ImageThumb);

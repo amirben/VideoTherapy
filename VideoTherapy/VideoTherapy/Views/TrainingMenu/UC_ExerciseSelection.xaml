@@ -52,7 +52,7 @@
         <!--Thumb for the exercise-->
         <DataTemplate x:Key="ExerciseImageDataTemplate">
             <DockPanel Height="240" HorizontalAlignment="Stretch" Margin="0,10">
-                <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Text="{Binding ExerciseNum}" 
+                <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Text="{Binding SessionId}" 
                            Foreground="White" FontSize="36" FontWeight="Bold" Margin="15,0,-15,0"></TextBlock>
                 <Image Width="600" DockPanel.Dock="Left" Source="{Binding ExerciseThumbs}" HorizontalAlignment="Stretch" 
                        Margin="-10,0,0,0"></Image>

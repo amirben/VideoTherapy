@@ -49,7 +49,8 @@
                     
                     <Grid Grid.Row="4" HorizontalAlignment="Stretch" Margin="12,16,12,8">
                         <TextBox Name="emailTxt" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="White"
-                                 Foreground="Gray" BorderThickness="1" BorderBrush="#4fc3f7" FontSize="14"  Height="24" TextChanged="emailTxt_TextChanged"/>
+                                 Foreground="Gray" BorderThickness="1" BorderBrush="#4fc3f7" FontSize="14"  Height="24" 
+                                 TextAlignment="Center" TextChanged="emailTxt_TextChanged"/>
                         <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF808080" IsHitTestVisible="False"
                                  BorderThickness="0" FontStyle="Italic" FontSize="12" Text="Your E-mail" IsReadOnly="True" Focusable="False">
                             <TextBox.Style>
@@ -82,7 +83,9 @@
                         </Grid.RowDefinitions>
 
                         <Grid >
-                            <PasswordBox x:Name="passwordTxt" Height="24" FontSize="12"  Foreground="Gray" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="White" BorderThickness="1" BorderBrush="#4fc3f7" PasswordChanged="passwordTxt_PasswordChanged"></PasswordBox>
+                            <PasswordBox x:Name="passwordTxt" Height="24" FontSize="12"  Foreground="Gray" 
+                                         HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="White" BorderThickness="1" BorderBrush="#4fc3f7" 
+                                         HorizontalContentAlignment="Center" PasswordChanged="passwordTxt_PasswordChanged"></PasswordBox>
                             <TextBox x:Name="passwordHint" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF808080" 
                                  IsHitTestVisible="False" BorderThickness="0" FontStyle="Italic" FontSize="12" Text="Password" IsReadOnly="True">
                                 <TextBox.Style>

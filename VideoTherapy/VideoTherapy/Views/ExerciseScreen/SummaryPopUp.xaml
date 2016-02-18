@@ -14,15 +14,15 @@
             
             <StackPanel x:Name="SummaryPopUpStackpanel" Orientation="Vertical" Background="Black" >
                 <Image Source="../../images/connected.png" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50" Width="50" Margin="0,20,0,10"></Image>
-                <TextBlock Foreground="White" Text="Training Finished!" HorizontalAlignment="Center" FontSize="50" Margin="0,0,0,10"></TextBlock>
+                <TextBlock Foreground="White" Text="Training Finished!" HorizontalAlignment="Center" FontSize="36" Margin="0,0,0,10"></TextBlock>
                 <Line HorizontalAlignment="Stretch"  Stroke="#80c683" Margin="10,5,10,10" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"  StrokeThickness="2" />
 
 
-                <StackPanel x:Name="TrainingOverallScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="20,30" VerticalAlignment="Center">
+                <StackPanel x:Name="TrainingOverallScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="20,20" VerticalAlignment="Center">
                     <Grid x:Name="MotionQualityGrid" Margin="0,0,15,0">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,-25,0,0">
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="91" />
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="36" Foreground="White" Text="%" />
+                            <TextBlock x:Name="MotionQualityValue" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="44" Foreground="White" Text="91" />
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="28" Foreground="White" Text="%" />
                         </StackPanel>
 
                         <ProgressBar x:Name="MotionQualityProgressBar" Margin="0,0,0,25" Value="91">
@@ -36,14 +36,14 @@
                             </ProgressBar.Template>
                         </ProgressBar>
 
-                        <TextBlock Foreground="White" FontFamily="Roboto" FontSize="24" FontWeight="Normal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Training Quality" Margin="0,20, 0, 0"/>
+                        <TextBlock Foreground="White" FontFamily="Roboto" FontSize="20" FontWeight="Normal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Training Quality" Margin="0,20, 0, 0"/>
                     </Grid>
 
 
                     <Grid x:Name="RepetitionsGrid" Margin="15,0,0,0">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,-25,0,0">
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="91" />
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="36" Foreground="White" Text="%" />
+                            <TextBlock x:Name="RepetitionScore" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="44" Foreground="White" Text="91" />
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="28" Foreground="White" Text="%" />
                         </StackPanel>
 
                         <ProgressBar x:Name="RepetitionsProgressBar" Margin="0,0,0,25" Value="91">
@@ -57,14 +57,14 @@
                             </ProgressBar.Template>
                         </ProgressBar>
 
-                        <TextBlock Foreground="White" FontFamily="Roboto" FontSize="24" FontWeight="Normal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Training Score" Margin="0,25, 0, 0"/>
+                        <TextBlock Foreground="White" FontFamily="Roboto" FontSize="20" FontWeight="Normal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Training Score" Margin="0,25, 0, 0"/>
                     </Grid>
                 </StackPanel>
 
 
-                <TextBlock x:Name="OpenQuestionsButton" Background="#4fc3f7" Foreground="White" FontSize="46" FontWeight="Bold" TextAlignment="Center" Padding="8" Margin="15,30,15,10" Text="Tell us how it was &gt;" MouseLeftButtonDown="OpenQuestionsButton_MouseLeftButtonDown"/>
+                <TextBlock x:Name="OpenQuestionsButton" Background="#4fc3f7" Foreground="White" FontSize="36" FontWeight="Bold" TextAlignment="Center" Padding="8" Margin="15,10,15,10" Text="Tell us how it was &gt;" MouseLeftButtonDown="OpenQuestionsButton_MouseLeftButtonDown"/>
 
-                <TextBlock x:Name="GoBackToTreatment" Foreground="White" FontSize="30" TextAlignment="Center" Opacity="0.5" Margin= "0,5" MouseLeftButtonDown="GoBackToTreatment_MouseLeftButtonDown">
+                <TextBlock x:Name="GoBackToTreatment" Foreground="White" FontSize="20" TextAlignment="Center" Opacity="0.5" Margin= "0,5" MouseLeftButtonDown="GoBackToTreatment_MouseLeftButtonDown">
             <Run Text="&lt; "/>
             <Underline>
                 <Run Text="Go back to treatment screen"/>

@@ -71,23 +71,44 @@ namespace VideoTherapy.Utils
 
         public static float GetTrainingScore(Training CurrentTraining)
         {
-            float avg = 0;
-            int numOfExe = 0;
-            foreach (var exercise in CurrentTraining.Playlist)
+            int numOfSuccess = 0;
+            int numOfExercises = 0;
+            foreach (var key in CurrentTraining.Playlist2.Keys)
             {
-                if (!exercise.isDemo)
+                foreach (var exercise in CurrentTraining.Playlist2[key])
                 {
-                    avg += exercise.ExerciseMotionScore;
-                    numOfExe++;
+                    if (!exercise.isDemo)
+                    {
+                        if (exercise.isSucceed)
+                        {
+                            numOfSuccess++;
+                        }
+                        numOfExercises++;
+                    }
                 }
             }
 
-            return avg/numOfExe;
+            return (numOfSuccess / numOfExercises) * 100;
         }
 
-        public static float GetTrainingQuailty()
+        public static float GetTrainingQuailty(Training CurrentTraining)
         {
-            return 0;
+            float avg = 0;
+            int numOfExe = 0;
+
+            foreach (var key in CurrentTraining.Playlist2.Keys)
+            {
+                foreach (var exercise in CurrentTraining.Playlist2[key])
+                {
+                    if (!exercise.isDemo)
+                    {
+                        avg+= exercise.ExerciseMotionScore;
+                        numOfExe++;
+                    }
+                }
+            }
+
+            return avg / numOfExe;
         }
 
 

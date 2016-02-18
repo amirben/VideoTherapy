@@ -21,6 +21,7 @@ namespace VideoTherapy.Objects
         public Uri VideoPath { set; get; }
         public string DBPath { set; get; }
         public string DBUrl { set; get; }
+        public int SessionId { set; get; }
 
         //for demo video
         public Boolean isDemo { set; get; }
@@ -40,7 +41,7 @@ namespace VideoTherapy.Objects
         public string ContinuousGestureName { set; get; }
         public VTGesture StartGesutre { set; get; }
      
-
+        public Boolean isSucceed { set; get; }
         
         //Rounds
         public ObservableCollection<Round> Rounds;
@@ -91,7 +92,6 @@ namespace VideoTherapy.Objects
                     //printstatus();
 
                     //Stop detecion
-                    
 
                     //changing the round and add event to him
                     CurrentRound = Rounds[RoundIndex];
@@ -101,14 +101,32 @@ namespace VideoTherapy.Objects
 
                     //update UI of the change
                     NextRoundUpdateUIEvent();
-
-                }
-
-                else
-                {
-                    //todo need to play next exercise -> throw event for next video
                 }
             }
+        }
+
+        //check if exercise completed or not
+        public void CheckIfExerciseStatus()
+        {
+            int numOfSuccesRound = 0;
+            if (isTrackable)
+            {
+                foreach (var round in Rounds)
+                {
+                    if (round.RoundSuccess)
+                    {
+                        numOfSuccesRound++;
+                    }
+                }
+
+                isSucceed = (numOfSuccesRound / Repetitions) * 100 > 50 ? true : false;
+            }
+            else
+            {
+                isSucceed = false;
+            }
+            
+
         }
 
         private void printstatus()
@@ -118,7 +136,7 @@ namespace VideoTherapy.Objects
             Console.WriteLine(CurrentRound.RoundProgress);
             Console.WriteLine(CurrentRound.RoundSuccess);
             Console.WriteLine("Current round {0}",CurrentRound.RoundNumber);
-            Console.WriteLine("Exe: " + this.GetHashCode());
+            //Console.WriteLine("Exe: " + this.GetHashCode());
             Console.WriteLine();
             foreach (var item in CurrentRound.GestureList)
             {
@@ -165,9 +183,20 @@ namespace VideoTherapy.Objects
             }
         }
 
+        public void CopyGesturesFromOrigin(Exercise copyFromExercise)
+        {
+            ContinuousGestureName = copyFromExercise.ContinuousGestureName;
+            StartGesutre = new VTGesture(copyFromExercise.StartGesutre);
+
+            VTGestureList = new List<VTGesture>();
+            foreach (VTGesture gesture in copyFromExercise.VTGestureList)
+            {
+                VTGestureList.Add(new VTGesture(gesture));
+            }
+        }
 
         //DELETE AFTER DEMO
-        public string createGestures()
+        /*public string createGestures()
         {
             VTGesture g1 = new VTGesture();
             g1.GestureName = "squat_getting_down";
@@ -253,6 +282,6 @@ namespace VideoTherapy.Objects
             VTGestureList.Add(g4);
 
             return @"C:\Users\amirb\Desktop\Afeka\VideoTherapy\VideoTherapy - Client\VideoTherapy\VideoTherapy\VideoTherapy\DB\lower_limbs.gbd";
-        }
+        }*/
     }
 }

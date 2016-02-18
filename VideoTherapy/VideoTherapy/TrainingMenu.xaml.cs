@@ -85,6 +85,7 @@ namespace VideoTherapy
 
         private void _trainingSelection_NextTraining()
         {
+            //todo need to fix after hashmap change
             _currentTraining = _currentPatient.PatientTreatment.NextTraining();
             _trainingSelection.DataContext = _currentTraining;
             _exerciseSelection.ExercisesListUI.DataContext = _currentTraining.Playlist;
@@ -93,6 +94,7 @@ namespace VideoTherapy
 
         private void _trainingSelection_PrevTraining()
         {
+            //todo need to fix after hashmap change
             _currentTraining = _currentPatient.PatientTreatment.PrevTraining();
             _trainingSelection.DataContext = _currentTraining;
             _exerciseSelection.ExercisesListUI.DataContext = _currentTraining.Playlist;

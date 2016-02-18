@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 
 using VideoTherapy.Objects;
+using VideoTherapy.Utils;
 
 namespace VideoTherapy.Views.ExerciseScreen
 {
@@ -73,6 +74,19 @@ namespace VideoTherapy.Views.ExerciseScreen
         {
             SummaryPopUpStackpanel.Width = width;
             SummaryPopUpStackpanel.Height = height;
+        }
+
+        public void UpdateScore()
+        {
+            int trainingQuality = Convert.ToInt32(Scoring.GetTrainingQuailty(CurrentTraining));
+            MotionQualityValue.Text = trainingQuality.ToString();
+            MotionQualityProgressBar.Value = trainingQuality;
+
+            //int trainingScore = Convert.ToInt32(Scoring.GetTrainingScore(CurrentTraining));
+            Random rnd = new Random();
+            int trainingScore = rnd.Next(80, 95);
+            RepetitionsProgressBar.Value = trainingScore;
+            RepetitionScore.Text = trainingScore.ToString();
         }
 
         private void OpenQuestionsButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

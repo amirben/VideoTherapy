@@ -35,7 +35,8 @@
         </Grid>
             
         <DockPanel x:Name="CalenderTimeline" Margin="10">
-            <ProgressBar x:Name="CalenderProgressBar" Margin="15,0" Height="9" Value="70" DockPanel.Dock="Top">
+            <!--Value="{Binding TreatmentProgress}"-->
+            <ProgressBar x:Name="CalenderProgressBar" Margin="15,0" Height="9" Value="67" DockPanel.Dock="Top">
                 <ProgressBar.Template>
                     <ControlTemplate>
                         <Grid x:Name="TemplateRoot" Height="8">
@@ -67,8 +68,8 @@
                 </ProgressBar.Template>
             </ProgressBar>
 
-            <TextBlock x:Name="EndDate" Text="16.8.15" Foreground="White" FontFamily="Roboto" FontSize="16" DockPanel.Dock="Right" TextAlignment="Right" Margin="15,5,15,0"></TextBlock>
-            <TextBlock x:Name="StartDate" Text="{Binding StartDate}" Foreground="White" FontFamily="Roboto" FontSize="16" DockPanel.Dock="Left" Margin="15,5,15,0"></TextBlock>
+            <TextBlock x:Name="EndDate" Text="{Binding EndDate, StringFormat=dd.MM.yyyy}" Foreground="White" FontFamily="Roboto" FontSize="16" DockPanel.Dock="Right" TextAlignment="Right" Margin="15,5,15,0"></TextBlock>
+            <TextBlock x:Name="StartDate" Text="{Binding StartDate, StringFormat=dd.MM.yyyy}" Foreground="White" FontFamily="Roboto" FontSize="16" DockPanel.Dock="Left" Margin="15,5,15,0"></TextBlock>
         </DockPanel>
 
         <StackPanel x:Name="TreatmentScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
@@ -78,7 +79,7 @@
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="36" Foreground="White" Text="%" />
                 </StackPanel>
                 
-                <ProgressBar x:Name="MotionQualityProgressBar" Margin="10,0,10,45" Value="20">
+                <ProgressBar x:Name="MotionQualityProgressBar" Margin="10,0,10,45" Value="67">
                     <ProgressBar.Template>
                         <ControlTemplate>
                             <Grid>
@@ -124,25 +125,33 @@
                 </Style>
             </StackPanel.Resources>
             
-            <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,5,10,-5">
-                <Image Source="{Binding ImageThumb}" Height="140" Width="140" Margin="5,5,5,0" >
+            <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,5,10,-10">
+                <Image Source="{Binding ImageThumb}" Height="140" Width="140" Margin="5,5,5,-5" >
                     <Image.Clip>
-                        <EllipseGeometry Center="60,60" RadiusX="60" RadiusY="60" />
+                        <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50" />
                     </Image.Clip>
                 </Image>
                 
                 <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0,15,0,0">
                     <TextBlock Text="{Binding FullName}" FontSize="20" FontWeight="Bold" />
                     <TextBlock Text="Physical Therapist" FontSize="18"/>
-                    <TextBlock Text="{Binding StartDate, StringFormat='Your Therapist Since | {0}'}" Opacity="0.5" FontSize="16"/>
+                    <TextBlock Opacity="0.5" FontSize="16">
+                        <Run Text="Your Therapist Since | "/>
+                        <Run Text="{Binding StartDate, StringFormat=dd.MM.yyyy}"/>
+                    </TextBlock>
                 </StackPanel>
             </StackPanel>
 
             <Line HorizontalAlignment="Stretch"  Stroke="White" Margin="10,0" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"  StrokeThickness="1" />
 
             <Grid  Margin="10,5,10,25">
-                <TextBlock FontFamily="Roboto" FontSize="20" TextWrapping="Wrap" TextAlignment="Left" Foreground="White" 
-                           Text="This treatment is the first sterp in you road to success, bla bla bla blabla blabla blabla blabla blabla bla" />
+                <TextBlock FontFamily="Roboto" FontSize="16" TextWrapping="Wrap" TextAlignment="Left" Foreground="White">
+                    This treatment is the first sterp in you road to success, It focuses on your stance and agility.
+                    <LineBreak/>
+                    Each training is inteded for specific area that need rehabilition.
+                    <LineBreak/>
+                    Don't skip any exercise, and fininsh the treatment on time so we can keep you on track.
+                </TextBlock>
             </Grid>
         </StackPanel>
     </StackPanel>

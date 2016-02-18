@@ -34,6 +34,8 @@ namespace VideoTherapy
         public Exercise CurrentExercise { set; get; }
 
         public List<Exercise> Playlist { set; get; }
+        public Dictionary<int, List<Exercise>> Playlist2 { set; get; }
+        private int _currentSessionId;
 
         public Patient CurrentPatient;
         public Training CurrentTraining;
@@ -59,7 +61,20 @@ namespace VideoTherapy
         private ulong bodyIndex;
 
         // flag to asses if a body is currently tracked
-        private bool bodyTracked = false;
+        private bool _bodyTracked = false;
+        public bool BodyTracked
+        {
+            get
+            {
+                return _bodyTracked;
+            }
+
+            set
+            {
+                _bodyTracked = value;
+                CheckForPause();
+            }
+        }
 
         //pause popup
         private PausePopUp pausePopUp;
@@ -73,6 +88,9 @@ namespace VideoTherapy
         //questionnaire finished popup
         private QuestionFinishedPopUp questionnaireFinishedPopUp;
 
+        //Nottrackable popup
+        private NoTrackingPopUp noTrackingPopUp;
+
         //delegates
         public delegate void NextRoundUpdataDelegate();
         public delegate void StopDetectionDelegate();
@@ -84,7 +102,6 @@ namespace VideoTherapy
         //close app
         public event MainWindow.CloseAppDelegate CloseApp;
 
-        private int temp = 0;
 
         public ExerciseView(Patient currentPatient, Training currentTraining)
         {
@@ -93,10 +110,9 @@ namespace VideoTherapy
             CurrentPatient = currentPatient;
             CurrentTraining = currentTraining;
 
-            Playlist = currentTraining.Playlist;
-            CurrentExercise = Playlist[0];
-            //temp = CurrentExercise.GetHashCode();
-
+            Playlist2 = currentTraining.Playlist2;
+            CurrentExercise = Playlist2[1][0];
+            _currentSessionId = 1;
 
             NextRoundUpdataDelegate nextRoundUpdateDelegate = new NextRoundUpdataDelegate(UpdateDataContext);
             CurrentExercise.NextRoundUpdateUIEvent += CurrentExercise_NextRoundUpdateUIEvet;
@@ -108,12 +124,29 @@ namespace VideoTherapy
             //Data context update
             UpdateDataContext();
 
-            //this.Loaded += ExerciseView_Loaded;
+            this.Loaded += ExerciseView_Loaded;
             InitGestureDetection();
 
+            ExerciseVideo.Play();
+            _playPause = true;
+
             UITimerChange = new DispatcherTimer();
-            UITimerChange.Interval = new TimeSpan(0, 0, 0, 1, 0);
+            UITimerChange.Interval = new TimeSpan(0, 0, 0, 0, 700);
             UITimerChange.Tick += UITimerChange_Tick;
+        }
+
+        private void UITimerChange_Tick(object sender, EventArgs e)
+        {
+
+            ExerciseStatus.DataContext = CurrentExercise.CurrentRound;
+            RoundIndexText.DataContext = CurrentExercise.CurrentRound;
+            RoundMotionQualityGrid.DataContext = CurrentExercise.CurrentRound;
+            StopDetection = false;
+            _gestureDetector.StopDetecion = false;
+
+            printStatus();
+
+            UITimerChange.Stop();
         }
 
         private void UpdateDataContext()
@@ -132,25 +165,8 @@ namespace VideoTherapy
 
         private void CurrentExercise_StopDetectionEvent()
         {
-            //printStatus();
-
             StopDetection = true;
             _gestureDetector.StopDetecion = true;
-        }
-
-        private void UITimerChange_Tick(object sender, EventArgs e)
-        {
-            
-
-            ExerciseStatus.DataContext = CurrentExercise.CurrentRound;
-            RoundIndexText.DataContext = CurrentExercise.CurrentRound;
-            RoundMotionQualityGrid.DataContext = CurrentExercise.CurrentRound;
-            StopDetection = false;
-            _gestureDetector.StopDetecion = false;
-            printStatus();
-
-            UITimerChange.Stop();
-   
         }
 
         private void CurrentExercise_NextRoundUpdateUIEvet()
@@ -162,43 +178,46 @@ namespace VideoTherapy
             //RoundMotionQualityGrid.DataContext = CurrentExercise.CurrentRound;
         }
 
-
         private void ExerciseView_Loaded(object sender, RoutedEventArgs e)
         {
-            
-            _sensor = KinectSensor.GetDefault();
-            //todo - check, not working
-            if (_sensor != null)
-            {
-                _sensor.Open();
 
-                // 2) Initialize the background removal tool.
-                _backgroundRemovalTool = new BackgroundRemovalTool(_sensor.CoordinateMapper);
-                _drawSkeleton = new DrawSkeleton(_sensor,(int) (KinectSkeleton.Width), (int)(KinectSkeleton.Height));
+            CreatePopUps();
 
-                _reader = _sensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.BodyIndex | FrameSourceTypes.Body);
-                _reader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
+            //_sensor = KinectSensor.GetDefault();
+            ////todo - check, not working
+            //if (_sensor != null)
+            //{
+            //    _sensor.Open();
 
-                //Gesture detection
-                Exercise tempExercise = CurrentExercise;
-                _gestureAnalysis = new GestureAnalysis(ref tempExercise);
-                _gestureDetector = new GestureDetector(_sensor, _gestureAnalysis, CurrentExercise);
+            //    // 2) Initialize the background removal tool.
+            //    _backgroundRemovalTool = new BackgroundRemovalTool(_sensor.CoordinateMapper);
+            //    _drawSkeleton = new DrawSkeleton(_sensor,(int) (KinectSkeleton.Width), (int)(KinectSkeleton.Height));
 
-                _gestureAnalysis.startGestureDeteced += _gestureAnalysis_startGestureDeteced;
+            //    _reader = _sensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.BodyIndex | FrameSourceTypes.Body);
+            //    _reader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
 
-                //ExerciseVideo.Source = new Uri("http://mil01.objectstorage.softlayer.net/v1/AUTH_2bc94b1c-c83f-4247-b43c-c1dfaf29db00/vtexercisevideos2/he/82.mp4");              
-                  
-                //_timer.Start();
-                ExerciseVideo.Play();
-                _playPause = true;
-            }
+            //    //Gesture detection
+            //    Exercise tempExercise = CurrentExercise;
+            //    _gestureAnalysis = new GestureAnalysis(ref tempExercise);
+            //    _gestureDetector = new GestureDetector(_sensor, _gestureAnalysis, CurrentExercise);
+
+            //    _gestureAnalysis.startGestureDeteced += _gestureAnalysis_startGestureDeteced;
+
+            //    //ExerciseVideo.Source = new Uri("http://mil01.objectstorage.softlayer.net/v1/AUTH_2bc94b1c-c83f-4247-b43c-c1dfaf29db00/vtexercisevideos2/he/82.mp4");              
+
+            //    //_timer.Start();
+            //    ExerciseVideo.Play();
+            //    _playPause = true;
+            //}
 
         }
 
         private void InitGestureDetection()
         {
-            if (!CurrentExercise.isDemo)
+            if (!CurrentExercise.isDemo && CurrentExercise.isTrackable)
             {
+                SetUIInTrackingMode();
+
                 _sensor = KinectSensor.GetDefault();
                 //todo - check, not working
                 if (_sensor != null)
@@ -227,7 +246,24 @@ namespace VideoTherapy
                     _playPause = true;
                 }
             }
-            
+            else
+            {
+                if (CurrentExercise.isDemo)
+                {
+                    SetUIInDemoMode();
+                }
+
+                else
+                {
+                    if (!CurrentExercise.isTrackable)
+                    {
+                        OpenNotTrackablePopUp();
+                        SetUIInNoTrackableMode();
+                    }
+                }
+
+            }
+
 
         }
 
@@ -270,7 +306,8 @@ namespace VideoTherapy
                         KinectSkeleton.Source = _drawSkeleton.DrawBodySkeleton(bodyFrame);
 
                         detected = GetTrackingId(bodyFrame);
-                        //_gestureDetector.IsPaused = !bodyTracked;
+                        
+                        //_gestureDetector.IsPaused = !BodyTracked;
                         //_gestureDetector.TrackingId = bodyIndex;
                         //Console.WriteLine("Pause: {0}, ID: {1}", _gestureDetector.IsPaused, _gestureDetector.TrackingId);
                         //_gestureDetector.GestureDetectionToAnalyze();
@@ -279,6 +316,9 @@ namespace VideoTherapy
 
                 if (detected && !StopDetection)
                 {
+                    
+                    ClosePausePopUp();
+
                     Body activeBody = this.bodies[this.bodyIndex];
 
                     // visualize the new gesture data
@@ -307,8 +347,15 @@ namespace VideoTherapy
                 else
                 {
                     //OpenPausePopUp();
+                    if (!BodyTracked)
+                        OpenPausePopUp();
                 }
 
+            }
+            else
+            {
+                ExerciseStatus.Visibility = Visibility.Hidden;
+                DemoLbl.Visibility = Visibility.Visible;
             }
 
 
@@ -326,7 +373,7 @@ namespace VideoTherapy
 
             Body body = null;
 
-            if (bodyTracked)
+            if (BodyTracked)
             {
                 if (bodies[bodyIndex].IsTracked)
                 {
@@ -334,17 +381,17 @@ namespace VideoTherapy
                 }
                 else
                 {
-                    bodyTracked = false;
+                    BodyTracked = false;
                 }
             }
-            if (!bodyTracked)
+            if (!BodyTracked)
             {
                 for (int i = 0; i < bodies.Length; ++i)
                 {
                     if (bodies[i].IsTracked)
                     {
                         bodyIndex = (ulong) i;
-                        bodyTracked = true;
+                        BodyTracked = true;
                         break;
                     }
                     else
@@ -354,33 +401,19 @@ namespace VideoTherapy
                 }
             }
 
-            return bodyTracked;
+            return BodyTracked;
         }
-
-        public void Dispose()
+  
+        private void CheckForPause()
         {
-            if (_gestureDetector != null)
+            if (BodyTracked)
             {
-                _gestureDetector.Dispose();
+                ClosePausePopUp();
             }
-
-            if (_reader != null)
+            else
             {
-                _reader.Dispose();
+                OpenPausePopUp();
             }
-
-            if (_gestureAnalysis != null)
-            {
-                _gestureAnalysis = null;
-            }
-
-            if (_sensor != null)
-            {
-                _sensor.Close();
-                _sensor = null;
-            }
-
-
         }
 
         private void PlayNextVideo()
@@ -388,7 +421,7 @@ namespace VideoTherapy
             if (!(_currentExerciseIndex + 1 >= Playlist.Count))
             {
                 _currentExerciseIndex++;
-                CurrentExercise = Playlist[_currentExerciseIndex];
+                //CurrentExercise = Playlist[_currentExerciseIndex];
 
                 //clearing the view
                 KinectShilloute.Source = null;
@@ -423,6 +456,183 @@ namespace VideoTherapy
             }
         }
 
+        private void PlayNextVideo2()
+        {
+            CurrentExercise.CheckIfExerciseStatus();
+
+            //incase there is more then one repeation in session (some exercise many times)
+            if (!CurrentTraining.Playlist2[_currentSessionId].Last().Equals(CurrentExercise))
+            {
+                //clearing the view
+                KinectShilloute.Source = null;
+                KinectSkeleton.Source = null;
+
+                //NEW
+                Dispose();
+
+                int i = CurrentTraining.Playlist2[_currentSessionId].IndexOf(CurrentExercise);
+                CurrentExercise = CurrentTraining.Playlist2[_currentSessionId][i + 1];
+
+                InitGestureDetection();
+
+                DataContext = CurrentExercise;
+                //_gestureAnalysis.CurrentExercise = CurrentExercise;
+
+                NextRoundUpdataDelegate nextRoundUpdateDelegate = new NextRoundUpdataDelegate(UpdateDataContext);
+                CurrentExercise.NextRoundUpdateUIEvent += CurrentExercise_NextRoundUpdateUIEvet;
+                CurrentExercise.NextRoundUpdateUIEvent += new NextRoundUpdataDelegate(UpdateDataContext);
+                CurrentExercise.StopDetectionEvent += CurrentExercise_StopDetectionEvent;
+
+
+                UpdateDataContext();
+                ExerciseStatus.DataContext = CurrentExercise.CurrentRound;
+                RoundIndexText.DataContext = CurrentExercise.CurrentRound;
+                RoundMotionQualityGrid.DataContext = CurrentExercise.CurrentRound;
+
+                WaitForStartLbl.Visibility = Visibility.Visible;
+                ExerciseVideo.Play();
+            }
+            else
+            {
+                //in case there is no more exercise in the same session (new type of exercise)
+                if (Playlist2.ContainsKey(_currentSessionId + 1))
+                {
+                    //MoveInDictionary(1);
+                    _currentSessionId++;
+                    PlayNextVideo2();
+                }
+                else
+                {
+                    //show questionere pop-up
+                    OpenSummaryPopUp();
+                    CloseAllComponents();
+                }
+            }
+            
+        }
+
+        private void PlayPrevVideo2()
+        {
+            //incase there is more then one repeation in session (some exercise many times)
+            if (!CurrentTraining.Playlist2[_currentSessionId].First().Equals(CurrentExercise))
+            {
+                //clearing the view
+                KinectShilloute.Source = null;
+                KinectSkeleton.Source = null;
+
+                //NEW
+                Dispose();
+
+                int i = CurrentTraining.Playlist2[_currentSessionId].IndexOf(CurrentExercise);
+                CurrentExercise = CurrentTraining.Playlist2[_currentSessionId][i - 1];
+
+                InitGestureDetection();
+
+                DataContext = CurrentExercise;
+                //_gestureAnalysis.CurrentExercise = CurrentExercise;
+
+                NextRoundUpdataDelegate nextRoundUpdateDelegate = new NextRoundUpdataDelegate(UpdateDataContext);
+                CurrentExercise.NextRoundUpdateUIEvent += CurrentExercise_NextRoundUpdateUIEvet;
+                //CurrentExercise.NextRoundUpdateUIEvent += new NextRoundUpdataDelegate(UpdateDataContext);
+                CurrentExercise.StopDetectionEvent += CurrentExercise_StopDetectionEvent;
+
+
+                UpdateDataContext();
+                ExerciseStatus.DataContext = CurrentExercise.CurrentRound;
+                RoundIndexText.DataContext = CurrentExercise.CurrentRound;
+                RoundMotionQualityGrid.DataContext = CurrentExercise.CurrentRound;
+
+                ExerciseVideo.Play();
+            }
+            else
+            {
+                //in case there is no more exercise in the same session (new type of exercise)
+                if (Playlist2.ContainsKey(_currentSessionId - 1))
+                {
+                    KinectShilloute.Source = null;
+                    KinectSkeleton.Source = null;
+
+                    //NEW
+                    Dispose();
+
+                    _currentSessionId--;
+                    CurrentExercise = Playlist2[_currentSessionId].Last();
+
+                    InitGestureDetection();
+
+                    DataContext = CurrentExercise;
+                    //_gestureAnalysis.CurrentExercise = CurrentExercise;
+
+                    NextRoundUpdataDelegate nextRoundUpdateDelegate = new NextRoundUpdataDelegate(UpdateDataContext);
+                    CurrentExercise.NextRoundUpdateUIEvent += CurrentExercise_NextRoundUpdateUIEvet;
+                    //CurrentExercise.NextRoundUpdateUIEvent += new NextRoundUpdataDelegate(UpdateDataContext);
+                    CurrentExercise.StopDetectionEvent += CurrentExercise_StopDetectionEvent;
+
+
+                    UpdateDataContext();
+                    ExerciseStatus.DataContext = CurrentExercise.CurrentRound;
+                    RoundIndexText.DataContext = CurrentExercise.CurrentRound;
+                    RoundMotionQualityGrid.DataContext = CurrentExercise.CurrentRound;
+
+                    ExerciseVideo.Play();
+                }
+            }
+
+        }
+
+        private void SetUIInNoTrackableMode()
+        {
+            RoundMotionPanel.Visibility = Visibility.Collapsed;
+            NARoundMotion.Visibility = Visibility.Visible;
+
+            ExerciseMotionPanel.Visibility = Visibility.Collapsed;
+            NAExerciseMotion.Visibility = Visibility.Visible;
+
+            ExerciseStatus.Visibility = Visibility.Visible;
+            RoundIndexPanel.Visibility = Visibility.Collapsed;
+            ExerciseRepetionsLbl.Visibility = Visibility.Collapsed;
+            NARoundIndex.Visibility = Visibility.Visible;
+            NotTraceableLbl.Visibility = Visibility.Visible;
+
+            DemoStatus.Visibility = Visibility.Collapsed;
+        }
+
+        private void SetUIInDemoMode()
+        {
+            ExerciseStatus.Visibility = Visibility.Collapsed;
+
+            RoundMotionPanel.Visibility = Visibility.Collapsed;
+            NARoundMotion.Visibility = Visibility.Visible;
+
+            ExerciseMotionPanel.Visibility = Visibility.Collapsed;
+            NAExerciseMotion.Visibility = Visibility.Visible;
+
+            DemoStatus.Visibility = Visibility.Visible;
+        }
+
+        private void SetUIInTrackingMode()
+        {
+            UpdateDataContext();
+            
+            //Demo panel - set off
+            DemoStatus.Visibility = Visibility.Collapsed;
+
+            ExerciseStatus.Visibility = Visibility.Visible;
+            RoundIndexPanel.Visibility = Visibility.Visible;
+            ExerciseRepetionsLbl.Visibility = Visibility.Visible;
+            NARoundIndex.Visibility = Visibility.Collapsed;
+            NotTraceableLbl.Visibility = Visibility.Collapsed;
+            
+            //not trackable - set off
+            RoundMotionPanel.Visibility = Visibility.Visible;
+            NARoundMotion.Visibility = Visibility.Collapsed;
+
+            ExerciseMotionPanel.Visibility = Visibility.Visible;
+            NAExerciseMotion.Visibility = Visibility.Collapsed;
+
+
+        }
+
         #region popups
     
         private void OpenSummaryPopUp()
@@ -438,6 +648,7 @@ namespace VideoTherapy
             summary.CurrentTraining = CurrentTraining;
             summary.CurrentPatient = CurrentPatient;
             summary.ExerciseView = this;
+            summary.UpdateScore();
 
             ExerciseWindow.Children.Add(summary);
         }
@@ -464,7 +675,7 @@ namespace VideoTherapy
             questionnairePopUp = new QuestionnairePopUp();
 
             int width = (int)(ActualWidth / 2.5);
-            int height = (int)(ActualHeight * 0.75);
+            int height = (int)(ActualHeight * 0.65);
 
             questionnairePopUp.SetSize(height, width);
 
@@ -493,7 +704,7 @@ namespace VideoTherapy
         {
             questionnaireFinishedPopUp = new QuestionFinishedPopUp();
 
-            int width = (int)(ActualWidth / 2);
+            int width = (int)(ActualWidth / 2.3);
             int height = (int)(ActualHeight * 0.55);
 
             questionnaireFinishedPopUp.SetSize(height, width);
@@ -510,7 +721,7 @@ namespace VideoTherapy
             MainWindow.OpenTreatmentWindow(this.CurrentPatient);
         }
 
-        private void OpenPausePopUp()
+        private void CreatePopUps()
         {
             pausePopUp = new PausePopUp();
             int width = (int)(ActualWidth * 0.5);
@@ -518,50 +729,103 @@ namespace VideoTherapy
 
             pausePopUp.SetSize(height, width);
 
-            //todo - stop training + video
 
-            ExerciseWindow.Children.Add(pausePopUp);
+            noTrackingPopUp = new NoTrackingPopUp();
+            width = (int)(ActualWidth * 0.45);
+            height = (int)(ActualHeight * 0.55);
+
+            noTrackingPopUp.SetSize(height, width);
+            noTrackingPopUp.ExerciseView = this;
+        }
+
+        private void OpenPausePopUp()
+        {
+            if (!ExerciseWindow.Children.Contains(pausePopUp))
+            {
+                ExerciseWindow.Children.Add(pausePopUp);
+
+                StopDetection = true;
+
+                ExerciseVideo.Pause();
+
+                _playPause = false;
+            }
+            
+
+            
         }
 
         private void ClosePausePopUp()
         {
-            ExerciseWindow.Children.Remove(pausePopUp);
+            if (ExerciseWindow.Children.Contains(pausePopUp))
+            {
+                ExerciseWindow.Children.Remove(pausePopUp);
+                //todo - resume tracking
 
-            //todo - resume tracking
+                StopDetection = false;
+
+                ExerciseVideo.Play();
+
+                _playPause = true;
+            }
+
         }
+        
+        private void OpenNotTrackablePopUp()
+        {
+            if (!ExerciseWindow.Children.Contains(noTrackingPopUp))
+            {
+                ExerciseWindow.Children.Add(noTrackingPopUp);
+                noTrackingPopUp.StartTimer();
+            }
+        }
+
+        public void CloseNotTrackablePopUp()
+        {
+            if (ExerciseWindow.Children.Contains(noTrackingPopUp))
+            {
+                ExerciseWindow.Children.Remove(noTrackingPopUp);
+                noTrackingPopUp.StopTimer();
+            }
+        }
+
         #endregion
 
         #region events
         private void NextVideoClick(object sender, MouseButtonEventArgs e)
         {
-            PlayNextVideo();
+            //PlayNextVideo();
+            PlayNextVideo2();
         }
 
         private void PrevVideoClick(object sender, MouseButtonEventArgs e)
         {
-            if (!(_currentExerciseIndex <= 0))
-            {
-                _currentExerciseIndex--;
+            PlayPrevVideo2();
+            //if (!(_currentExerciseIndex <= 0))
+            //{
+            //    _currentExerciseIndex--;
 
-                CurrentExercise = Playlist[_currentExerciseIndex];
+            //    CurrentExercise = Playlist[_currentExerciseIndex];
 
-                //clearing the view
-                KinectShilloute.Source = null;
-                KinectSkeleton.Source = null;
-
-
-                DataContext = CurrentExercise;
-
-                ////FOR DEMO!!!
-                //ForDemo();
+            //    //clearing the view
+            //    KinectShilloute.Source = null;
+            //    KinectSkeleton.Source = null;
 
 
-                ExerciseVideo.Play();
-            }
+            //    DataContext = CurrentExercise;
+
+            //    ////FOR DEMO!!!
+            //    //ForDemo();
+
+
+            //    ExerciseVideo.Play();
+            //}
         }
 
         private void PlayPauseClick(object sender, MouseButtonEventArgs e)
         {
+            //todo - need to stop detecion
+
             if (_playPause)
             {
                 ExerciseVideo.Pause();
@@ -580,7 +844,8 @@ namespace VideoTherapy
 
         private void ExerciseVideo_MediaEnded(object sender, RoutedEventArgs e)
         {
-            PlayNextVideo();
+            PlayNextVideo2();
+            //PlayNextVideo();
         }
 
         private void CloseButton_MouseDown(object sender, MouseButtonEventArgs e)
@@ -609,6 +874,31 @@ namespace VideoTherapy
             }
         }
 
+        public void Dispose()
+        {
+            if (_gestureDetector != null)
+            {
+                _gestureDetector.Dispose();
+            }
+
+            if (_reader != null)
+            {
+                _reader.Dispose();
+            }
+
+            if (_gestureAnalysis != null)
+            {
+                _gestureAnalysis = null;
+            }
+
+            if (_sensor != null)
+            {
+                _sensor.Close();
+                _sensor = null;
+            }
+
+
+        }
 
 
         //=====================================
@@ -617,15 +907,15 @@ namespace VideoTherapy
         private void ForDemo()
         {
             CurrentExercise.Repetitions = 5;
-            CurrentExercise.DBPath = CurrentExercise.createGestures();
-            CurrentExercise.CreateRounds();
+            //CurrentExercise.DBPath = CurrentExercise.createGestures();
+            //CurrentExercise.CreateRounds();
 
         }
 
         private void ForDemo2()
         {
             CurrentExercise.Repetitions = 5;
-            CurrentExercise.DBPath = CurrentExercise.CreateGestures2();
+            //CurrentExercise.DBPath = CurrentExercise.CreateGestures2();
             CurrentExercise.CreateRounds();
 
         }
@@ -636,7 +926,7 @@ namespace VideoTherapy
             Console.WriteLine("================ In View =================");
             Console.WriteLine("Current round {0}", CurrentExercise.CurrentRound.RoundNumber);
             Console.WriteLine("Current round in exe {0}", CurrentExercise.RoundIndex);
-            Console.WriteLine("Current exe " + CurrentExercise.GetHashCode());
+            //Console.WriteLine("Current exe " + CurrentExercise.GetHashCode());
             Console.WriteLine(CurrentExercise.CurrentRound.RoundProgress);
             Console.WriteLine(CurrentExercise.CurrentRound.RoundSuccess);
             foreach (var item in CurrentExercise.CurrentRound.GestureList)

@@ -14,7 +14,16 @@ namespace VideoTherapy.Objects
         public List<Training> TrainingList { set; get; }
         public Training CurrentTraining { set; get; }
         public Training RecommendedTraining { set; get; }
-        public string StartDate { set; get; }
+        public DateTime StartDate { set; get; }
+        public DateTime EndDate { set; get; }
+
+        public int TreatmentProgress
+        {
+
+            set;
+            get;
+
+        }
 
         public Training NextTraining()
         {

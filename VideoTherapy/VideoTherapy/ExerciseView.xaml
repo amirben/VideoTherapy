@@ -20,9 +20,10 @@
         <Grid Visibility="Visible" >
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Bottom">
                 <StackPanel x:Name="WaitForStartLbl" Background="#7F000000" Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
-                    <Border Background="#4fc3f7" BorderThickness="2" CornerRadius="20" Height="34" Width="34" Margin="15,5,5,5">
+                    <Image Source=".\Images\info.png" Height="34" Width="34" Margin="15,5,5,5"/>
+                    <!--<Border Background="#4fc3f7" BorderThickness="2" CornerRadius="20" Height="34" Width="34" Margin="15,5,5,5">
                         <TextBlock Text="i" FontFamily="Roboto" FontSize="20"  Foreground="#7F000000" TextAlignment="Center" Margin="5"/>
-                    </Border>
+                    </Border>-->
 
                     <Label Foreground="White" FontFamily="Roboto" FontSize="20" Margin="5,15,15,15">Place your body on the figure to start</Label>
                 </StackPanel>
@@ -75,11 +76,12 @@
 
                     <StackPanel x:Name="ExerciseTotalScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0" >
                         <Grid x:Name="RoundMotionQualityGrid"  Margin="0,0,15,0" HorizontalAlignment="Center">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,-40,0,0">
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" Foreground="White" Text="{Binding Path=RoundMotionQuality}" />
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20" Foreground="White" Text="%" Margin="0,7,0,0" />
+                            <StackPanel x:Name="RoundMotionPanel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,-40,0,0">
+                                <TextBlock x:Name="RoundMotionProgressTxt" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" Foreground="White" Text="{Binding Path=RoundMotionQuality}" />
+                                <TextBlock x:Name="RoundMotionPrecentTxt" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20" Foreground="White" Text="%" Margin="0,7,0,0" />
                             </StackPanel>
-
+                            <TextBlock x:Name="NARoundMotion" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-40,0,0" Foreground="White" FontSize="36" Text="N/A" Visibility="Collapsed"/>
+                            
                             <ProgressBar x:Name="RoundMotionQualityProgressBar" Margin="10,0,10,45" Value="{Binding Path=RoundMotionQuality}">
                                 <ProgressBar.Template>
                                     <ControlTemplate>
@@ -96,11 +98,15 @@
 
 
                         <Grid x:Name="ExerciseMotionQualityGrid" Margin="15,0,0,0" HorizontalAlignment="Center">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,-40,0,0">
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" Foreground="White" Text="{Binding Path=ExerciseMotionScore}" />
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20" Foreground="White" Text="%" Margin="0,7,0,0" />
+                            <StackPanel x:Name="ExerciseMotionPanel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,-40,0,0">
+                                <TextBlock x:Name="ExerciseMoitionProgressTxt" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                           FontSize="40" Foreground="White" Text="{Binding Path=ExerciseMotionScore}">
+                                </TextBlock>
+                                <TextBlock x:Name="ExerciseMotionPrecentTxt" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20" Foreground="White" Text="%" Margin="0,7,0,0" />
                             </StackPanel>
-
+                            <TextBlock x:Name="NAExerciseMotion" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-40,0,0" Foreground="White" FontSize="36" Text="N/A" Visibility="Collapsed"/>
+                            
+                            
                             <ProgressBar x:Name="ExerciseMotionQualityProgressBar" Margin="10,0,10,45" Value="{Binding Path=ExerciseMotionScore}">
                                 <ProgressBar.Template>
                                     <ControlTemplate>
@@ -120,11 +126,15 @@
 
                 <StackPanel x:Name="ExerciseStatus" Background="#7F000000" Width="360" Height="320" Margin="15">
                     <Grid Height="320">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock x:Name="NARoundIndex" HorizontalAlignment="Center" VerticalAlignment="Center" Text="N/A" FontSize="65" Foreground="White" Visibility="Collapsed" />
+                        
+                        <StackPanel x:Name="RoundIndexPanel" Orientation="Horizontal" HorizontalAlignment="Center">
                             <TextBlock x:Name="RoundIndexText" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="65" Foreground="White" Text="{Binding Path=RoundNumber}"/>
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="65" Foreground="White" Text="/" Margin="12,0"/>
+                            <TextBlock x:Name="RoundIndexSlash" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="65" Foreground="White" Text="/" Margin="12,0"/>
                             <TextBlock x:Name="RoundReptitionText" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="65" Foreground="White" Text="{Binding Path=RoundRepetitions}"/>
                         </StackPanel>
+                        
+                        
 
                         <ProgressBar x:Name="ExerciseRepetitionsProgressBar" Margin="17,15,13,15" Value="{Binding Path=RoundProgress}">
                             <ProgressBar.Template>
@@ -137,11 +147,16 @@
                             </ProgressBar.Template>
                         </ProgressBar>
 
-                        <TextBlock Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Exercise Repetitions" Margin="0,15"/>
+                        <TextBlock x:Name="ExerciseRepetionsLbl" Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Exercise Repetitions" Margin="0,15"/>
+                        <TextBlock x:Name="NotTraceableLbl" Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Not traceable" Margin="0,15"/>
                     </Grid>
 
                 </StackPanel>
-
+                <Grid x:Name="DemoStatus" Background="#7F000000" Width="360" Height="160" Margin="15" >
+                    <TextBlock x:Name="DemoLbl" Text="This is demostraion video, There will be no tracking" 
+                               FontSize="22" TextAlignment="Center" TextWrapping="Wrap" Padding="15" VerticalAlignment="Center"
+                               HorizontalAlignment="Center" Foreground="White"/>
+                </Grid>
             </StackPanel>
 
             <Grid  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="15" >

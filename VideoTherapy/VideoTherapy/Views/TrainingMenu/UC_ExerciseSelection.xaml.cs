@@ -35,8 +35,16 @@ namespace VideoTherapy.Views.TrainingMenu
 
         private void UC_ExerciseSelection_Loaded(object sender, RoutedEventArgs e)
         {
-            
-            ExercisesListUI.DataContext = _currentTraining.Playlist;
+            //ExercisesListUI.DataContext = _currentTraining.Playlist;
+
+            List<Exercise> showExerciseList = new List<Exercise>();
+
+            foreach (int key in _currentTraining.Playlist2.Keys)
+            {
+                showExerciseList.Add(_currentTraining.Playlist2[key][0]);
+            }
+
+            ExercisesListUI.DataContext = showExerciseList;
         }
 
         private List<Exercise> createDemoExercises()

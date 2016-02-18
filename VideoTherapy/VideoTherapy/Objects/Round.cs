@@ -94,8 +94,13 @@ namespace VideoTherapy.Objects
 
         private void printStatus()
         {
-            Console.WriteLine("in round ===");
-            Console.WriteLine("Round num {0}", RoundNumber);
+            Console.Write("Round num {0}   ", RoundNumber);
+
+            foreach (VTGesture g in GestureList.Values)
+            {
+                Console.Write("n = {0}, p = {1} | ", g.GestureName, g.ProgressValue);
+
+            }
             Console.WriteLine();
         }
 

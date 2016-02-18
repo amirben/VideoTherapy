@@ -14,9 +14,6 @@ namespace VideoTherapy.Kinect_Detection
     /// </summary>
     public class GestureDetector : IDisposable
     {
-        //TEMP!!!!!!!
-        private string DBPATH = @"C:\Users\amirb\Desktop\Afeka\VideoTherapy\Prototype\VIdeotherapy-Prototype\Videotherapy-Prototype-Client\Database\sqaut.gdb";
-
         /// <summary> Gesture frame source which should be tied to a body tracking ID </summary>
         private VisualGestureBuilderFrameSource vgbFrameSource = null;
 
@@ -61,7 +58,7 @@ namespace VideoTherapy.Kinect_Detection
             }
 
             // load all gestures from the gesture database
-            using (var database = new VisualGestureBuilderDatabase(_currentExercise.DBPath))
+            using (  var database = new VisualGestureBuilderDatabase(_currentExercise.DBPath))
             //using (var database = new VisualGestureBuilderDatabase(@"C:\Users\amirb\Desktop\Afeka\VideoTherapy\VideoTherapy - Client\VideoTherapy\VideoTherapy\VideoTherapy\DB\squat.gbd"))
             //using (var database = new VisualGestureBuilderDatabase(_currentExercise.DBPath))
             {

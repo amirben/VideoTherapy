@@ -39,6 +39,10 @@
   <PropertyGroup>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon_ico.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="Microsoft.Kinect, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Kinect.VisualGestureBuilder, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=x86" />
@@ -100,6 +104,9 @@
     <Compile Include="Utils\HttpsReplaceToHttp.cs" />
     <Compile Include="Utils\Scoring.cs" />
     <Compile Include="Utils\TrainingValueToColorConvert.cs" />
+    <Compile Include="Views\ExerciseScreen\NoTrackingPopUp.xaml.cs">
+      <DependentUpon>NoTrackingPopUp.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ExerciseScreen\PausePopUp.xaml.cs">
       <DependentUpon>PausePopUp.xaml</DependentUpon>
     </Compile>
@@ -140,6 +147,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TreatmentMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExerciseScreen\NoTrackingPopUp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -281,6 +292,8 @@
     <Resource Include="Images\close3.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\icon_ico.ico" />
+    <Resource Include="icon_ico.ico" />
     <Content Include="XML\TreatmentsList.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

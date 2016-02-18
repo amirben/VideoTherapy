@@ -91,6 +91,39 @@ namespace VideoTherapy.ServerConnections
             Console.WriteLine("-----> finished download");
         }
 
+        public void DownloadTraining2(Patient _patien, int _trainingIndex)
+        {
+            _barrier = new Barrier(1);
+
+            string newDir = CreateDir(dir, _patient.AccountId.ToString());
+            //create treatment dir (it if needed)
+            newDir = CreateDir(newDir, _patient.PatientTreatment.TreatmentNumber.ToString());
+            //create training dir (it if needed)
+            newDir = CreateDir(newDir, _patient.PatientTreatment.TrainingList[_trainingIndex].TrainingId.ToString());
+
+            foreach (int key in _patient.PatientTreatment.TrainingList[_trainingIndex].Playlist2.Keys)
+            {
+                Exercise exercise = _patient.PatientTreatment.TrainingList[_trainingIndex].Playlist2[key][0];
+               
+                string imagePath = newDir + "\\" + exercise.ExerciseId + ".png";
+
+                string _from = exercise.ExerciseThumbs;
+                Thread downloadThread = new Thread(() => DownloadFile(_from, imagePath));
+                _barrier.AddParticipants(1);
+
+                downloadThread.Start();
+                exercise.ExerciseThumbs = imagePath;
+
+                foreach (Exercise _exercise in _patient.PatientTreatment.TrainingList[_trainingIndex].Playlist2[key])
+                {
+                    _exercise.ExerciseThumbs = imagePath;
+                }
+            }
+
+            _barrier.SignalAndWait();
+
+        }
+
         /// <summary>
         /// Download treatment images and current training Id
         /// <param name="_patient">Current user patient</param>
@@ -132,7 +165,8 @@ namespace VideoTherapy.ServerConnections
 
             foreach(Training t in _patient.PatientTreatment.TrainingList)
             {
-                DownloadTraining(_patient, _patient.PatientTreatment.TrainingList.IndexOf(t));
+                //DownloadTraining(_patient, _patient.PatientTreatment.TrainingList.IndexOf(t));
+                DownloadTraining2(_patient, _patient.PatientTreatment.TrainingList.IndexOf(t));
             }
 
         }

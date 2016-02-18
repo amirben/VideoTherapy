@@ -70,7 +70,7 @@ namespace VideoTherapy
                 }
 
                 int width = (int)(ActualWidth / 4);
-                int height = (int)(ActualHeight * 0.55);
+                int height = (int)(ActualHeight * 0.65);
 
                 ld.SetSize(width, height);
                 ld.CloseApp += CloseApp;
@@ -116,10 +116,10 @@ namespace VideoTherapy
 
         public async void OpenExerciseWindow(Patient _currentPatient, Training _currentTraining)
         {
-            //download the gestures and .gdb files for the current training
-            foreach (var exercise in _currentTraining.Playlist)
+            foreach (int key in _currentTraining.Playlist2.Keys)
             {
-                if (!exercise.isDemo && !exercise.isDuplicate)
+                Exercise exercise = _currentTraining.Playlist2[key][1];
+                if (exercise.isTrackable)
                 {
                     string json = await ApiConnection.GetExerciseGesturesApiAsync(exercise.ExerciseId);
                     JSONConvertor.GettingExerciseGesture(exercise, json);
@@ -128,8 +128,18 @@ namespace VideoTherapy
                     {
                         dc.DownloadGDBfile(exercise);
                     }
-                }
 
+                    foreach (var item in _currentTraining.Playlist2[key])
+                    {
+                        if (!item.isDemo && !item.Equals(exercise))
+                        {
+                            item.DBPath = exercise.DBPath;
+                            item.CopyGesturesFromOrigin(exercise);
+                        }
+
+                    }
+                }
+                
             }
 
             //OpenningWindow.Background = null;
@@ -142,5 +152,23 @@ namespace VideoTherapy
         }
 
 
+        public void DownloadGDBOld()
+        {
+            ////download the gestures and .gdb files for the current training
+            //foreach (var exercise in _currentTraining.Playlist)
+            //{
+            //    if (!exercise.isDemo && !exercise.isDuplicate)
+            //    {
+            //        string json = await ApiConnection.GetExerciseGesturesApiAsync(exercise.ExerciseId);
+            //        JSONConvertor.GettingExerciseGesture(exercise, json);
+
+            //        using (DownloadCache dc = new DownloadCache(_currentPatient))
+            //        {
+            //            dc.DownloadGDBfile(exercise);
+            //        }
+            //    }
+
+            //}
+        }
     }
 }

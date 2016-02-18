@@ -48,8 +48,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        
-        
+           
         <Style TargetType="Border" x:Key="BorderStyle">
             <Setter Property="BorderBrush" Value="White"></Setter>
             <Style.Triggers>
@@ -65,12 +64,10 @@
                     <Setter Property="BorderBrush" Value="Yellow"></Setter>
                 </DataTrigger>
             </Style.Triggers>
-            
-            
         </Style>
 
         <DataTemplate x:Key="TrainingImageDataTemplate">
-            <StackPanel HorizontalAlignment="Left" Width="240" Margin="15, 10">
+            <StackPanel HorizontalAlignment="Left" Width="220" Margin="5, 5">
                 <Grid>
                     <Grid Background="White">
                         <Image Source="{Binding TrainingThumbs}" RenderTransformOrigin="20,2" Margin="-60,0,75,0" >
@@ -140,9 +137,10 @@
             <Label HorizontalAlignment="Left" FontFamily="Roboto" FontSize="36" Foreground="White"  FontWeight="Bold" Margin="26,20,26,0">Training Program</Label>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"  Margin="26,10">
-                <Border Background="#4fc3f7" BorderThickness="2" CornerRadius="20" Height="34" Width="34">
+                <Image Source="..\..\Images\info.png" Height="34" Width="34"/>
+                <!--<Border Background="#4fc3f7" BorderThickness="2" CornerRadius="20" Height="34" Width="34">
                     <TextBlock Text="i" FontFamily="Roboto" FontSize="20"  Foreground="Gray" TextAlignment="Center" Margin="-2,3,-2.4,2.6"/>
-                </Border>
+                </Border>-->
 
                 <Label Foreground="White" FontFamily="Roboto" FontSize="30">Select a training session to start</Label>
             </StackPanel>
@@ -150,7 +148,11 @@
         
 
         <!--Treatment List-->
-        <ListBox x:Name="TreatmentTrainingList" Grid.Row="1" BorderBrush="Transparent" Background="Transparent" Margin="26,15" ItemsSource="{Binding}" ItemTemplate="{DynamicResource TrainingImageDataTemplate}" ItemsPanel="{DynamicResource TrainingImageItemsPanelTemplate}" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Auto">
+        <ListBox x:Name="TreatmentTrainingList" Grid.Row="1" BorderBrush="Transparent" Background="Transparent" 
+                 Margin="5,15" 
+                 ItemsSource="{Binding}" ItemTemplate="{DynamicResource TrainingImageDataTemplate}" 
+                 ItemsPanel="{DynamicResource TrainingImageItemsPanelTemplate}" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <EventSetter Event="MouseDoubleClick" Handler="DoubleClickHandler"/>
