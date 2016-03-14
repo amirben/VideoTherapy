@@ -16,7 +16,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -137,6 +137,9 @@
     <Compile Include="Views\UC_UserInfo.xaml.cs">
       <DependentUpon>UC_UserInfo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\VT_Splash.xaml.cs">
+      <DependentUpon>VT_Splash.xaml</DependentUpon>
+    </Compile>
     <Compile Include="XML\ObjectReader.cs" />
     <Page Include="ExerciseView.xaml">
       <SubType>Designer</SubType>
@@ -203,6 +206,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\UC_UserInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VT_Splash.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -294,6 +301,7 @@
     </Resource>
     <Resource Include="Images\icon_ico.ico" />
     <Resource Include="icon_ico.ico" />
+    <Resource Include="Images\vt_logo.png" />
     <Content Include="XML\TreatmentsList.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

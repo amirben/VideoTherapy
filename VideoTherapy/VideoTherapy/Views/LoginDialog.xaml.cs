@@ -26,6 +26,9 @@ using System.Xml;
 using System.Xml.Linq;
 using System.IO;
 
+using VideoTherapy.Views;
+using System.ComponentModel;
+
 namespace VideoTherapy
 {
     /// <summary>
@@ -60,7 +63,42 @@ namespace VideoTherapy
         /// </summary> 
         private string config_path = @"user_config.xml";
 
-        #endregion 
+        /// <summary>
+        /// saving the check-box value due to ui-thread problems
+        /// </summary> 
+        private bool isSavingConfig = false;
+
+        /// <summary>
+        /// Worker for download all user data from server
+        /// </summary> 
+        private BackgroundWorker worker;
+
+        /// <summary>
+        /// If error accure somewhere, it will stop all connection to server
+        /// </summary> 
+        private bool isErrorAccure = false;
+
+        /// <summary>
+        /// Saving the login screen in case that there is an error and need to show it again
+        /// </summary> 
+        private object loginScreen;
+
+        /// <summary>
+        /// Saving the last error messege that accure
+        /// </summary>
+        private ErrorMessege lastErrorMessege;
+
+        /// <summary>
+        /// Splash screen when loading
+        /// </summary>
+        private VT_Splash splash = new VT_Splash();
+
+        //*************
+        //todo - remove
+        private Stopwatch watch;
+        //*************
+
+        #endregion
 
         #region constractor
         /// <summary>
@@ -70,9 +108,11 @@ namespace VideoTherapy
         {
             InitializeComponent();
 
+            //Adding event to the static class
+            JSONConvertor.ErrorEvent += JSONConvertor_ErrorEvent;
+
             CheckConfigFile();
         }
-
         #endregion
 
         #region methods
@@ -98,7 +138,9 @@ namespace VideoTherapy
 
                 userFullName.Content = user.Element("user_fullname").Value;
                 emailTxt.Text = user.Element("user_name").Value;
-                //passwordTxt.Password = user.Element("pass").Value;
+#if DEBUG
+                passwordTxt.Password = user.Element("pass").Value;
+#endif
 
                 SaveConfig.IsChecked = true;
 
@@ -115,50 +157,41 @@ namespace VideoTherapy
         /// </summary>
         private async void Login()
         {
-            //todo - check input text
+            //create worker for background job
+            CreateWorker();
+            isErrorAccure = false;
+
             string email = emailTxt.Text;
             string password = MD5Hash.CalculateMD5Hash(passwordTxt.Password);
+            isSavingConfig = SaveConfig.IsChecked.Value;
 
+            //************
             //todo - remove
-            Stopwatch watch = new Stopwatch();
+            watch = new Stopwatch();
             watch.Start();
+            //************
 
             //retrive the user id
-            //todo - check for errors from server
             bool userIdExist = await LoginUserForId(email, password);
 
             //if there is a user id
             if (userIdExist)
             {
-                RetrivePatientDetails();
+                //Save login screen and change to splash
+                loginScreen = this.Content;
+                this.Content = splash;
 
-                RetriveTreatmentDetails();
-
-                RetriveTherapistDetails();
-
-                RetriveTrainingDetails();
-
-                IsNeedToSaveConfig();
-
-                await _semaphoreSlime.WaitAsync();
-
-                //TODO - remove
-                watch.Stop();
-                TimeSpan time = watch.Elapsed;
-                Console.WriteLine(time.ToString());
-
-                MainWindow.OpenTreatmentWindow(_currentPatient);
+                //start download data
+                worker.RunWorkerAsync();
             }
 
             //in case that email or password are wrong
             else
             {
-
+                //print error to error label
+                errorMessegeFromServer.Content = "Error in username or password";
+                errorMessegeFromServer.Visibility = Visibility.Visible;
             }
-            
-            //TODO - REMOVE
-            //string gestures = await ApiConnection.GetExerciseGesturesApiAsync(1);
-            //JSONConvertor.GettingExerciseGesture(_currentPatient.PatientTreatment.TrainingList[0].Playlist[0], gestures);
         }
 
         /// <summary>
@@ -179,10 +212,8 @@ namespace VideoTherapy
 
                 email = Uri.EscapeDataString(email);
                 string loginData = await ApiConnection.AppLoginApiAsync(email, password);
-                //todo - check errors
+                
                 _currentPatient = JSONConvertor.CreatePatient(loginData);
-
-                //todo - check error code for login
 
                 return _currentPatient != null ? true : false;
             }
@@ -199,9 +230,12 @@ namespace VideoTherapy
             try
             {
                 await _semaphoreSlime.WaitAsync();
-                string userData = await ApiConnection.GetUserDataApiAsync(_currentPatient.AccountId, ApiConnection.PATIENT_LEVEL);
-                //todo - check errors
-                JSONConvertor.GettingPatientData(_currentPatient, userData);
+                if (!isErrorAccure)
+                {
+                    string userData = await ApiConnection.GetUserDataApiAsync(_currentPatient.AccountId, ApiConnection.PATIENT_LEVEL);
+                    JSONConvertor.GettingPatientData(_currentPatient, userData);
+                }
+                
             }
             finally
             {
@@ -218,8 +252,13 @@ namespace VideoTherapy
             try
             {
                 await _semaphoreSlime.WaitAsync();
-                string treatmentData = await ApiConnection.GetTreatmentApiAsync(_currentPatient.PatientTreatment.TreatmentId);
-                JSONConvertor.GettingPatientTreatment(_currentPatient, treatmentData);
+                if (!isErrorAccure)
+                {
+                    //string treatmentData = await ApiConnection.GetTreatmentApiAsync(_currentPatient.PatientTreatment.TreatmentId);
+                    string userTreatmentsData = await ApiConnection.GetTreatmentByUserApiAsync(_currentPatient.AccountId);
+                    JSONConvertor.GettingPatientTreatment(_currentPatient, userTreatmentsData);
+                }
+                
             }
             finally
             {
@@ -237,22 +276,33 @@ namespace VideoTherapy
             {
                 await _semaphoreSlime.WaitAsync();
 
-                //downloading all the trainings data in the current treatment
-                foreach (Training training in _currentPatient.PatientTreatment.TrainingList)
+                if (!isErrorAccure)
                 {
-                    string trainingData = await ApiConnection.GetTrainingApiAsync(training.TrainingId);
-                    //JSONConvertor.GettingPatientTraining(training, trainingData);
+                    Barrier barrier = new Barrier(_currentPatient.PatientTreatment.TrainingList.Count + 1);
+                    
+                    //downloading all the trainings data in the current treatment
+                    foreach (Training training in _currentPatient.PatientTreatment.TrainingList)
+                    {
+                        Thread t = new Thread(async () =>
+                        {
+                            string trainingData = await ApiConnection.GetTrainingApiAsync(training.TrainingId);
+                            JSONConvertor.GettingPatientTraining2(training, trainingData);
 
-                    JSONConvertor.GettingPatientTraining2(training, trainingData);
+                            barrier.SignalAndWait();
+                        });
+
+                        t.Start();
+                    }
+
+                    barrier.SignalAndWait();
+                    
+                    //downloading current images for treatment screen
+                    using (DownloadCache _downloadCache = new DownloadCache(_currentPatient))
+                    {
+                        _downloadCache.DownloadAllTreatmentImages();
+                    }
                 }
 
-
-                //downloading current images for treatment screen
-                using (DownloadCache _downloadCache = new DownloadCache(_currentPatient))
-                {
-                    _downloadCache.DownloadAllTreatmentImages();
-                    //_downloadCache.DownloadTreatment();
-                }
             }
             finally
             {
@@ -268,11 +318,15 @@ namespace VideoTherapy
             try
             {
                 await _semaphoreSlime.WaitAsync();
-                //todo get patient current therapist
-                string therapistData = await ApiConnection.GetUserDataApiAsync(_currentPatient.PatientTreatment.TreatmentTherapist.AccountId, ApiConnection.THERAPIST_LEVEL);
-                JSONConvertor.GettingTherapistData(_currentPatient.PatientTreatment.TreatmentTherapist, therapistData);
 
-                _currentPatient.PatientTreatment.TreatmentTherapist.StartDate = _currentPatient.PatientTreatment.StartDate;
+                if (!isErrorAccure)
+                {
+                    string therapistData = await ApiConnection.GetUserDataApiAsync(_currentPatient.PatientTreatment.TreatmentTherapist.AccountId, ApiConnection.THERAPIST_LEVEL);
+                    JSONConvertor.GettingTherapistData(_currentPatient.PatientTreatment.TreatmentTherapist, therapistData);
+
+                    _currentPatient.PatientTreatment.TreatmentTherapist.StartDate = _currentPatient.PatientTreatment.StartDate;
+                }
+                
             }
             finally
             {
@@ -288,18 +342,21 @@ namespace VideoTherapy
             try
             {
                 await _semaphoreSlime.WaitAsync();
-
-                //configuration handler
-                if (SaveConfig.IsChecked.Value)
+                if (!isErrorAccure)
                 {
-                    //saving config file
-                    SaveUserConfig(_currentPatient);
+                    //configuration handler
+                    if (isSavingConfig)
+                    {
+                        //saving config file
+                        SaveUserConfig(_currentPatient);
+                    }
+                    else
+                    {
+                        //clear the config file
+                        DeleteConfigFile();
+                    }
                 }
-                else
-                {
-                    //clear the config file
-                    DeleteConfigFile();
-                }
+                
             }
             finally
             {
@@ -328,9 +385,11 @@ namespace VideoTherapy
             writer.WriteString(_currentPatient.Email);
             writer.WriteEndElement();
 
-            //writer.WriteStartElement("pass");
-            //writer.WriteString(passwordTxt.Password);
-            //writer.WriteEndElement();
+#if DEBUG
+            writer.WriteStartElement("pass");
+            writer.WriteString(passwordTxt.Password);
+            writer.WriteEndElement();
+#endif
 
             writer.WriteStartElement("user_img");
             writer.WriteString(_currentPatient.ImageThumb);
@@ -366,47 +425,28 @@ namespace VideoTherapy
             }
 
         }
+
+        /// <summary>
+        /// Create new worker
+        /// </summary>
+        private void CreateWorker()
+        {
+            worker = new BackgroundWorker();
+            worker.WorkerSupportsCancellation = true;
+
+            worker.DoWork += Worker_DoWork;
+            worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
+        }
         #endregion
 
         #region events
         /// <summary>
         /// Login btn click event - not used
         /// </summary>
-        private async void LoginBtn_Click(object sender, RoutedEventArgs e)
+        private void LoginBtn_Click(object sender, RoutedEventArgs e)
         {
             Login();
         }
-
-        /*public void ShowHandlerDialog()
-        {
-            Visibility = Visibility.Visible;
-
-            //_parent.IsEnabled = false;
-
-            _hideRequest = false;
-            while (!_hideRequest)
-            {
-                // HACK: Stop the thread if the application is about to close
-                if (this.Dispatcher.HasShutdownStarted ||
-                    this.Dispatcher.HasShutdownFinished)
-                {
-                    break;
-                }
-
-                // HACK: Simulate "DoEvents"
-                this.Dispatcher.Invoke(
-                    DispatcherPriority.Background,
-                    new ThreadStart(delegate { }));
-                Thread.Sleep(20);
-            }
-
-        }
-
-        private void HideHandlerDialog()
-        {
-            _hideRequest = true;
-            Visibility = Visibility.Hidden;
-        }*/
 
         /// <summary>
         /// Login button click event
@@ -437,7 +477,10 @@ namespace VideoTherapy
         /// </summary>
         public void Dispose()
         {
-            
+            if (worker != null)
+            {
+                worker.Dispose();
+            }
         }
 
         /// <summary>
@@ -445,7 +488,7 @@ namespace VideoTherapy
         /// </summary>
         private void CloseButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            CloseApp();
+            CloseApp(null);
         }
 
         /// <summary>
@@ -470,6 +513,70 @@ namespace VideoTherapy
                 LoginBtn.IsEnabled = true;
                 LoginBtn.Opacity = 1;
             }
+        }
+
+        /// <summary>
+        /// worker completed method - open treatment screen
+        /// </summary>
+        private async void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            await _semaphoreSlime.WaitAsync();
+
+            //**************
+            //TODO - remove
+            watch.Stop();
+            TimeSpan time = watch.Elapsed;
+            Console.WriteLine(time.ToString());
+            //**************
+
+            if (isErrorAccure)
+            {
+                //change back to login;
+                this.Content = loginScreen;
+
+                //print error to error label
+                errorMessegeFromServer.Content = "Error: " + lastErrorMessege.Code + " " + lastErrorMessege.Messege.ToString();
+                errorMessegeFromServer.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                MainWindow.OpenTreatmentWindow(_currentPatient);
+            }
+
+        }
+
+        /// <summary>
+        /// worker do work - download all user data
+        /// </summary>
+        private void Worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            RetrivePatientDetails();
+
+            RetriveTreatmentDetails();
+
+            //RetriveTherapistDetails();
+
+            RetriveTrainingDetails();
+
+            IsNeedToSaveConfig();
+
+        }
+
+        /// <summary>
+        /// handle the error messege and returning to the login screen
+        /// </summary>
+        private void JSONConvertor_ErrorEvent(object sender, EventArgs e)
+        {
+            //stop worker
+            if (worker.IsBusy)
+            {
+                worker.CancelAsync();
+            }
+                
+            worker.Dispose();
+
+            isErrorAccure = true;
+            lastErrorMessege = e as ErrorMessege;
         }
         #endregion
 

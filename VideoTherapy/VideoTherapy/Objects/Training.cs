@@ -11,12 +11,13 @@ namespace VideoTherapy.Objects
         public int TrainingId { set; get; }
         public int TrainingNumber { set; get; }
         public string TrainingName { set; get; }
+        public bool isRecommended { set; get; }
         public int Repetitions { set; get; }
         public int TrainingCompleted { set; get; }
         public string LastViewed { set; get; }
         public string TrainingThumbs { set; get; }
         public List<Exercise> Playlist { set; get; }
-
+        
         public Dictionary<int, List<Exercise>> Playlist2 { set; get; }
 
         public Boolean Downloaded { set; get;}

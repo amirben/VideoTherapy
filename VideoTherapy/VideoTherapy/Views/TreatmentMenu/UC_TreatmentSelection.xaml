@@ -13,30 +13,31 @@
     <StackPanel x:Name="TreatmentSelection" Orientation="Vertical" Background="#7F000000" Margin="15,15,7,15" >
             
         <Grid  HorizontalAlignment="Stretch" Height="80"  >
-                <Button x:Name="BackwardBtn" HorizontalAlignment="Left" Height="45" Width="45" Margin="20,15,0,15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
+                <!--<Button x:Name="BackwardBtn" HorizontalAlignment="Left" Height="45" Width="45" Margin="20,15,0,15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
                     <Button.Content>
                         <Image Source="..\..\Images\arrow_left.png" Height="40" Width="40" ></Image>
-                    <!--<Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" Background="#4fc3f7" >
+                    --><!--<Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" Background="#4fc3f7" >
                             <Image Source="..\..\Images\arrow_left.png" Height="25" Width="25" ></Image>
-                        </Border>-->
+                        </Border>--><!--
                     </Button.Content>
-                </Button>
-            <TextBlock x:Name="CurrentTreatmentLbl" HorizontalAlignment="Center" Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}" VerticalAlignment="Center" TextAlignment="Center" FontSize="58"  Margin="0,15"  Foreground="White" FontWeight="Bold" FontFamily="Roboto"/>
+                </Button>-->
+            <TextBlock x:Name="CurrentTreatmentLbl" HorizontalAlignment="Center" Text="{Binding TreatmentNumber, StringFormat='Your Treatment'}" VerticalAlignment="Center" TextAlignment="Center" FontSize="58"  Margin="0,15"  Foreground="White" FontWeight="Bold" FontFamily="Roboto"/>
+            <!--<TextBlock x:Name="CurrentTreatmentLbl" HorizontalAlignment="Center" Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}" VerticalAlignment="Center" TextAlignment="Center" FontSize="58"  Margin="0,15"  Foreground="White" FontWeight="Bold" FontFamily="Roboto"/>-->
                 <!--Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}"-->
 
-                <Button x:Name="ForwardBtn" HorizontalAlignment="Right" Height="45" Width="45" Margin="0,15,20,15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" >
+                <!--<Button x:Name="ForwardBtn" HorizontalAlignment="Right" Height="45" Width="45" Margin="0,15,20,15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" >
                     <Button.Content>
                     <Image Source="..\..\Images\arrow_right.png" Height="40" Width="40" ></Image>
-                    <!--<Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" Background="#4fc3f7" >
+                    --><!--<Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" Background="#4fc3f7" >
                             <Image Source="..\..\Images\arrow_right.png" Height="25" Width="25" ></Image>
-                        </Border>-->
+                        </Border>--><!--
                     </Button.Content>
-                </Button>
+                </Button>-->
         </Grid>
             
         <DockPanel x:Name="CalenderTimeline" Margin="10">
             <!--Value="{Binding TreatmentProgress}"-->
-            <ProgressBar x:Name="CalenderProgressBar" Margin="15,0" Height="9" Value="67" DockPanel.Dock="Top">
+            <ProgressBar x:Name="CalenderProgressBar" Margin="15,0" Height="9" Value="{Binding TreatmentProgress}" DockPanel.Dock="Top">
                 <ProgressBar.Template>
                     <ControlTemplate>
                         <Grid x:Name="TemplateRoot" Height="8">

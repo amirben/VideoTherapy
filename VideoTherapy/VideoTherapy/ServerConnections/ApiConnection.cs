@@ -45,7 +45,7 @@ namespace VideoTherapy.ServerConnections
         /// <summary>
         /// Enum that represent the types of the API
         /// </summary>
-        private enum ApiType { AppLogin, GetUserData, GetTreatment, GetTraining, GetExerciseGestures, ReportExercise };
+        private enum ApiType { AppLogin, GetUserData, GetTreatment, GetTraining, GetExerciseGestures, ReportExercise, GetTreatmentByUser };
 
         /// <summary>
         /// Initializes a new dictionary that represent the tuples for the REST-api request
@@ -99,6 +99,10 @@ namespace VideoTherapy.ServerConnections
                 case ApiType.ReportExercise:
                     ApiTypeString = "report-treatment-session-usage";
                     break;
+
+                case ApiType.GetTreatmentByUser:
+                    ApiTypeString = "treatments/get-treatments-by-user";
+                    break;
             }
         }
 
@@ -123,9 +127,6 @@ namespace VideoTherapy.ServerConnections
                 content = await response.Content.ReadAsStringAsync();
 
             }
-
-           
-
 
             return content;
         }
@@ -163,6 +164,17 @@ namespace VideoTherapy.ServerConnections
             string byUsage = "byUsage";
             string byUsageValue = "1";
             Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.GetTreatment, "treatmentId", Convert.ToString(_treatmentId), byUsage, byUsageValue);
+
+            return await ConnectingApiAsync(_pairs);
+        }
+
+        /// <summary>
+        /// Request the user treatments by user id, returning JSON with the content of the treatment
+        /// </summary>
+        /// <param name="_patientId">Patient id</param>
+        public static async Task<string> GetTreatmentByUserApiAsync(int _accountId)
+        {
+            Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.GetTreatmentByUser, "accountId", Convert.ToString(_accountId));
 
             return await ConnectingApiAsync(_pairs);
         }

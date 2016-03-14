@@ -26,7 +26,7 @@ namespace VideoTherapy.Utils
             DateTime current = DateTime.Now;
             TimeSpan startCorrent = current.Subtract(startDate);
 
-            double t = ((int)startCorrent.TotalDays) / (int)(startEnd.TotalDays);
+            double t = ((double)startCorrent.TotalDays) / (double)(startEnd.TotalDays);
             return (int)(t * 100);
 
         }

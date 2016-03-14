@@ -47,7 +47,7 @@
 
                     <Label x:Name="userFullName" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,15,0,-5" FontWeight="Light" FontSize="14"></Label>
                     
-                    <Grid Grid.Row="4" HorizontalAlignment="Stretch" Margin="12,16,12,8">
+                    <Grid x:Name="emailGrid" Grid.Row="4" HorizontalAlignment="Stretch" Margin="12,16,12,8">
                         <TextBox Name="emailTxt" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="White"
                                  Foreground="Gray" BorderThickness="1" BorderBrush="#4fc3f7" FontSize="14"  Height="24" 
                                  TextAlignment="Center" TextChanged="emailTxt_TextChanged"/>
@@ -75,8 +75,7 @@
                         </TextBox>
                     </Grid>
 
-                    <!--<Label Content="Password" Margin="10,234,0,110.2"/>-->
-                    <Grid Grid.Row="5" HorizontalAlignment="Stretch" Margin="12,8">
+                    <Grid x:Name="passwordGrid" Grid.Row="5" HorizontalAlignment="Stretch" Margin="12,8">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
@@ -110,6 +109,7 @@
                             </TextBox>
                         </Grid>
                         <Label Grid.Row="2" x:Name="wrongInputLbl" Visibility="Hidden" Foreground="Red" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="10">Wrong email or password</Label>
+                        <Label Grid.Row="2" x:Name="errorMessegeFromServer" Visibility="Hidden" Foreground="Red" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="10"></Label>
                     </Grid>
 
 
@@ -117,14 +117,9 @@
                         <CheckBox x:Name="SaveConfig" Grid.Row="2" FontSize="12">Remember Me!</CheckBox>
                     </Grid>
                     
-                    <Button BorderThickness="0" Grid.Row="7" Name="LoginBtn" Content="Login" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,4" Padding="18,6" Foreground="White" Background="#80c683" Click="LoginBtn_Click"/>
+                    <Button BorderThickness="0" Grid.Row="7" Name="LoginBtn" Content="Login" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,4" Padding="18,6" Foreground="White" 
+                            Background="#80c683" Click="LoginBtn_Click"/>
 
-                    
-                    <!--<TextBlock  HorizontalAlignment="Center" Margin="10,5" >
-                        Need an account? 
-                        <Hyperlink NavigateUri="www.videotherapy.co">Signup</Hyperlink>
-                    </TextBlock>-->
-                    
                 </Grid>
 
 

@@ -153,7 +153,7 @@ namespace VideoTherapy.Views
 
         private void CloseButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            closeApp();
+            closeApp(_currentPatient);
         }
 
         private void LogoutBtn_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

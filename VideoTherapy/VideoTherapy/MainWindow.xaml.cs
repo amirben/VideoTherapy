@@ -17,6 +17,7 @@ using System.Windows.Threading;
 using VideoTherapy.Views;
 using VideoTherapy.Objects;
 using VideoTherapy.ServerConnections;
+using System.IO;
 
 namespace VideoTherapy
 {
@@ -27,7 +28,7 @@ namespace VideoTherapy
     {
         private bool authenticated = false;
 
-        public delegate void CloseAppDelegate();
+        public delegate void CloseAppDelegate(Patient _currentPatient);
         public delegate void LogOutDelegate();
 
         public MainWindow()
@@ -35,6 +36,11 @@ namespace VideoTherapy
             InitializeComponent();
             
             Loaded += MainWindow_Loaded;
+            Closing += MainWindow_Closing;
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -45,8 +51,17 @@ namespace VideoTherapy
             //LogOutDelegate logOut = new LogOutDelegate(LogOut);
         }
 
-        private void CloseApp()
+        private void CloseApp(Patient _currentPatient)
         {
+            //if (_currentPatient != null)
+            //{
+            //    using (DownloadCache downloadCache = new DownloadCache(_currentPatient))
+            //    {
+            //        downloadCache.DeleteTempDir();
+            //    }
+
+            //}
+            
             Close();
         }
 
@@ -76,9 +91,7 @@ namespace VideoTherapy
                 ld.CloseApp += CloseApp;
                 ld.MainWindow = this;
                 this.Content = ld;
-            }
-
-               
+            }               
         }
 
         private void OpenExerciseWindow()
@@ -150,7 +163,6 @@ namespace VideoTherapy
                 this.Content = _exerciseView;
             }
         }
-
 
         public void DownloadGDBOld()
         {

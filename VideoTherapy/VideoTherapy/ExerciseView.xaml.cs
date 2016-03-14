@@ -850,7 +850,7 @@ namespace VideoTherapy
 
         private void CloseButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            CloseApp();
+            CloseApp(CurrentPatient);
         }
         #endregion
 

@@ -12,23 +12,81 @@ using VideoTherapy.Utils;
 
 namespace VideoTherapy.ServerConnections
 {
+    /// <summary>
+    /// Class used for saving the error from server
+    /// </summary>
+    public class ErrorMessege : EventArgs
+    {
+        public string Messege { get; set; }
+        public int Code { get; set; }
+        public ErrorMessege(string messege, int code)
+        {
+            Code = code;
+            Messege = messege;
+        }
+    }
+
+    /// <summary>
+    /// Class used for convert from json to objects using newtonsoft
+    /// </summary>
     public static class JSONConvertor
     {
+        /// <summary>
+        /// Enum used for all error codes in server
+        /// </summary>
+        private enum ServerCode { API_OK = 100, ERROR_SYSTEM_UNDER_MAINTENANCE, ERROR_INVALID_CLIENT_VERSION, ERROR_API_NAME,
+                                    ERROR_API_NOT_EXIST, ERROR_NO_REQUEST, ERROR_INVALID_REQUEST, ERROR_EMPTY_RESPONSE, ERROR_DB_INSERT_ERROR,
+                                    ERROR_USER_IS_NOT_PERMITTED, ERROR_BAD_API_KEY, ERROR_UPLOAD_FAILURE, ERROR_SIGNUP_ACCOUNT_ALREADY_EXISTS,
+                                    ERROR_SIGNUP_ACCOUNT_FAILURE, ERROR_LOGIN_ACCOUNT_FAILURE, ERROR_LOGIN_ACCOUNT_FAILURE_BAD_CREDENTIAL,
+                                    ERROR_ACCOUNT_FAILURE, ERROR_THERAPIST_FAILURE, ERROR_PATIENT_DIAGNOSIS_FAILURE, ERROR_TREATMENT_CONFIRMATION_FAILURE,
+                                    ERROR_TREATMENT_UPDATE_STATUS, ERROR_NO_TRAINING_FOUND, ERROR_FAIL_TO_CREATE_TRAINING, ERROR_FAIL_TO_DELETE_TRAINING,
+                                    ERROR_FAIL_TO_RESET_PASSWORD, ERROR_UPDATE_EVALUATION, ERROR_FAIL_TO_CREATE_ACCOUNT_INFO, ERROR_FAIL_TO_TRACK_TRAINING,
+                                    ERROR_FAIL_TO_MARK_EVENT_AS_COMPLETED }
 
+        /// <summary>
+        /// Event handler on error accure
+        /// </summary>
+        public static event EventHandler ErrorEvent;
+
+        /// <summary>
+        /// Parse from json content to new patient object, get his id
+        /// </summary>
+        /// <param name="_JSONcontent">The response json</param>
         public static Patient CreatePatient(string _JSONcontent)
         {
             dynamic o = JsonConvert.DeserializeObject<object>(_JSONcontent);
 
+            bool checkError = checkForErrors((int)o.code);
+
+            if (checkError)
+            {
+                ErrorEvent(null, new ErrorMessege(((ServerCode)o.code).ToString(), (int)o.code));
+
+                return null;
+            }
+
             Patient _patient = new Patient();
             _patient.AccountId = o.data;
-
 
             return _patient;
         }
 
+        /// <summary>
+        /// Parse from json content to new therapist and his information from the json
+        /// </summary>
+        /// <param name="_JSONcontent">The response json</param>
+        /// <param name="_therapist">The therapist object</param>
         public static void GettingTherapistData(Therapist _therapist, string _JSONcontent)
         {
             dynamic o = JsonConvert.DeserializeObject<object>(_JSONcontent);
+
+            bool checkError = checkForErrors((int)o.code);
+            
+            if (checkError)
+            {
+                ErrorEvent(null, new ErrorMessege(((ServerCode)o.code).ToString(), (int)o.code));
+                return;
+            }
 
             _therapist.FirstName = o.data.firstName;
             _therapist.LastName = o.data.lastName;
@@ -38,82 +96,132 @@ namespace VideoTherapy.ServerConnections
             _therapist.ImageThumb = o.data.profilePhoto;
             _therapist.BirthDay = Convert.ToDateTime((string)o.data.birthday);
             _therapist.UserProfileLink = o.data.profileUrl;
-            
 
         }
 
+        /// <summary>
+        /// Parse from json content to current patient and his information from the json
+        /// </summary>
+        /// <param name="_JSONcontent">The response json</param>
+        /// <param name="_patient">The _patient object</param>
         public static void GettingPatientData(Patient _patient, string _JSONcontent)
         {
             dynamic o = JsonConvert.DeserializeObject<object>(_JSONcontent);
+
+            bool checkError = checkForErrors((int)o.code);
+            
+            if (checkError)
+            {
+                ErrorEvent(null, new ErrorMessege(((ServerCode)o.code).ToString(), (int)o.code));
+                return;
+            }
 
             _patient.FirstName = o.data.firstName;
             _patient.LastName = o.data.lastName;
             _patient.Email = o.data.email;
             _patient.Gender = o.data.gender;
-            _patient.Age = Int32.Parse((string) o.data.age);
+            _patient.Age = Int32.Parse((string)o.data.age);
             _patient.ImageThumb = o.data.profilePhoto;
-            _patient.BirthDay = Convert.ToDateTime((string) o.data.birthday);
+            _patient.BirthDay = Convert.ToDateTime((string)o.data.birthday);
             _patient.UserProfileLink = o.data.profileUrl;
 
             _patient.PatientTreatment = new Treatment();
             _patient.PatientTreatment.TreatmentId = o.data.treatmentIds;
+
         }
 
+
+        /// <summary>
+        /// Parse from json content to current patient treatment
+        /// </summary>
+        /// <param name="_JSONcontent">The response json</param>
+        /// <param name="_patient">The _patient object</param>
         public static void GettingPatientTreatment(Patient _patient, string _JSONcontent)
         {
             //todo - run over the treatments
             dynamic d =
-                    (JsonConvert.DeserializeObject<IDictionary<string, object>>(_JSONcontent))["data"];
- 
-            _patient.PatientTreatment = new Treatment();
-            
-            //todo - need to be change when there are more the one
-            _patient.PatientTreatment.TreatmentNumber = 1;
-            _patient.PatientTreatment.TreatmentId = d[0].treatmentId;
-            //todo - change to Date 
-
-            //_patient.PatientTreatment.StartDate = DateFormat.FormatDate(DateTime.Parse((string)d.treatmentStartTime));
-            //_patient.PatientTreatment.EndDate = DateFormat.FormatDate(DateTime.Parse((string)d.treatmentEndTime));
-            _patient.PatientTreatment.StartDate = DateTime.Parse((string)d[0].treatmentStartTime);
-            _patient.PatientTreatment.EndDate = DateTime.Parse((string)d[0].treatmentEndTime);
-            _patient.PatientTreatment.TreatmentProgress = DateFormat.CalcTreatementDateProgress(_patient.PatientTreatment.StartDate, _patient.PatientTreatment.EndDate);
+                    (JsonConvert.DeserializeObject<IDictionary<string, object>>(_JSONcontent));
 
 
-            _patient.PatientTreatment.TreatmentTherapist = new Therapist();
-            _patient.PatientTreatment.TreatmentTherapist.AccountId = d[0].therapistId;
+            bool checkError = checkForErrors((int)d["code"]);
+            if (checkError)
+            {
+                ErrorEvent(null, new ErrorMessege(((ServerCode)d["code"]).ToString(), (int)d["code"]));
+                return;
+            }
+
+            dynamic list = (JsonConvert.DeserializeObject<IDictionary<string, object>>(_JSONcontent))["data"];
+
+            List<Treatment> treatments = new List<Treatment>();
+
+            foreach (var item in list)
+            {
+                Treatment treatment = new Treatment();
+
+                //treatment details
+                treatment.TreatmentNumber = list.IndexOf(item) + 1;
+                treatment.TreatmentId = item.treatmentId;
+                treatment.StartDate = DateTime.Parse((string)item.treatmentStartTime);
+                treatment.EndDate = DateTime.Parse((string)item.treatmentEndTime);
+                treatment.TreatmentProgress = DateFormat.CalcTreatementDateProgress(treatment.StartDate, treatment.EndDate);
+                
+                //todo - add scoring
 
 
-            _patient.PatientTreatment.TrainingList = new List<Training>();
 
-            string json = d[0]["trainings"].ToString();
-            List<object> trainingListJson = JsonConvert.DeserializeObject<List<object>>(json);
+                //therapist details
+                treatment.TreatmentTherapist = new Therapist();
+                treatment.TreatmentTherapist.AccountId = item.therapistId;
+                treatment.TreatmentTherapist.FirstName = item.therapistFirst;
+                treatment.TreatmentTherapist.LastName = item.therapistLast;
+                treatment.TreatmentTherapist.ImageThumb = item.therapistThumbnail;
 
+                //trainings:
+                treatment.TrainingList = CreateTrainingList(item["trainings"].ToString());
+
+                //set recomended training to treatment
+                //todo 
+
+                treatments.Add(treatment);
+            }
+
+            //Now there is only one treatment:
+            _patient.PatientTreatment = treatments.First();
+        }
+
+        /// <summary>
+        /// Parse from json content to training list
+        /// <param name="_JSONcontent">The response json</param>
+        /// </summary>
+        public static List<Training> CreateTrainingList(string _JSONcontent)
+        {
+            List<Training> trainingList = new List<Training>();
+
+            List<object> trainingListJson = JsonConvert.DeserializeObject<List<object>>(_JSONcontent);
 
             foreach (object item in trainingListJson)
             {
                 Training newTraining = new Training();
 
-                json = item.ToString();
+                string json = item.ToString();
                 Dictionary<string, object> currentObj = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
 
-                _patient.PatientTreatment.TrainingList.Add(newTraining);
-                
-                newTraining.TrainingNumber = _patient.PatientTreatment.TrainingList.IndexOf(newTraining) + 1;
+                trainingList.Add(newTraining);
+
+                newTraining.TrainingNumber = trainingList.IndexOf(newTraining) + 1;
                 newTraining.TrainingName = currentObj["label"].ToString();
                 newTraining.TrainingId = Int32.Parse(currentObj["id"].ToString());
                 newTraining.TrainingThumbs = currentObj["thumbnail"].ToString();
-                
+
                 //todo - yoav need to change the api
                 newTraining.LastViewed = currentObj["timeCreated"].ToString();
+
+                //todo - add scoring!!
 
                 //check if there is calEvents exist
                 object tempCalEvents;
                 currentObj.TryGetValue("calEventsUsage", out tempCalEvents);
 
-                //if (tempCalEvents is JArray)
-                //{
-                //    Console.WriteLine("empty");
-                //}
                 if (tempCalEvents is JObject)
                 {
                     Dictionary<string, string> calEvents = JsonConvert.DeserializeObject<Dictionary<string, string>>(tempCalEvents.ToString());
@@ -126,79 +234,94 @@ namespace VideoTherapy.ServerConnections
                 currentObj.TryGetValue("upcomingEvent", out checkUpComming);
                 if (checkUpComming != null && (Boolean)checkUpComming)
                 {
-                    _patient.PatientTreatment.RecommendedTraining = newTraining;
+                    newTraining.isRecommended = true;
                 }
 
             }
+
+            return trainingList;
         }
 
         public static void GettingPatientTraining(Training _training, string _JSONcontent)
         {
-            dynamic d =
-                    (JsonConvert.DeserializeObject<IDictionary<string, object>>(_JSONcontent))["data"];
+            //dynamic d =
+            //        (JsonConvert.DeserializeObject<IDictionary<string, object>>(_JSONcontent))["data"];
 
-            _training.Playlist = new List<Exercise>();
-            int numOfExercises = 1;
+            //_training.Playlist = new List<Exercise>();
+            //int numOfExercises = 1;
 
-            foreach (var item in d.sessions)
-            {
-                //For demo
-                Exercise demoExercise = new Exercise();
-                demoExercise.ExerciseName = item.exerciseLabel;
-                demoExercise.ExerciseId = item.exerciseId;
-                demoExercise.ExerciseThumbs = item.exerciseThumbnail;
-                string tt = item.exerciseVideoDemo;
-                demoExercise.VideoPath = new Uri(HttpsReplaceToHttp.ReplaceHttpsToHttp(tt));
-                demoExercise.ExerciseNum = numOfExercises;
-                demoExercise.isDemo = true;
+            //foreach (var item in d.sessions)
+            //{
+            //    //For demo
+            //    Exercise demoExercise = new Exercise();
+            //    demoExercise.ExerciseName = item.exerciseLabel;
+            //    demoExercise.ExerciseId = item.exerciseId;
+            //    demoExercise.ExerciseThumbs = item.exerciseThumbnail;
+            //    string tt = item.exerciseVideoDemo;
+            //    demoExercise.VideoPath = new Uri(HttpsReplaceToHttp.ReplaceHttpsToHttp(tt));
+            //    demoExercise.ExerciseNum = numOfExercises;
+            //    demoExercise.isDemo = true;
 
-                _training.Playlist.Add(demoExercise);
+            //    _training.Playlist.Add(demoExercise);
 
-                numOfExercises++;
+            //    numOfExercises++;
 
-                //duplicate the exercise if there are repeats for him by therapist
-                //sessRepeats - number of duplicates exercise
-                int x = item.sessRepeats;
-                for (int i = 0; i < x; i++)
-                {
-                    Exercise newExercise = new Exercise();
+            //    //duplicate the exercise if there are repeats for him by therapist
+            //    //sessRepeats - number of duplicates exercise
+            //    int x = item.sessRepeats;
+            //    for (int i = 0; i < x; i++)
+            //    {
+            //        Exercise newExercise = new Exercise();
 
-                    newExercise.ExerciseName = item.exerciseLabel;
-                    newExercise.ExerciseId = item.exerciseId;
-                    newExercise.ExerciseThumbs = item.exerciseThumbnail;
-                    tt = item.exerciseVideo;
-                    newExercise.VideoPath = new Uri(HttpsReplaceToHttp.ReplaceHttpsToHttp(tt));
-                    newExercise.Repetitions = item.exerciseCycles;
-                    newExercise.ExerciseNum = numOfExercises;
+            //        newExercise.ExerciseName = item.exerciseLabel;
+            //        newExercise.ExerciseId = item.exerciseId;
+            //        newExercise.ExerciseThumbs = item.exerciseThumbnail;
+            //        tt = item.exerciseVideo;
+            //        newExercise.VideoPath = new Uri(HttpsReplaceToHttp.ReplaceHttpsToHttp(tt));
+            //        newExercise.Repetitions = item.exerciseCycles;
+            //        newExercise.ExerciseNum = numOfExercises;
 
-                    //for future download for not duplicate the same file
-                    if (i != 0)
-                    {
-                        newExercise.isDuplicate = true;
-                    }
+            //        //for future download for not duplicate the same file
+            //        if (i != 0)
+            //        {
+            //            newExercise.isDuplicate = true;
+            //        }
 
-                    _training.Playlist.Add(newExercise);
-                    numOfExercises++;
-                }
+            //        _training.Playlist.Add(newExercise);
+            //        numOfExercises++;
+            //    }
 
-                _training.Playlist.Last().isLastDuplicate = true;
+            //    _training.Playlist.Last().isLastDuplicate = true;
 
                 
-            }
+            //}
         }
 
+        /// <summary>
+        /// Parse from json content to current patient training
+        /// </summary>
+        /// <param name="_JSONcontent">The response json</param>
+        /// <param name="_training">The _training object</param>
         public static void GettingPatientTraining2(Training _training, string _JSONcontent)
         {
             dynamic d =
-                    (JsonConvert.DeserializeObject<IDictionary<string, object>>(_JSONcontent))["data"];
+                    (JsonConvert.DeserializeObject<IDictionary<string, object>>(_JSONcontent));
+    
+            //checking errors
+            bool checkError = checkForErrors((int)d["code"]);
+            if (checkError)
+            {
+                ErrorEvent(null, new ErrorMessege(((ServerCode)d["code"].code).ToString(), (int)d["code"].code));
+                return;
+            }
 
             _training.Playlist2 = new Dictionary<int, List<Exercise>>();
             int numOfExercises = 0;
 
             //iterat over the exercise session 
-            foreach (var item in d.sessions)
+            foreach (var item in d["data"].sessions)
             {
-                //For demo
+                //Creating demo exercise
                 Exercise demoExercise = new Exercise();
                 demoExercise.ExerciseName = item.exerciseLabel;
                 demoExercise.ExerciseId = item.exerciseId;
@@ -243,21 +366,35 @@ namespace VideoTherapy.ServerConnections
             }
         }
 
+
+        /// <summary>
+        /// Parse from json content to exercise gestures details
+        /// </summary>
+        /// <param name="_JSONcontent">The response json</param>
+        /// <param name="_exercise">The _exercise object</param>
         public static void GettingExerciseGesture(Exercise _exercise, string _JSONcontent)
         {
-            dynamic d = (JsonConvert.DeserializeObject<IDictionary<string, object>>(_JSONcontent))["data"];
+            dynamic d = (JsonConvert.DeserializeObject<IDictionary<string, object>>(_JSONcontent));
 
-            _exercise.ContinuousGestureName = d.gesture_progress_name;
-            //_exercise.isTrackable = d.is_trackable == 1 ? true : false;
-            _exercise.DBUrl = d.file;
+            //check errors
+            bool checkError = checkForErrors((int)d["code"]);
+            if (checkError)
+            {
+                ErrorEvent(null, new ErrorMessege(((ServerCode)d["code"].code).ToString(), (int)d["code"].code));
+                return;
+            }
+
+            _exercise.ContinuousGestureName = d["data"].gesture_progress_name;
+            _exercise.DBUrl = d["data"].file;
 
             _exercise.StartGesutre = new VTGesture();
-            _exercise.StartGesutre.GestureName = Convert.ToString(d.start_gesture_name);
+            _exercise.StartGesutre.GestureName = Convert.ToString(d["data"].start_gesture_name);
             _exercise.StartGesutre.ConfidanceTrshold = 0.2f;
 
-            string json = d["gesture_list"].ToString();
+            string json = d["data"]["gesture_list"].ToString();
             List<object> gestureList = JsonConvert.DeserializeObject<List<object>>(json);
 
+            //createing gestures list
             _exercise.VTGestureList = new List<VTGesture>();
             foreach (var item in gestureList)
             {
@@ -276,6 +413,15 @@ namespace VideoTherapy.ServerConnections
 
                 _exercise.VTGestureList.Add(gesture);
             }
+        }
+
+        /// <summary>
+        /// check if the response code is API_OK
+        /// </summary>
+        /// <param name="code">the error code</param>
+        public static bool checkForErrors(int code)
+        {
+            return !code.Equals((int) ServerCode.API_OK) ? true : false;
         }
     }
 }
