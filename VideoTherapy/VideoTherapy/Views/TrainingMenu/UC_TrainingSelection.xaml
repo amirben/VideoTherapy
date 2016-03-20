@@ -7,7 +7,23 @@
              xmlns:mv="clr-namespace:VideoTherapy.Model_View"
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="600">
-
+    <UserControl.Style>
+        <Style>
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="00:00:01" From="0" To="1" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <Trigger Property="FrameworkElement.Visibility" Value="Collapsed">
+                    <Setter Property="FrameworkElement.Opacity" Value="0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Style>
+    
     <DockPanel Background="#7F000000" Margin="15,15,7,15">
         <StackPanel DockPanel.Dock="Top" Orientation="Vertical"  >
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Height="80" Margin="0,0,0,15">
@@ -54,11 +70,11 @@
             <StackPanel x:Name="TrainingScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,45,0,0">
                 <Grid x:Name="MotionQualityGrid"  Margin="0,0,15,0">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,-40,0,0">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="67" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="{Binding TrainingCompliance}" />
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="36" Foreground="White" Text="%" />
                     </StackPanel>
 
-                    <ProgressBar x:Name="MotionQualityProgressBar" Margin="10,0,10,45" Value="67">
+                    <ProgressBar x:Name="MotionQualityProgressBar" Margin="10,0,10,45" Value="{Binding TrainingCompliance}">
                         <ProgressBar.Template>
                             <ControlTemplate>
                                 <Grid>
@@ -69,17 +85,17 @@
                         </ProgressBar.Template>
                     </ProgressBar>
 
-                    <TextBlock  Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Training Quality" Margin="34,0,21.6,0.2"/>
+                    <TextBlock  Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Training Compliance" Margin="34,0,21.6,0.2"/>
                 </Grid>
 
 
                 <Grid x:Name="RepetitionsGrid" Margin="15,0,0,0">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,-40,0,0">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="91" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="{Binding TrainingScore}" />
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="36" Foreground="White" Text="%" />
                     </StackPanel>
 
-                    <ProgressBar x:Name="RepetitionsProgressBar" Margin="10,0,10,45" Value="91">
+                    <ProgressBar x:Name="RepetitionsProgressBar" Margin="10,0,10,45" Value="{Binding TrainingScore}">
                         <ProgressBar.Template>
                             <ControlTemplate>
                                 <Grid>
@@ -95,10 +111,14 @@
             </StackPanel>
         </StackPanel>
 
-        
-        <Button Height="160" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Background="#7F4FC3F7" BorderBrush="Transparent" 
+
+        <StackPanel Orientation="Vertical" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Margin="15,15,15,15">
+            <CheckBox x:Name="SkipDemoCheckBox" FontFamily="Roboto" FontSize="16" Foreground="White" Unchecked="SkipDemoCheckBox_Checked" Checked="SkipDemoCheckBox_Checked">Skip demos</CheckBox>
+            <Button Height="160"  Background="#7F4FC3F7" BorderBrush="Transparent" 
                 BorderThickness="0" Foreground="White" Content="Start &gt;" FontSize="110" 
-                FontWeight="Bold" Margin="15,15,15,15" Click="StartButton"></Button>
+                FontWeight="Bold"  Click="StartButton"></Button>
+        </StackPanel>
+
         
     </DockPanel>
     

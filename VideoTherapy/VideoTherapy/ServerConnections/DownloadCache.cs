@@ -86,7 +86,7 @@ namespace VideoTherapy.ServerConnections
 
             barrier.SignalAndWait();
 
-            barrier.Dispose();
+            //barrier.Dispose();
         }
 
         /// <summary>

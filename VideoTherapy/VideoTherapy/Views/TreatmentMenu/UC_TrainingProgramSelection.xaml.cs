@@ -26,24 +26,47 @@ namespace VideoTherapy.Views.TreatmentMenu
     /// </summary>
     public partial class UC_TrainingProgramSelection : UserControl
     {
-        private List<Training> _treatmentList;
+        private List<Training> _treatmentList; //for future porpuse
+
+        /// <summary>
+        /// training list of the treatment
+        /// </summary>
         private List<Training> _currentTrainingList;
 
+        /// <summary>
+        /// Current treatement that is showing
+        /// </summary>
+        private Treatment CurrentTreatment;
+
+        /// <summary>
+        /// event handler that called when training has been selected
+        /// </summary>
         public event VideoTherapy.TreatmentMenu.TrainingSelectedDelegate trainingSelectedEvent;
 
-        public UC_TrainingProgramSelection(List<Training> _trainingList)
+
+        /// <summary>
+        /// Training program selection constractor
+        /// </summary>
+        /// <param name="currentTreatemet">The current treatement that the user have</param>
+        public UC_TrainingProgramSelection(Treatment currentTreatemet)
         {
             InitializeComponent();
 
-            SetTrainingList(_trainingList);
-            this.Loaded += UC_TrainingProgramSelection_Loaded;
+            CurrentTreatment = currentTreatemet;
+            SetTrainingList(currentTreatemet.TrainingList);
+            
+            //if there is a recommended training, then will a panel will appear otherwise will not
+            if (CurrentTreatment.RecommendedTraining != null)
+            {
+                ShowRecommendedBorder.DataContext = CurrentTreatment.RecommendedTraining;
+            }
+            else
+            {
+                ShowRecommendedBorder.Visibility = Visibility.Collapsed;
+            }
+           
         }
 
-        private void UC_TrainingProgramSelection_Loaded(object sender, RoutedEventArgs e)
-        {
-            //_treatmentList = ObjectReader.GetAllTreatments();
-            //TreatmentTrainingList.DataContext = _treatmentList[0].TrainingList;
-        }
 
         public void SetTrainingList(List<Training> _trainingList)
         {
@@ -54,6 +77,15 @@ namespace VideoTherapy.Views.TreatmentMenu
         public void DoubleClickHandler(object sender, MouseEventArgs e)
         {
             var selectedTraining = sender as ListBoxItem;
+            var training = (Training)selectedTraining.DataContext;
+
+            trainingSelectedEvent(training);
+        }
+
+
+        private void ShowRecommendedBorder_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var selectedTraining = sender as Border;
             var training = (Training)selectedTraining.DataContext;
 
             trainingSelectedEvent(training);

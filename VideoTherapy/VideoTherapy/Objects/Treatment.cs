@@ -16,16 +16,9 @@ namespace VideoTherapy.Objects
         public Training RecommendedTraining { set; get; }
         public DateTime StartDate { set; get; }
         public DateTime EndDate { set; get; }
-        public float Compliance { set; get; }
-        public float Score { set; get; }
-
-        public int TreatmentProgress
-        {
-
-            set;
-            get;
-
-        }
+        public int TreatmentCompliance { set; get; } // done/total
+        public int TreatmentScore { set; get; } //quality
+        public int TreatmentProgress { set;  get;}
 
         public Training NextTraining()
         {

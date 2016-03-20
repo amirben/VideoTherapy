@@ -21,16 +21,24 @@ namespace VideoTherapy.Views.TreatmentMenu
     /// </summary>
     public partial class UC_TreatmentSelection : UserControl
     {
+        /// <summary>
+        /// Current treatment of the user
+        /// </summary>
         private Treatment _currentTreatment;
 
+        /// <summary>
+        /// Treatment selection constractor
+        /// </summary>
+        /// <param name="_currentTreatment">the current treatment of the user</param>
         public UC_TreatmentSelection(Treatment _currentTreatment)
         {
             InitializeComponent();
 
             SetCurrentTreatment(_currentTreatment);
+
             TreatmentSelection.DataContext = _currentTreatment;
             TherapistInfo.DataContext = _currentTreatment.TreatmentTherapist;
-            CalenderTimeline.DataContext = _currentTreatment;
+
         }
 
         public void SetCurrentTreatment(Treatment newTreatment)

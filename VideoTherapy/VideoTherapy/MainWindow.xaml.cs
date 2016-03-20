@@ -127,33 +127,41 @@ namespace VideoTherapy
             }
         }
 
-        public async void OpenExerciseWindow(Patient _currentPatient, Training _currentTraining)
+        public void OpenExerciseWindow(Patient _currentPatient, Training _currentTraining)
         {
-            foreach (int key in _currentTraining.Playlist2.Keys)
-            {
-                Exercise exercise = _currentTraining.Playlist2[key][1];
-                if (exercise.isTrackable)
-                {
-                    string json = await ApiConnection.GetExerciseGesturesApiAsync(exercise.ExerciseId);
-                    JSONConvertor.GettingExerciseGesture(exercise, json);
+            //var watch = System.Diagnostics.Stopwatch.StartNew();
 
-                    using (DownloadCache dc = new DownloadCache(_currentPatient))
-                    {
-                        dc.DownloadGDBfile(exercise);
-                    }
+            //foreach (int key in _currentTraining.Playlist2.Keys)
+            //{
+            //    Exercise exercise = _currentTraining.Playlist2[key][1];
+            //    if (exercise.isTrackable)
+            //    {
+            //        string json = await ApiConnection.GetExerciseGesturesApiAsync(exercise.ExerciseId);
+            //        JSONConvertor.GettingExerciseGesture(exercise, json);
 
-                    foreach (var item in _currentTraining.Playlist2[key])
-                    {
-                        if (!item.isDemo && !item.Equals(exercise))
-                        {
-                            item.DBPath = exercise.DBPath;
-                            item.CopyGesturesFromOrigin(exercise);
-                        }
+            //        using (DownloadCache dc = new DownloadCache(_currentPatient))
+            //        {
+            //            dc.DownloadGDBfile(exercise);
+            //        }
 
-                    }
-                }
-                
-            }
+            //        foreach (var item in _currentTraining.Playlist2[key])
+            //        {
+            //            if (!item.isDemo && !item.Equals(exercise))
+            //            {
+            //                item.DBPath = exercise.DBPath;
+            //                item.CopyGesturesFromOrigin(exercise);
+            //            }
+
+            //        }
+            //    }
+
+            //}
+
+            //watch.Stop();
+            //var elapsedMs = watch.ElapsedMilliseconds;
+            //Console.WriteLine("Downloading gdb " + elapsedMs.ToString());
+
+            
 
             //OpenningWindow.Background = null;
             using (ExerciseView _exerciseView = new ExerciseView(_currentPatient, _currentTraining))

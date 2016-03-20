@@ -42,6 +42,7 @@ namespace VideoTherapy.Views.TrainingMenu
 
         private void StartButton(object sender, RoutedEventArgs e)
         {
+            
             StartPlaylist(_currentTraining);
         }
 
@@ -59,6 +60,17 @@ namespace VideoTherapy.Views.TrainingMenu
         private void BackToTreatmentBtn_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             BackToTreatment();
+        }
+
+        private void SkipDemoCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+
+            HandlerSkipDemo(sender as CheckBox);
+        }
+
+        private void HandlerSkipDemo(CheckBox checkBox)
+        {
+            _currentTraining.SkipDemo = checkBox.IsChecked.Value;
         }
     }
 }

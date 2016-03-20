@@ -26,18 +26,53 @@ namespace VideoTherapy
     /// </summary>
     public partial class TreatmentMenu : UserControl, IDisposable
     {
+        /// <summary>
+        /// Current patient of the session
+        /// </summary>
         public Patient _currentPatient { set; get; }
+
+        /// <summary>
+        /// The main window of the application
+        /// </summary>
         public MainWindow MainWindow { set; get; }
 
+        /// <summary>
+        /// Treatment selection user contorl - use for information of the treatment,
+        /// therapist details, calender, compliance and score of the treatment
+        /// </summary>
         private UC_TreatmentSelection _treatmentSelection;
+
+        /// <summary>
+        /// The user control that show you the recommended training and all the training list
+        /// </summary>
         private UC_TrainingProgramSelection _trainingSeleciton;
+
+        /// <summary>
+        /// The user control that show you if kinect connected or not, link to user profile
+        /// </summary>
         private UC_UserInfo _userInfo;
 
+        /// <summary>
+        /// Delegate use for open the selected training
+        /// </summary>
+        /// <param name="_selectedTraining"></param>
         public delegate void TrainingSelectedDelegate(Training _selectedTraining);
 
+        /// <summary>
+        /// Close the application delegate
+        /// </summary>
         public event MainWindow.CloseAppDelegate CloseApp;
+
+        /// <summary>
+        /// Logout delegate, use for go back to login screen
+        /// </summary>
         public event MainWindow.LogOutDelegate LogOut;
 
+
+        /// <summary>
+        /// The constractor of this window
+        /// </summary>
+        /// <param name="_currentPatient">The current patient of the session</param>
         public TreatmentMenu(Patient _currentPatient)
         {
             InitializeComponent();
@@ -46,22 +81,23 @@ namespace VideoTherapy
             this.Loaded += TreatmentMenu_Loaded;
         }
 
+
         private void TreatmentMenu_Loaded(object sender, RoutedEventArgs e)
         {
+            //create the user controls inside this window.
             _treatmentSelection = new UC_TreatmentSelection(_currentPatient.PatientTreatment);
-            _trainingSeleciton = new UC_TrainingProgramSelection(_currentPatient.PatientTreatment.TrainingList);
+            _trainingSeleciton = new UC_TrainingProgramSelection(_currentPatient.PatientTreatment);
+            _userInfo = new UC_UserInfo(_currentPatient);
+            //TrainingSelectedDelegate trainingSelected = new TrainingSelectedDelegate(_trainingSeleciton_trainingSelectedEvent);
 
-            TrainingSelectedDelegate trainingSelected = new TrainingSelectedDelegate(_trainingSeleciton_trainingSelectedEvent);
+            //attach training selection handler
             _trainingSeleciton.trainingSelectedEvent += _trainingSeleciton_trainingSelectedEvent;
 
-            _userInfo = new UC_UserInfo(_currentPatient);
-            _userInfo.ShowRecommended = true;
-            _userInfo.RecomendedTraining = _currentPatient.PatientTreatment.RecommendedTraining;
-            _userInfo.trainingSelectedEvent += _trainingSeleciton_trainingSelectedEvent;
+            //attach the handlers
             _userInfo.closeApp += CloseApp;
             _userInfo.logOut += LogOut;
 
-
+            //Add the user control into this window
             TreatmentMenuGrid.Children.Add(_treatmentSelection);
             TreatmentMenuGrid.Children.Add(_trainingSeleciton);
             TreatmentMenuGrid.Children.Add(_userInfo);
@@ -71,36 +107,21 @@ namespace VideoTherapy
             Grid.SetColumn(_userInfo, 2);
         }
 
-        private async void _trainingSeleciton_trainingSelectedEvent(Training _selectedTraining)
+        /// <summary>
+        /// Handling the selection of the training and open his window
+        /// </summary>
+        /// <param name="_selectedTraining">The select training</param>
+        private void _trainingSeleciton_trainingSelectedEvent(Training _selectedTraining)
         {
-            //Console.WriteLine(_selectedTraining);
-            //string json = await ApiConnection.GetTrainingApiAsync(_selectedTraining.TrainingId);
-            //JSONConvertor.GettingPatientTraining(_selectedTraining, json);
-
-            //todo - use "using"
-            //DownloadCache cache = new DownloadCache(_currentPatient);
-            //cache.DownloadTraining(_currentPatient, _currentPatient.PatientTreatment.TrainingList.IndexOf(_selectedTraining));
-
-
-            //-------------------------------===================----------------------
-            //Training temp = _currentPatient.PatientTreatment.CurrentTraining;
-            //foreach (Exercise tempExe in temp.Playlist)
-            //{
-            //    //check if it is not demo and not duplicated video (to download once the gdb)
-            //    if (!tempExe.isDemo && !tempExe.isDuplicate)
-            //    {
-            //        //todo - download the gestures (gdb)
-            //    }
-            //}
             _currentPatient.PatientTreatment.CurrentTraining = _selectedTraining;
             MainWindow.OpenTrainingWindow(_currentPatient, _selectedTraining);
-            //todo - download gdb's
-
+            
+            //todo - start download gdb files
+            //
         }
 
         public void Dispose()
         {
-            Console.WriteLine("Treatment window disposed");
         }
     }
 }

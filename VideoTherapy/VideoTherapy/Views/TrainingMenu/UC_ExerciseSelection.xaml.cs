@@ -22,13 +22,13 @@ namespace VideoTherapy.Views.TrainingMenu
     /// </summary>
     public partial class UC_ExerciseSelection : UserControl
     {
-        private Training _currentTraining;
+        public Training CurrentTraining;
 
         public UC_ExerciseSelection(Training currentTraining)
         {
             InitializeComponent();
 
-            _currentTraining = currentTraining;
+            CurrentTraining = currentTraining;
 
             this.Loaded += UC_ExerciseSelection_Loaded;
         }
@@ -37,11 +37,16 @@ namespace VideoTherapy.Views.TrainingMenu
         {
             //ExercisesListUI.DataContext = _currentTraining.Playlist;
 
+            ShowExerciseList();
+        }
+
+        public void ShowExerciseList()
+        {
             List<Exercise> showExerciseList = new List<Exercise>();
 
-            foreach (int key in _currentTraining.Playlist2.Keys)
+            foreach (int key in CurrentTraining.Playlist2.Keys)
             {
-                showExerciseList.Add(_currentTraining.Playlist2[key][0]);
+                showExerciseList.Add(CurrentTraining.Playlist2[key][0]);
             }
 
             ExercisesListUI.DataContext = showExerciseList;

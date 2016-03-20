@@ -21,8 +21,9 @@ namespace VideoTherapy.Objects
         public Dictionary<int, List<Exercise>> Playlist2 { set; get; }
 
         public Boolean Downloaded { set; get;}
+        public Boolean SkipDemo { set; get; } 
 
         public int TrainingScore { set; get; }
-        public int TrainingQuality { set; get; }
+        public int TrainingCompliance { set; get; }
     }
 }

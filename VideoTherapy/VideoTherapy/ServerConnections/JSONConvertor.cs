@@ -164,10 +164,11 @@ namespace VideoTherapy.ServerConnections
                 treatment.StartDate = DateTime.Parse((string)item.treatmentStartTime);
                 treatment.EndDate = DateTime.Parse((string)item.treatmentEndTime);
                 treatment.TreatmentProgress = DateFormat.CalcTreatementDateProgress(treatment.StartDate, treatment.EndDate);
-                
-                //todo - add scoring
 
-
+                //treatment scoring
+                Dictionary<string, float> scoringDic = JsonConvert.DeserializeObject<Dictionary<string, float>>(item.scoring.ToString());
+                treatment.TreatmentCompliance = (int) (scoringDic["num_repition_done"] / scoringDic["num_repition_total"] * 100);
+                treatment.TreatmentScore = (int) (scoringDic["motion_quality"] * 100);
 
                 //therapist details
                 treatment.TreatmentTherapist = new Therapist();
@@ -175,12 +176,22 @@ namespace VideoTherapy.ServerConnections
                 treatment.TreatmentTherapist.FirstName = item.therapistFirst;
                 treatment.TreatmentTherapist.LastName = item.therapistLast;
                 treatment.TreatmentTherapist.ImageThumb = item.therapistThumbnail;
+                //todo - change when will be a the date of start connection between therapist and patient
+                treatment.TreatmentTherapist.StartDate = treatment.StartDate;
 
                 //trainings:
                 treatment.TrainingList = CreateTrainingList(item["trainings"].ToString());
 
                 //set recomended training to treatment
                 //todo 
+                foreach (var training in treatment.TrainingList)
+                {
+                    if (training.isRecommended)
+                    {
+                        treatment.RecommendedTraining = training;
+                        break;
+                    }
+                }
 
                 treatments.Add(treatment);
             }
@@ -202,21 +213,41 @@ namespace VideoTherapy.ServerConnections
             foreach (object item in trainingListJson)
             {
                 Training newTraining = new Training();
+                object temp;
+                int tempInt;
+                float tempFloat1, tempFloat2;
 
-                string json = item.ToString();
-                Dictionary<string, object> currentObj = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+
+                Dictionary<string, object> currentObj = JsonConvert.DeserializeObject<Dictionary<string, object>>(item.ToString());
 
                 trainingList.Add(newTraining);
 
                 newTraining.TrainingNumber = trainingList.IndexOf(newTraining) + 1;
-                newTraining.TrainingName = currentObj["label"].ToString();
-                newTraining.TrainingId = Int32.Parse(currentObj["id"].ToString());
-                newTraining.TrainingThumbs = currentObj["thumbnail"].ToString();
+                currentObj.TryGetValue("label", out temp);
+                newTraining.TrainingName = temp.ToString();
+
+                currentObj.TryGetValue("id", out temp);
+                Int32.TryParse(temp.ToString(), out tempInt);
+                newTraining.TrainingId = tempInt;
+
+                currentObj.TryGetValue("thumbnail", out temp);
+                newTraining.TrainingThumbs = temp.ToString();
 
                 //todo - yoav need to change the api
-                newTraining.LastViewed = currentObj["timeCreated"].ToString();
+                currentObj.TryGetValue("timeCreated", out temp);
+                newTraining.LastViewed = temp.ToString();
 
                 //todo - add scoring!!
+                Dictionary<string, float> scoringDic = JsonConvert.DeserializeObject<Dictionary<string, float>>(currentObj["session_usage"].ToString());
+                scoringDic.TryGetValue("num_repeatition_done", out tempFloat1);
+                scoringDic.TryGetValue("num_repeatition_total", out tempFloat2);
+                newTraining.TrainingCompliance = (int)(tempFloat1 / tempFloat2 * 100);
+                //newTraining.TrainingCompliance = (int)(scoringDic["num_repeatition_done"] / scoringDic["num_repeatition_total"] * 100);
+
+                scoringDic.TryGetValue("motion_quality", out tempFloat1);
+                newTraining.TrainingScore = (int)(tempFloat1 * 100);
+                //newTraining.TrainingScore = (int)(scoringDic["motion_quality"] * 100);
+
 
                 //check if there is calEvents exist
                 object tempCalEvents;
@@ -224,9 +255,14 @@ namespace VideoTherapy.ServerConnections
 
                 if (tempCalEvents is JObject)
                 {
-                    Dictionary<string, string> calEvents = JsonConvert.DeserializeObject<Dictionary<string, string>>(tempCalEvents.ToString());
-                    newTraining.Repetitions = Int32.Parse(calEvents["total"].ToString());
-                    newTraining.TrainingCompleted = Int32.Parse(calEvents["completed"].ToString());
+                    Dictionary<string, int> calEvents = JsonConvert.DeserializeObject<Dictionary<string, int>>(tempCalEvents.ToString());
+                    calEvents.TryGetValue("total", out tempInt);
+                    newTraining.Repetitions = tempInt;
+                    //newTraining.Repetitions = Int32.Parse(calEvents["total"].ToString());
+
+                    calEvents.TryGetValue("completed", out tempInt);
+                    newTraining.TrainingCompleted = tempInt;
+                    //newTraining.TrainingCompleted = Int32.Parse(calEvents["completed"].ToString());
                 }
 
                 //check if this training is the upcoming one

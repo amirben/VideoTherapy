@@ -48,7 +48,10 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-           
+        <!-- -->
+        
+        
+        <!-- Covertor for green / yellow / white - indicate the usage of the training-->
         <Style TargetType="Border" x:Key="BorderStyle">
             <Setter Property="BorderBrush" Value="White"></Setter>
             <Style.Triggers>
@@ -66,6 +69,8 @@
             </Style.Triggers>
         </Style>
 
+        
+        <!-- Training preview panel styling -->
         <DataTemplate x:Key="TrainingImageDataTemplate">
             <StackPanel HorizontalAlignment="Left" Width="220" Margin="5, 5">
                 <Grid>
@@ -126,11 +131,28 @@
         </ItemsPanelTemplate>
     </UserControl.Resources>
 
+    <UserControl.Style>
+        <Style>
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="00:00:01" From="0" To="1" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <Trigger Property="FrameworkElement.Visibility" Value="Collapsed">
+                    <Setter Property="FrameworkElement.Opacity" Value="0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Style>
 
     <Grid x:Name="TrainingProgramSelection" Background="#7F000000" Margin="7,15,7,15" >
         <Grid.RowDefinitions>
-            <RowDefinition Height="130"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
         <StackPanel Orientation="Vertical" Grid.Row="0">
@@ -138,21 +160,100 @@
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"  Margin="26,10">
                 <Image Source="..\..\Images\info.png" Height="34" Width="34"/>
-                <!--<Border Background="#4fc3f7" BorderThickness="2" CornerRadius="20" Height="34" Width="34">
-                    <TextBlock Text="i" FontFamily="Roboto" FontSize="20"  Foreground="Gray" TextAlignment="Center" Margin="-2,3,-2.4,2.6"/>
-                </Border>-->
-
                 <Label Foreground="White" FontFamily="Roboto" FontSize="30">Select a training session to start</Label>
             </StackPanel>
         </StackPanel>
         
+        <!--Recommended training-->
+        <!--MouseLeftButtonDown="OpenRecommendedTraining_MouseLeftButtonDown"-->
+        <Border Grid.Row="1" x:Name="ShowRecommendedBorder" BorderThickness="2" Margin="55,15" MouseLeftButtonDown="ShowRecommendedBorder_MouseLeftButtonDown" >
+            <Border.Style>
+                <Style>
+                    <Setter Property="Border.BorderBrush" Value="Transparent"/>
+                    <Style.Triggers>
+                        <Trigger Property="Border.IsMouseOver" Value="True">
+                            <Setter Property="Border.BorderBrush" Value="#4fc3f7" />
+                        </Trigger>
+                        
+                        
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <StackPanel x:Name="ShowRecommendedPanel"  Background="#7F000000"  Margin="25,15">
+                <StackPanel Orientation="Vertical" Background="#CC000000"  VerticalAlignment="Bottom">
+                    <Grid >
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Foreground="White">Recommended Training</Label>
+                    </Grid>
+                </StackPanel>
+
+                <!--Current training-->
+                <StackPanel x:Name="RecommendedTrainingPanel" HorizontalAlignment="Center" Width="220" Margin="5, 5" >
+                    <Grid>
+                        <Grid Background="White">
+                            <Image Source="{Binding TrainingThumbs}" RenderTransformOrigin="20,2" Margin="-60,0,75,0" >
+                                <Image.Clip>
+                                    <RectangleGeometry Rect="60,0,400,400"></RectangleGeometry>
+                                </Image.Clip>
+                                <Image.OpacityMask>
+                                    <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5" >
+                                        <GradientStop Color="White" Offset="0.5"/>
+                                        <GradientStop Color="Transparent" Offset="0.95"/>
+                                    </LinearGradientBrush>
+                                </Image.OpacityMask>
+                            </Image>
+                        </Grid>
+
+
+                        <Border Style="{StaticResource BorderStyle}" BorderThickness="4" CornerRadius="50" Height="80" Width="80" HorizontalAlignment="Right" Margin="0,0,20,0">
+                            <Border Background="#FF626262" CornerRadius="50" >
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center"  Height="50">
+                                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" Foreground="White" FontSize="26" Opacity="1" Text="{Binding TrainingCompleted}"/>
+                                    <Line VerticalAlignment="Stretch"  Stroke="White" Margin="8,0" Y2="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"  StrokeThickness="2"/>
+                                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" Foreground="White" FontSize="26" Opacity="1" Text="{Binding Repetitions}"/>
+                                </StackPanel>
+
+                            </Border>
+                        </Border>
+                    </Grid>
+
+                    <StackPanel Orientation="Vertical" Background="Black">
+                        <StackPanel.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontSize" Value="10"></Setter>
+                            </Style>
+                        </StackPanel.Resources>
+
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" Height="30" Margin="5,5,5,-5" FontWeight="SemiBold">
+                        <Run Text="Training #"></Run>
+                        <Run Text="{Binding TrainingNumber}"></Run>
+                        <Run Text=" | "></Run>
+                        <Run Text="{Binding TrainingName}"></Run>
+                        </TextBlock>
+
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" Opacity="50" Height="30" Margin="5,-10,5,0">
+                    <Run Text="Last viewed on: "></Run>
+                    <Run Text="{Binding LastViewed}"></Run>
+                        </TextBlock>
+                    </StackPanel>
+
+                </StackPanel>
+
+                <StackPanel >
+                    <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">
+                        <!--<Image Source="../../images/info.png" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="30" Margin="5,10"/>-->
+                        <TextBlock Text="Touch to start" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="15,0"/>
+                    </StackPanel>
+                </StackPanel>
+
+            </StackPanel>
+        </Border>
 
         <!--Treatment List-->
-        <ListBox x:Name="TreatmentTrainingList" Grid.Row="1" BorderBrush="Transparent" Background="Transparent" 
+        <ListBox x:Name="TreatmentTrainingList" Grid.Row="2" BorderBrush="Transparent" Background="Transparent" 
                  Margin="5,15" 
                  ItemsSource="{Binding}" ItemTemplate="{DynamicResource TrainingImageDataTemplate}" 
                  ItemsPanel="{DynamicResource TrainingImageItemsPanelTemplate}" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Auto">
-            
+
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <!--<EventSetter Event="MouseDoubleClick" Handler="DoubleClickHandler"/>-->

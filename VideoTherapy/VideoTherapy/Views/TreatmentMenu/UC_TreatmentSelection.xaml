@@ -7,8 +7,23 @@
              xmlns:mv="clr-namespace:VideoTherapy.Model_View"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
-    
-    
+
+    <UserControl.Style>
+        <Style>
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="00:00:01" From="0" To="1" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <Trigger Property="FrameworkElement.Visibility" Value="Collapsed">
+                    <Setter Property="FrameworkElement.Opacity" Value="0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Style>
 
     <StackPanel x:Name="TreatmentSelection" Orientation="Vertical" Background="#7F000000" Margin="15,15,7,15" >
             
@@ -16,27 +31,28 @@
                 <!--<Button x:Name="BackwardBtn" HorizontalAlignment="Left" Height="45" Width="45" Margin="20,15,0,15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
                     <Button.Content>
                         <Image Source="..\..\Images\arrow_left.png" Height="40" Width="40" ></Image>
-                    --><!--<Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" Background="#4fc3f7" >
+                    <Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" Background="#4fc3f7" >
                             <Image Source="..\..\Images\arrow_left.png" Height="25" Width="25" ></Image>
-                        </Border>--><!--
+                        </Border>
                     </Button.Content>
                 </Button>-->
             <TextBlock x:Name="CurrentTreatmentLbl" HorizontalAlignment="Center" Text="{Binding TreatmentNumber, StringFormat='Your Treatment'}" VerticalAlignment="Center" TextAlignment="Center" FontSize="58"  Margin="0,15"  Foreground="White" FontWeight="Bold" FontFamily="Roboto"/>
-            <!--<TextBlock x:Name="CurrentTreatmentLbl" HorizontalAlignment="Center" Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}" VerticalAlignment="Center" TextAlignment="Center" FontSize="58"  Margin="0,15"  Foreground="White" FontWeight="Bold" FontFamily="Roboto"/>-->
-                <!--Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}"-->
+            <!--
+            <TextBlock x:Name="CurrentTreatmentLbl" HorizontalAlignment="Center" Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}" VerticalAlignment="Center" TextAlignment="Center" FontSize="58"  Margin="0,15"  Foreground="White" FontWeight="Bold" FontFamily="Roboto"/>
+            Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}"
 
-                <!--<Button x:Name="ForwardBtn" HorizontalAlignment="Right" Height="45" Width="45" Margin="0,15,20,15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" >
+                <Button x:Name="ForwardBtn" HorizontalAlignment="Right" Height="45" Width="45" Margin="0,15,20,15" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" >
                     <Button.Content>
                     <Image Source="..\..\Images\arrow_right.png" Height="40" Width="40" ></Image>
-                    --><!--<Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" Background="#4fc3f7" >
+                    <Border CornerRadius="20" Height="40" Width="40" Margin="0" BorderBrush="Gray" BorderThickness="1" Background="#4fc3f7" >
                             <Image Source="..\..\Images\arrow_right.png" Height="25" Width="25" ></Image>
-                        </Border>--><!--
+                        </Border>
                     </Button.Content>
                 </Button>-->
-        </Grid>
             
+        </Grid>
+
         <DockPanel x:Name="CalenderTimeline" Margin="10">
-            <!--Value="{Binding TreatmentProgress}"-->
             <ProgressBar x:Name="CalenderProgressBar" Margin="15,0" Height="9" Value="{Binding TreatmentProgress}" DockPanel.Dock="Top">
                 <ProgressBar.Template>
                     <ControlTemplate>
@@ -44,7 +60,6 @@
                             <DockPanel>
                                 <Rectangle Name="PART_Track" Fill="Black" Height="4">
                                 </Rectangle>
-                                <!--<Rectangle Name="Mask" MinWidth="{TemplateBinding Width}" Fill="Black" Height="4"/>-->
 
                             </DockPanel>
                             <StackPanel Orientation="Horizontal">
@@ -56,15 +71,8 @@
 
                                 <Ellipse Width="8" Height="8" Fill="#ff8300"  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="-4,0,0,0" ></Ellipse>
                             </StackPanel>
-                            
+
                         </Grid>
-                        
-                        
-                        <!--<Grid x:Name="Root">
-                            <Border Name="PART_Track"  BorderBrush="Black" BorderThickness="2" />
-                            <Border Name="PART_Indicator" BorderBrush="#ff8300" BorderThickness="2" HorizontalAlignment="Left" />
-                            <Ellipse Width="10" Height="10" Fill="Yellow"  VerticalAlignment="Center" ></Ellipse>
-                        </Grid>-->
                     </ControlTemplate>
                 </ProgressBar.Template>
             </ProgressBar>
@@ -76,11 +84,11 @@
         <StackPanel x:Name="TreatmentScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
             <Grid x:Name="MotionQualityGrid"  Margin="0,0,15,0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,-40,0,0">
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="67" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="{Binding TreatmentCompliance}" />
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="36" Foreground="White" Text="%" />
                 </StackPanel>
-                
-                <ProgressBar x:Name="MotionQualityProgressBar" Margin="10,0,10,45" Value="67">
+
+                <ProgressBar x:Name="MotionQualityProgressBar" Margin="10,0,10,45" Value="{Binding TreatmentCompliance}">
                     <ProgressBar.Template>
                         <ControlTemplate>
                             <Grid>
@@ -97,11 +105,11 @@
 
             <Grid x:Name="RepetitionsGrid" Margin="15,0,0,0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,-40,0,0">
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="91" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="{Binding TreatmentScore}" />
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="36" Foreground="White" Text="%" />
                 </StackPanel>
 
-                <ProgressBar x:Name="RepetitionsProgressBar" Margin="10,0,10,45" Value="91">
+                <ProgressBar x:Name="RepetitionsProgressBar" Margin="10,0,10,45" Value="{Binding TreatmentScore}">
                     <ProgressBar.Template>
                         <ControlTemplate>
                             <Grid>

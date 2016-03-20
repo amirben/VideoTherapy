@@ -27,48 +27,32 @@ namespace VideoTherapy.Views
         private Patient _currentPatient;
         private DispatcherTimer timer;
 
-        public event VideoTherapy.TreatmentMenu.TrainingSelectedDelegate trainingSelectedEvent;
         public event VideoTherapy.MainWindow.CloseAppDelegate closeApp;
         public event VideoTherapy.MainWindow.LogOutDelegate logOut;
 
-        private Training _RecomendedTraining;
-        public Training RecomendedTraining
-        {
-            set
-            {
-                _RecomendedTraining = value;
-                RecomendedTrainingPanel.DataContext = value;
-            }
-
-            get
-            {
-                return _RecomendedTraining;
-            }
-        }
-
         private KinectSensor sensor;
 
-        //to show or not the recommended panel
-        public Boolean ShowRecommended
-        {
-            set
-            {
-                if (value)
-                {
-                    this.ShowRecommendedBorder.Visibility = Visibility.Visible;
-                    this.ShowKinectStatus.Visibility = Visibility.Hidden;
-                    this.UserInfoStack.Children.Remove(ShowKinectStatus);
+        ////to show or not the recommended panel
+        //public Boolean ShowRecommended
+        //{
+        //    set
+        //    {
+        //        if (value)
+        //        {
+        //            //this.ShowRecommendedBorder.Visibility = Visibility.Visible;
+        //            this.ShowKinectStatus.Visibility = Visibility.Hidden;
+        //            this.UserInfoStack.Children.Remove(ShowKinectStatus);
                     
-                }
-                else
-                {
-                    this.ShowRecommendedBorder.Visibility = Visibility.Hidden;
-                    this.ShowKinectStatus.Visibility = Visibility.Visible;
-                    this.UserInfoStack.Children.Remove(ShowRecommendedBorder);
-                    KinectConnectionStatus();
-                }
-            }
-        }
+        //        }
+        //        else
+        //        {
+        //            //this.ShowRecommendedBorder.Visibility = Visibility.Hidden;
+        //            this.ShowKinectStatus.Visibility = Visibility.Visible;
+        //            //this.UserInfoStack.Children.Remove(ShowRecommendedBorder);
+        //            KinectConnectionStatus();
+        //        }
+        //    }
+        //}
 
         public UC_UserInfo(Patient _currentPatient)
         {
@@ -77,6 +61,14 @@ namespace VideoTherapy.Views
             this._currentPatient = _currentPatient;
             this.DataContext = this._currentPatient;
 
+            ShowCurrentTime();
+            KinectConnectionStatus();
+
+            LinktToProfile.RequestNavigate += LinktToProfile_RequestNavigate;
+        }
+
+        private void ShowCurrentTime()
+        {
             CurrentDate.Text = DateTime.Now.ToString("ddd, dd.mm.yy");
             CurrentTime.Text = DateTime.Now.ToString("HH:mm");
 
@@ -88,10 +80,8 @@ namespace VideoTherapy.Views
             }, this.Dispatcher);
 
             timer.Start();
-            
-            LinktToProfile.RequestNavigate += LinktToProfile_RequestNavigate;
-        }
 
+        }
         private void Sensor_IsAvailableChanged(object sender, IsAvailableChangedEventArgs e)
         {
             if (sensor.IsAvailable)
@@ -144,11 +134,6 @@ namespace VideoTherapy.Views
                 System.Diagnostics.Process.Start(e.Uri.ToString());
             }
            
-        }
-
-        private void OpenRecommendedTraining_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            trainingSelectedEvent(RecomendedTraining);
         }
 
         private void CloseButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
