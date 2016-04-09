@@ -26,7 +26,7 @@ namespace VideoTherapy.XML
                         TrainingName = EX.Element("TrainingName").Value,
                         Repetitions = Int32.Parse(EX.Element("Repetitions").Value),
                         TrainingCompleted = Int32.Parse(EX.Element("TrainingCompleted").Value),
-                        LastViewed = EX.Element("LastViewed").Value,
+                        
                         TrainingThumbs = EX.Element("TrainingThumbs").Value
 
                     })).ToList()

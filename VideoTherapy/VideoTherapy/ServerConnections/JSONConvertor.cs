@@ -73,9 +73,9 @@ namespace VideoTherapy.ServerConnections
 
         /// <summary>
         /// Parse from json content to new therapist and his information from the json
-        /// </summary>
         /// <param name="_JSONcontent">The response json</param>
         /// <param name="_therapist">The therapist object</param>
+        /// </summary>
         public static void GettingTherapistData(Therapist _therapist, string _JSONcontent)
         {
             dynamic o = JsonConvert.DeserializeObject<object>(_JSONcontent);
@@ -161,8 +161,8 @@ namespace VideoTherapy.ServerConnections
                 //treatment details
                 treatment.TreatmentNumber = list.IndexOf(item) + 1;
                 treatment.TreatmentId = item.treatmentId;
-                treatment.StartDate = DateTime.Parse((string)item.treatmentStartTime);
-                treatment.EndDate = DateTime.Parse((string)item.treatmentEndTime);
+                treatment.StartDate = DateTime.Parse((string)item.treatmentStartTime["date"]);
+                treatment.EndDate = DateTime.Parse((string)item.treatmentEndTime["date"]);
                 treatment.TreatmentProgress = DateFormat.CalcTreatementDateProgress(treatment.StartDate, treatment.EndDate);
 
                 //treatment scoring
@@ -208,15 +208,16 @@ namespace VideoTherapy.ServerConnections
         {
             List<Training> trainingList = new List<Training>();
 
-            List<object> trainingListJson = JsonConvert.DeserializeObject<List<object>>(_JSONcontent);
+            Dictionary<int, object> trainingListJson = JsonConvert.DeserializeObject<Dictionary<int, object>>(_JSONcontent);
 
-            foreach (object item in trainingListJson)
+            //List<object> trainingListJson = JsonConvert.DeserializeObject<List<object>>(_JSONcontent);
+
+            foreach (object item in trainingListJson.Values)
             {
                 Training newTraining = new Training();
                 object temp;
                 int tempInt;
                 float tempFloat1, tempFloat2;
-
 
                 Dictionary<string, object> currentObj = JsonConvert.DeserializeObject<Dictionary<string, object>>(item.ToString());
 
@@ -234,10 +235,15 @@ namespace VideoTherapy.ServerConnections
                 newTraining.TrainingThumbs = temp.ToString();
 
                 //todo - yoav need to change the api
-                currentObj.TryGetValue("timeCreated", out temp);
-                newTraining.LastViewed = temp.ToString();
+                currentObj.TryGetValue("lastTrainedDate", out temp);
+                Dictionary<string, string> tempDate = JsonConvert.DeserializeObject<Dictionary<string, string>>(temp.ToString());
+                DateTime tempDateTime;
+                DateTime.TryParse(tempDate["date"].ToString(), out tempDateTime);
 
-                //todo - add scoring!!
+                newTraining.LastViewed = tempDateTime;
+
+                //todo - YOAV REMOVE THE FIELDS!
+                //add scoring!!
                 Dictionary<string, float> scoringDic = JsonConvert.DeserializeObject<Dictionary<string, float>>(currentObj["session_usage"].ToString());
                 scoringDic.TryGetValue("num_repeatition_done", out tempFloat1);
                 scoringDic.TryGetValue("num_repeatition_total", out tempFloat2);

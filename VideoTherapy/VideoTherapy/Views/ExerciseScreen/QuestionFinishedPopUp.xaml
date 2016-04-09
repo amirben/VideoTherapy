@@ -12,7 +12,7 @@
 					HorizontalAlignment="Center">
 
             <StackPanel x:Name="QuestionFinishedPopUpStackpanel" Orientation="Vertical" Background="Black" >
-                <Image Source="../../images/connected.png" HorizontalAlignment="Center" VerticalAlignment="Top" Height="36" Width="50" Margin="0,20,0,10"></Image>
+                <Image Source="../../images/stars.png" HorizontalAlignment="Center" VerticalAlignment="Center" Height="70" Width="140" Margin="0,15,0,0"></Image>
                 <TextBlock Foreground="White" Text="You've succesfilly finished" HorizontalAlignment="Center" FontSize="24" Margin="0,10,0,10"></TextBlock>
                 <TextBlock Foreground="White" Text="Well done!" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold" Margin="0,0,0,10"></TextBlock>
 

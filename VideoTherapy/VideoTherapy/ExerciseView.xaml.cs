@@ -100,7 +100,7 @@ namespace VideoTherapy
         private Boolean StopDetection = false;
 
         //close app
-        public event MainWindow.CloseAppDelegate CloseApp;
+        public event MainWindow.GoBackToTreatmentScreen GoBackToTreatmentScreen;
 
 
         public ExerciseView(Patient currentPatient, Training currentTraining)
@@ -822,6 +822,16 @@ namespace VideoTherapy
             //}
         }
 
+        private void NextSessionMouseClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void PrevSessionMouseClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
         private void PlayPauseClick(object sender, MouseButtonEventArgs e)
         {
             //todo - need to stop detecion
@@ -848,9 +858,12 @@ namespace VideoTherapy
             //PlayNextVideo();
         }
 
-        private void CloseButton_MouseDown(object sender, MouseButtonEventArgs e)
+        private void GoBackTreatmentButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            CloseApp(CurrentPatient);
+            //todo - need to clear all data
+            //Returning to the treatement screen
+            GoBackToTreatmentScreen(CurrentPatient);
+            
         }
         #endregion
 
@@ -937,6 +950,8 @@ namespace VideoTherapy
                 Console.WriteLine();
             }
         }
+
+
 
         //=====================================
     }

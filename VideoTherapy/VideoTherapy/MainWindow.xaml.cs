@@ -29,6 +29,7 @@ namespace VideoTherapy
         private bool authenticated = false;
 
         public delegate void CloseAppDelegate(Patient _currentPatient);
+        public delegate void GoBackToTreatmentScreen(Patient _currentPatient);
         public delegate void LogOutDelegate();
 
         public MainWindow()
@@ -64,6 +65,7 @@ namespace VideoTherapy
             
             Close();
         }
+
 
         private void LogOut()
         {
@@ -167,7 +169,7 @@ namespace VideoTherapy
             using (ExerciseView _exerciseView = new ExerciseView(_currentPatient, _currentTraining))
             {
                 _exerciseView.MainWindow = this;
-                _exerciseView.CloseApp += CloseApp;
+                _exerciseView.GoBackToTreatmentScreen += OpenTreatmentWindow;
                 this.Content = _exerciseView;
             }
         }

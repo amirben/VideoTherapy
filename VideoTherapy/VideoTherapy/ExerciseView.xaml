@@ -7,7 +7,7 @@
              xmlns:mv="clr-namespace:VideoTherapy.Model_View"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1400">
-    <Grid x:Name="ExerciseWindow">
+    <Grid x:Name="ExerciseWindow" Background="#80c683">
 
         <!--Source="{Binding VideoPath}" Margin="-6,0,6,0"-->
         <MediaElement x:Name="ExerciseVideo" Source="{Binding VideoPath}" Stretch="Fill" LoadedBehavior="Manual" UnloadedBehavior="Stop"  MediaEnded="ExerciseVideo_MediaEnded"/>
@@ -29,25 +29,36 @@
                 </StackPanel>
 
                 <StackPanel x:Name="VideoControls" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20">
-                    <ContentControl Cursor="Hand" MouseDown="PrevVideoClick">
-                        <Border CornerRadius="30" Height="60" Width="60" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
+                    <ContentControl Cursor="Hand" ToolTip="Previous session" MouseDown="PrevSessionMouseClick">
+                        <Border CornerRadius="30" Height="40" Width="40" Margin="5" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
+                            <Image x:Name="PrevSession"  Source="Images\prev_session.png" Height="15" Width="15" ></Image>
+                        </Border>
+                    </ContentControl>
+
+                    <ContentControl Cursor="Hand" MouseDown="PrevVideoClick" ToolTip="Previous exercise">
+                        <Border CornerRadius="30" Height="60" Width="60" Margin="10" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
                             <Image x:Name="PrevVideo"  Source="Images\rewind.png" Height="20" Width="20" ></Image>
                         </Border>
                     </ContentControl>
 
-                    <ContentControl Cursor="Hand" MouseDown="PlayPauseClick">
+                    <ContentControl Cursor="Hand" MouseDown="PlayPauseClick" ToolTip="Pause/Play video">
                         <Border CornerRadius="42" Height="85" Width="85" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
                             <Image x:Name="PlayPauseVideo"  Source="Images\pause.png" Height="50" Width="50" ></Image>
                         </Border>
                     </ContentControl>
 
 
-                    <ContentControl MouseDown="NextVideoClick"  Cursor="Hand">
+                    <ContentControl MouseDown="NextVideoClick"  Cursor="Hand" ToolTip="Next exercise">
                         <Border CornerRadius="30" Height="60" Width="60" Margin="15" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
                             <Image x:Name="NextVideo"  Source="Images\next.png"  Height="20" Width="20"/>
                         </Border>
                     </ContentControl>
 
+                    <ContentControl Cursor="Hand" ToolTip="Next session" MouseDown="NextSessionMouseClick">
+                        <Border CornerRadius="30" Height="40" Width="40" Margin="5" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
+                            <Image x:Name="NextSession"  Source="Images\next_session.png" Height="15" Width="15" ></Image>
+                        </Border>
+                    </ContentControl>
 
                 </StackPanel>
 
@@ -175,7 +186,8 @@
                     </DockPanel>
                 </Border>
 
-                <Image x:Name="CloseButton" Grid.Column="2" Source=".\Images\close.png" HorizontalAlignment="Center" VerticalAlignment="Center" Height="70" Width="70" Margin="5,0" MouseLeftButtonDown="CloseButton_MouseDown"></Image>
+                <Image x:Name="ClosePlayerButton" Grid.Column="2" Source=".\Images\close.png" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                       Height="70" Width="70" Margin="5,0" MouseLeftButtonDown="GoBackTreatmentButton_MouseDown" ToolTip="Back to treatment"/>
 
             </Grid>
 

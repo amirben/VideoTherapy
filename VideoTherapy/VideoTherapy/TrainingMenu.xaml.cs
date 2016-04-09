@@ -104,7 +104,7 @@ namespace VideoTherapy
         private void DownloadGDBFiles()
         {
             finishFirstGDBSemaphore = new SemaphoreSlim(1);
-            finishFirstGDBSemaphore.Wait();
+            //finishFirstGDBSemaphore.Wait();
 
             Barrier downloadTrainingBarrier = new Barrier(1);
             
@@ -116,6 +116,10 @@ namespace VideoTherapy
                 downloadTrainingBarrier.AddParticipant();
                 if (exercise.isTrackable)
                 {
+                    if (newKey == FIRST_EXERCISE)
+                    {
+                        finishFirstGDBSemaphore.Wait();
+                    }
                     Thread downloadGDB = new Thread(() => DownloadCurrentGDB(exercise, newKey, downloadTrainingBarrier));
                     downloadGDB.Start(); 
                 }

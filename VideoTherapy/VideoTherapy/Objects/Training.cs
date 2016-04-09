@@ -14,7 +14,7 @@ namespace VideoTherapy.Objects
         public bool isRecommended { set; get; }
         public int Repetitions { set; get; }
         public int TrainingCompleted { set; get; }
-        public string LastViewed { set; get; }
+        public DateTime LastViewed { set; get; }
         public string TrainingThumbs { set; get; }
         public List<Exercise> Playlist { set; get; }
         
