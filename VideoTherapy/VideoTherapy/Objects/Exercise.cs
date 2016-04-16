@@ -13,6 +13,9 @@ namespace VideoTherapy.Objects
 {
     public class Exercise : INotifyPropertyChanged
     {
+        public enum ExerciseMode { Demo, Traceable, TraceableDuplicate, NonTraceable, NonTraceableDuplicate }
+
+        public ExerciseMode Mode { set; get; }
         public int ExerciseId { set; get; }
         public int ExerciseNum { set; get; }
         public String ExerciseName { set; get; }
@@ -42,7 +45,8 @@ namespace VideoTherapy.Objects
         public VTGesture StartGesutre { set; get; }
      
         public Boolean isSucceed { set; get; }
-        
+        public Boolean IsPlayed { set; get;}
+
         //Rounds
         public ObservableCollection<Round> Rounds;
         public Round CurrentRound { set; get; }
@@ -50,38 +54,42 @@ namespace VideoTherapy.Objects
 
         //Score
         public int ExerciseMotionScore { set; get; }
+        public int ExerciseRepetitionDone { set; get; }
+        public Score ExerciseScore { set; get; }
 
         //Events
         public event PropertyChangedEventHandler PropertyChanged;
         public event ExerciseView.NextRoundUpdataDelegate NextRoundUpdateUIEvent;
-        public event ExerciseView.StopDetectionDelegate StopDetectionEvent;
+        //public event ExerciseView.StopDetectionDelegate StopDetectionEvent;
+        public event ExerciseView.UpdateLastRound UpdateLastRound;
 
         public delegate void NextRoundDelegate();
               
 
         public Exercise()
         {
-            NextRoundDelegate nextRoundDelegate = new NextRoundDelegate(NextRoundEvent);
+           // NextRoundDelegate nextRoundDelegate = new NextRoundDelegate(NextRoundEvent);
 
         }
 
         public void AddNextRoundEvent()
         {
             //CurrentRound.NextRoundEvent += new NextRoundDelegate(NextRoundEvent);
-            NextRoundDelegate nextRoundDelegate = new NextRoundDelegate(NextRoundEvent);
+            //NextRoundDelegate nextRoundDelegate = new NextRoundDelegate(NextRoundEvent);
             CurrentRound.NextRoundEvent += NextRoundEvent;
         }
 
         //Next round
         public void NextRoundEvent()
         {
-            StopDetectionEvent();
+            //StopDetectionEvent();
 
             if (!isPause)
             {
                 RoundIndex++;
                 this.NotifyPropertyChanged("RoundNumber");
                 this.NotifyPropertyChanged("RoundProgress");
+                UpdateLastRound();
 
                 //Scoring update
                 ExerciseMotionScore = Convert.ToInt32(Scoring.GetExerciseScore(this));
@@ -89,8 +97,6 @@ namespace VideoTherapy.Objects
 
                 if (RoundIndex < Repetitions)
                 {
-                    //printstatus();
-
                     //Stop detecion
 
                     //changing the round and add event to him
@@ -102,11 +108,16 @@ namespace VideoTherapy.Objects
                     //update UI of the change
                     NextRoundUpdateUIEvent();
                 }
+                else
+                {
+                    UpdateLastRound();
+                    isPause = true;
+                }
             }
         }
 
         //check if exercise completed or not
-        public void CheckIfExerciseStatus()
+        public int SumUpExerciseRepetitions()
         {
             int numOfSuccesRound = 0;
             if (isTrackable)
@@ -119,14 +130,26 @@ namespace VideoTherapy.Objects
                     }
                 }
 
+                ExerciseRepetitionDone = numOfSuccesRound;
                 isSucceed = (numOfSuccesRound / Repetitions) * 100 > 50 ? true : false;
             }
             else
             {
+                ExerciseRepetitionDone = 0;
                 isSucceed = false;
             }
-            
 
+            return ExerciseRepetitionDone;
+
+        }
+
+        public void ClearAllDataInExercise()
+        {
+            isStart = false;
+            isSucceed = false;
+            RoundIndex = 0;
+            Rounds = null;
+            ExerciseScore = null;
         }
 
         private void printstatus()
@@ -194,94 +217,5 @@ namespace VideoTherapy.Objects
                 VTGestureList.Add(new VTGesture(gesture));
             }
         }
-
-        //DELETE AFTER DEMO
-        /*public string createGestures()
-        {
-            VTGesture g1 = new VTGesture();
-            g1.GestureName = "squat_getting_down";
-            g1.MinProgressValue = 0;
-            g1.MaxProgressValue = 1.0f;
-            g1.TrsholdProgressValue = 0.4f;
-            g1.ConfidanceTrshold = 0.4f;
-            g1.IsTrack = true;
-
-            VTGesture g2 = new VTGesture();
-            g2.GestureName = "squat_getting_up";
-            g2.MinProgressValue = 1.0f;
-            g2.MaxProgressValue = 0.0f;
-            g2.TrsholdProgressValue = 0.4f;
-            g2.ConfidanceTrshold = 0.4f;
-            g2.IsTrack = true;
-
-            StartGesutre = new VTGesture();
-            StartGesutre.GestureName = "squat_start";
-            StartGesutre.MinProgressValue = 0;
-            StartGesutre.MaxProgressValue = 1.0f;
-            StartGesutre.TrsholdProgressValue = 0.01f;
-            StartGesutre.ConfidanceTrshold = 0.0f;
-            StartGesutre.IsTrack = true;
-
-            ContinuousGestureName = "squatProgress";
-
-            VTGestureList = new List<VTGesture>();
-            VTGestureList.Add(g1);
-            VTGestureList.Add(g2);
-
-            return @"C:\Users\amirb\Desktop\Afeka\VideoTherapy\VideoTherapy - Client\VideoTherapy\VideoTherapy\VideoTherapy\DB\squat.gbd";
-        }
-
-        public string CreateGestures2()
-        {
-            VTGesture g1 = new VTGesture();
-            g1.GestureName = "limbs_up_Right";
-            g1.MinProgressValue = 0;
-            g1.MaxProgressValue = 0.5f;
-            g1.TrsholdProgressValue = 0.25f;
-            g1.ConfidanceTrshold = 0.4f;
-            g1.IsTrack = true;
-
-            VTGesture g2 = new VTGesture();
-            g2.GestureName = "limbs_down_Right";
-            g2.MinProgressValue = 0.5f;
-            g2.MaxProgressValue = 1.0f;
-            g2.TrsholdProgressValue = 0.75f;
-            g2.ConfidanceTrshold = 0.4f;
-            g2.IsTrack = true;
-
-            VTGesture g3 = new VTGesture();
-            g3.GestureName = "limbs_up_Left";
-            g3.MinProgressValue = 1.0f;
-            g3.MaxProgressValue = 0.5f;
-            g3.TrsholdProgressValue = 0.75f;
-            g3.ConfidanceTrshold = 0.4f;
-            g3.IsTrack = true;
-
-            VTGesture g4 = new VTGesture();
-            g4.GestureName = "limbs_down_Left";
-            g4.MinProgressValue = 0.5f;
-            g4.MaxProgressValue = 0.0f;
-            g4.TrsholdProgressValue = 0.25f;
-            g4.ConfidanceTrshold = 0.4f;
-            g4.IsTrack = true;
-
-            StartGesutre = new VTGesture();
-            StartGesutre.GestureName = "limbs_start";
-            StartGesutre.MinProgressValue = 0;
-            StartGesutre.MaxProgressValue = 1.0f;
-            StartGesutre.TrsholdProgressValue = 0.01f;
-            StartGesutre.ConfidanceTrshold = 0.0f;
-            StartGesutre.IsTrack = true;
-
-            ContinuousGestureName = "lower_limbsProgress";
-
-            VTGestureList = new List<VTGesture>();
-            VTGestureList.Add(g1);
-            VTGestureList.Add(g2);
-            VTGestureList.Add(g3);
-            VTGestureList.Add(g4);
-
-            return @"C:\Users\amirb\Desktop\Afeka\VideoTherapy\VideoTherapy - Client\VideoTherapy\VideoTherapy\VideoTherapy\DB\lower_limbs.gbd";
-        }*/
     }
 }

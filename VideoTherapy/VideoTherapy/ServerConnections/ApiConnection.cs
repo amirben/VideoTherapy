@@ -7,6 +7,8 @@ using System.Windows.Threading;
 using System.Net.Http;
 using Newtonsoft.Json;
 
+using VideoTherapy.Objects;
+
 namespace VideoTherapy.ServerConnections
 {
 
@@ -45,7 +47,8 @@ namespace VideoTherapy.ServerConnections
         /// <summary>
         /// Enum that represent the types of the API
         /// </summary>
-        private enum ApiType { AppLogin, GetUserData, GetTreatment, GetTraining, GetExerciseGestures, ReportExercise, GetTreatmentByUser };
+        private enum ApiType { AppLogin, GetUserData, GetTreatment, GetTraining, GetExerciseGestures,
+                                ReportExercise, GetTreatmentByUser, ReportTrainingFeedback };
 
         /// <summary>
         /// Initializes a new dictionary that represent the tuples for the REST-api request
@@ -102,6 +105,10 @@ namespace VideoTherapy.ServerConnections
 
                 case ApiType.GetTreatmentByUser:
                     ApiTypeString = "treatments/get-treatments-by-user";
+                    break;
+
+                case ApiType.ReportTrainingFeedback:
+                    ApiTypeString = "treatments/report-training-feedback";
                     break;
             }
         }
@@ -202,13 +209,28 @@ namespace VideoTherapy.ServerConnections
         }
 
         /// <summary>
-        /// Request the gestures for exercise, returning JSON with the content of the gestures
-        /// </summary>
+        /// 
         /// <param name="_exerciseId">Active instance of the KinectSensor</param>
-        public static async Task<string> PostExerciseRepotApiAsync()
+        /// </summary>
+        public static async Task<string> ReportExerciseScoreApiAsync(Exercise exercise, Training training)
         {
-            return null;
+            //todo - add scoring data in exercise class
+            Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.ReportExercise, "exerciseId", exercise.ExerciseId.ToString(), "numRepitionTotal", exercise.ExerciseScore.TotalRepetitions.ToString(),
+                                                                        "numRepitionDone", exercise.ExerciseScore.TotalRepetitionsDone.ToString(), "motionQuality", exercise.ExerciseScore.MoitionQuality.ToString(),
+                                                                        "calGuid", training.CalGuid, "calEventId", training.CalEventId );
+
+            return await ConnectingApiAsync(_pairs);
         }
 
+        /// <summary>
+        /// Report the the feedback to server
+        /// <param name="feedbackJson">The answers that the user answer about feedback</param>
+        /// </summary>
+        public static async Task<string> ReportTrainingFeedback(string feedbackJson, string calGuid, string eventId)
+        {
+            Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.ReportTrainingFeedback, "calGuid", calGuid, "eventId", eventId, "feedback", feedbackJson);
+
+            return await ConnectingApiAsync(_pairs);
+        }
     }
 }

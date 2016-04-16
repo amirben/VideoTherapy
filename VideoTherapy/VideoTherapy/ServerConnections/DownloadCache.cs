@@ -51,35 +51,42 @@ namespace VideoTherapy.ServerConnections
         {
             Barrier barrier = new Barrier(1);
 
-            string newDir = CreateDir(dir, _patient.AccountId.ToString());
+            //string newDir = CreateDir(dir, _patient.AccountId.ToString());
             
-            //create treatment dir (it if needed)
-            newDir = CreateDir(newDir, _patient.PatientTreatment.TreatmentNumber.ToString());
+            ////create treatment dir (it if needed)
+            //newDir = CreateDir(newDir, _patient.PatientTreatment.TreatmentNumber.ToString());
             
-            //create training dir (it if needed)
-            newDir = CreateDir(newDir, _patient.PatientTreatment.TrainingList[_trainingIndex].TrainingId.ToString());
+            ////create training dir (it if needed)
+            //newDir = CreateDir(newDir, _patient.PatientTreatment.TrainingList[_trainingIndex].TrainingId.ToString());
 
-            foreach (int key in _patient.PatientTreatment.TrainingList[_trainingIndex].Playlist2.Keys)
+
+            string newDir = CreateDir(dir, "trainingThumb");
+
+            foreach (int key in _patient.PatientTreatment.TrainingList[_trainingIndex].Playlist.Keys)
             {
 
-                Thread downloadThread = new Thread(() => {
+                Task downloadThread = new Task(() => {
                     int keyThread = key;
 
-                    Exercise exercise = _patient.PatientTreatment.TrainingList[_trainingIndex].Playlist2[keyThread][0];
+                    Exercise exercise = _patient.PatientTreatment.TrainingList[_trainingIndex].Playlist[keyThread][0];
                     string imagePath = newDir + "\\" + exercise.ExerciseId + ".png";
 
                     string _from = exercise.ExerciseThumbs;
 
+                    if (!File.Exists(imagePath))
+                    {
+                        barrier.AddParticipants(1);
+                        DownloadFile(_from, imagePath);
 
-                    barrier.AddParticipants(1);
-                    DownloadFile(_from, imagePath);
+                        barrier.SignalAndWait();
+                    }
 
-                    foreach (Exercise _exercise in _patient.PatientTreatment.TrainingList[_trainingIndex].Playlist2[keyThread])
+                    foreach (Exercise _exercise in _patient.PatientTreatment.TrainingList[_trainingIndex].Playlist[keyThread])
                     {
                         _exercise.ExerciseThumbs = imagePath;
                     }
 
-                    barrier.SignalAndWait();
+                    
                 });
                 downloadThread.Start();
             }
@@ -95,12 +102,14 @@ namespace VideoTherapy.ServerConnections
         public void DownloadTreatment()
         {
             //crearte dir for user (if not already created)
-            string newDir = CreateDir(dir, _patient.AccountId.ToString());
-            newDir = CreateDir(newDir, _patient.PatientTreatment.TreatmentNumber.ToString());
+            //string newDir = CreateDir(dir, _patient.AccountId.ToString());
+            //newDir = CreateDir(newDir, _patient.PatientTreatment.TreatmentNumber.ToString());
+            string newDir = CreateDir(dir, "treatmentThumb");
 
             //initilaize the barrier
             int size = _patient.PatientTreatment.TrainingList.Count;
-            Barrier _barrier = new Barrier(size + 1);
+            //Barrier _barrier = new Barrier(size + 1);
+            Barrier _barrier = new Barrier(1);
 
             for (int i = 0; i < size; i++)
             {
@@ -110,12 +119,17 @@ namespace VideoTherapy.ServerConnections
                 string _to = newDir + "\\" + _patient.PatientTreatment.TrainingList[temp].TrainingId + ".png";
                 _patient.PatientTreatment.TrainingList[temp].TrainingThumbs = _to;
 
-                Thread tempThread = new Thread(() =>
+                if (!File.Exists(_to))
                 {
-                    DownloadFile(_from, _to);
-                    _barrier.SignalAndWait();
-                });
-                tempThread.Start();
+                    _barrier.AddParticipant();
+                    Task tempThread = new Task(() =>
+                    {
+                        DownloadFile(_from, _to);
+                        _barrier.SignalAndWait();
+                    });
+                    tempThread.Start();
+                }
+                
             }
 
             _barrier.SignalAndWait();
@@ -130,7 +144,7 @@ namespace VideoTherapy.ServerConnections
         {
             Barrier barrier = new Barrier(_patient.PatientTreatment.TrainingList.Count + 2);
 
-            Thread treatmentThread = new Thread(() =>
+            Task treatmentThread = new Task(() =>
             {
                 //Downloading all thumbs in treatment
                 DownloadTreatment();
@@ -141,12 +155,13 @@ namespace VideoTherapy.ServerConnections
 
             foreach(Training t in _patient.PatientTreatment.TrainingList)
             {
-                Thread tt = new Thread(() =>
+                Task tt = new Task(() =>
                 {
                     DownloadTraining(_patient.PatientTreatment.TrainingList.IndexOf(t));
                     barrier.SignalAndWait();
                 });
-                tt.Start();              
+                tt.Start();     
+                         
             }
 
             barrier.SignalAndWait();
@@ -161,15 +176,14 @@ namespace VideoTherapy.ServerConnections
         {
             Barrier _barrier = new Barrier(1);
 
-            string newDir = CreateDir(dir, _patient.AccountId.ToString());
-            newDir = CreateDir(newDir, _patient.PatientTreatment.TreatmentNumber.ToString());
-            newDir = CreateDir(newDir, _patient.PatientTreatment.CurrentTraining.TrainingId.ToString());
-            newDir = CreateDir(newDir, _exercise.ExerciseId.ToString());
-
+            string newDir = CreateDir(dir, "DB");
             newDir += "\\" + _exercise.ExerciseId + ".gdb";
 
-            DownloadFile(_exercise.DBUrl, newDir);
-            _barrier.SignalAndWait();
+            if (!File.Exists(newDir))
+            {
+                DownloadFile(_exercise.DBUrl, newDir);
+                _barrier.SignalAndWait();
+            }
 
             _exercise.DBPath = newDir;
         }

@@ -236,18 +236,28 @@ namespace VideoTherapy.ServerConnections
 
                 //todo - yoav need to change the api
                 currentObj.TryGetValue("lastTrainedDate", out temp);
-                Dictionary<string, string> tempDate = JsonConvert.DeserializeObject<Dictionary<string, string>>(temp.ToString());
-                DateTime tempDateTime;
-                DateTime.TryParse(tempDate["date"].ToString(), out tempDateTime);
+                Console.WriteLine(temp.ToString());
+                if (!temp.ToString().Equals("[]"))
+                {
+                    Dictionary<string, string> tempDate = JsonConvert.DeserializeObject<Dictionary<string, string>>(temp.ToString());
+                    DateTime tempDateTime;
+                    DateTime.TryParse(tempDate["date"].ToString(), out tempDateTime);
 
-                newTraining.LastViewed = tempDateTime;
-
-                //todo - YOAV REMOVE THE FIELDS!
+                    newTraining.LastViewed = tempDateTime;
+                }
+                
                 //add scoring!!
                 Dictionary<string, float> scoringDic = JsonConvert.DeserializeObject<Dictionary<string, float>>(currentObj["session_usage"].ToString());
                 scoringDic.TryGetValue("num_repeatition_done", out tempFloat1);
                 scoringDic.TryGetValue("num_repeatition_total", out tempFloat2);
-                newTraining.TrainingCompliance = (int)(tempFloat1 / tempFloat2 * 100);
+                if (tempFloat1 == 0)
+                {
+                    newTraining.TrainingCompliance = 0;
+                }
+                else
+                {
+                    newTraining.TrainingCompliance = (int)(tempFloat1 / tempFloat2 * 100);
+                }
                 //newTraining.TrainingCompliance = (int)(scoringDic["num_repeatition_done"] / scoringDic["num_repeatition_total"] * 100);
 
                 scoringDic.TryGetValue("motion_quality", out tempFloat1);
@@ -279,64 +289,16 @@ namespace VideoTherapy.ServerConnections
                     newTraining.isRecommended = true;
                 }
 
+
+                object calGuid;
+                currentObj.TryGetValue("cal_guid", out calGuid);
+                newTraining.CalGuid = calGuid.ToString();
+
+                currentObj.TryGetValue("next_cal_event_id", out calGuid);
+                newTraining.CalGuid = calGuid.ToString();
             }
 
             return trainingList;
-        }
-
-        public static void GettingPatientTraining(Training _training, string _JSONcontent)
-        {
-            //dynamic d =
-            //        (JsonConvert.DeserializeObject<IDictionary<string, object>>(_JSONcontent))["data"];
-
-            //_training.Playlist = new List<Exercise>();
-            //int numOfExercises = 1;
-
-            //foreach (var item in d.sessions)
-            //{
-            //    //For demo
-            //    Exercise demoExercise = new Exercise();
-            //    demoExercise.ExerciseName = item.exerciseLabel;
-            //    demoExercise.ExerciseId = item.exerciseId;
-            //    demoExercise.ExerciseThumbs = item.exerciseThumbnail;
-            //    string tt = item.exerciseVideoDemo;
-            //    demoExercise.VideoPath = new Uri(HttpsReplaceToHttp.ReplaceHttpsToHttp(tt));
-            //    demoExercise.ExerciseNum = numOfExercises;
-            //    demoExercise.isDemo = true;
-
-            //    _training.Playlist.Add(demoExercise);
-
-            //    numOfExercises++;
-
-            //    //duplicate the exercise if there are repeats for him by therapist
-            //    //sessRepeats - number of duplicates exercise
-            //    int x = item.sessRepeats;
-            //    for (int i = 0; i < x; i++)
-            //    {
-            //        Exercise newExercise = new Exercise();
-
-            //        newExercise.ExerciseName = item.exerciseLabel;
-            //        newExercise.ExerciseId = item.exerciseId;
-            //        newExercise.ExerciseThumbs = item.exerciseThumbnail;
-            //        tt = item.exerciseVideo;
-            //        newExercise.VideoPath = new Uri(HttpsReplaceToHttp.ReplaceHttpsToHttp(tt));
-            //        newExercise.Repetitions = item.exerciseCycles;
-            //        newExercise.ExerciseNum = numOfExercises;
-
-            //        //for future download for not duplicate the same file
-            //        if (i != 0)
-            //        {
-            //            newExercise.isDuplicate = true;
-            //        }
-
-            //        _training.Playlist.Add(newExercise);
-            //        numOfExercises++;
-            //    }
-
-            //    _training.Playlist.Last().isLastDuplicate = true;
-
-                
-            //}
         }
 
         /// <summary>
@@ -357,8 +319,8 @@ namespace VideoTherapy.ServerConnections
                 return;
             }
 
-            _training.Playlist2 = new Dictionary<int, List<Exercise>>();
-            int numOfExercises = 0;
+            _training.Playlist = new Dictionary<int, List<Exercise>>();
+            int numOfExercises = 1;
 
             //iterat over the exercise session 
             foreach (var item in d["data"].sessions)
@@ -373,10 +335,11 @@ namespace VideoTherapy.ServerConnections
                 demoExercise.ExerciseNum = numOfExercises;
                 demoExercise.isDemo = true;
                 demoExercise.SessionId = item.sessionId;
+                demoExercise.Mode = Exercise.ExerciseMode.Demo;
 
                 int temp = item.sessionId;
-                _training.Playlist2[temp] = new List<Exercise>();
-                _training.Playlist2[temp].Add(demoExercise);
+                _training.Playlist[temp] = new List<Exercise>();
+                _training.Playlist[temp].Add(demoExercise);
 
                 numOfExercises++;
 
@@ -393,17 +356,20 @@ namespace VideoTherapy.ServerConnections
                     tt = item.exerciseVideo;
                     newExercise.VideoPath = new Uri(HttpsReplaceToHttp.ReplaceHttpsToHttp(tt));
                     newExercise.Repetitions = item.exerciseCycles;
-                    newExercise.ExerciseNum = i;
+                    newExercise.ExerciseNum = numOfExercises;
                     newExercise.SessionId = item.sessionId;
                     newExercise.isTrackable = item.isTrackable;
+                    newExercise.Mode = (bool) item.isTrackable ? Exercise.ExerciseMode.Traceable : Exercise.ExerciseMode.NonTraceable;
 
                     //for future download for not duplicate the same file
-                    if (i != 0)
+                    if (i != 1)
                     {
+                        newExercise.Mode = newExercise.Mode == Exercise.ExerciseMode.Traceable ? Exercise.ExerciseMode.TraceableDuplicate : Exercise.ExerciseMode.NonTraceableDuplicate; 
                         newExercise.isDuplicate = true;
                     }
+                    numOfExercises++;
 
-                    _training.Playlist2[temp].Add(newExercise);
+                    _training.Playlist[temp].Add(newExercise);
                 }
             }
         }

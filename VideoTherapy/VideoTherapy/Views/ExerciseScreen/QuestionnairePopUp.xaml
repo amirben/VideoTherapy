@@ -12,7 +12,7 @@
 					HorizontalAlignment="Center">
 
             <StackPanel x:Name="QuestionPopUpStackpanel" Orientation="Vertical" Background="Black" >
-                <Image Source="../../images/paused.png" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50" Width="50" Margin="0,20,0,10"></Image>
+                <Image Source="../../images/question.png" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50" Width="50" Margin="0,20,0,10"></Image>
                 <TextBlock x:Name="QuestionNumberTB" Foreground="White" FontSize="26" HorizontalAlignment="Center" Margin="15">
                     <Run Text="{Binding QuestionNumber}"></Run>
                     <Run Text="/"></Run>
@@ -28,19 +28,19 @@
                 </TextBlock>
 
                 <StackPanel x:Name="AnswerPanel" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <StackPanel Orientation="Vertical" x:Name="LeftAnswer" Margin="25, 10" VerticalAlignment="Center" MouseLeftButtonDown="LeftAnswer_MouseLeftButtonDown">
+                    <StackPanel Orientation="Vertical" x:Name="LeftAnswer" Margin="25, 10" VerticalAlignment="Center" MouseLeftButtonDown="QuestionAnsweredHandle_MouseDown">
                         <Ellipse Width="100" Height="100" Fill="#e43834" Margin="14,0"></Ellipse>
-                        <TextBlock Text="{Binding LeftAnswer}" Foreground="White" FontSize="18" HorizontalAlignment="Center" Margin="15,25,15,5"></TextBlock>
+                        <TextBlock Text="{Binding AnswerTitle}" Foreground="White" FontSize="18" HorizontalAlignment="Center" Margin="15,25,15,5"></TextBlock>
                     </StackPanel>
 
-                    <StackPanel Orientation="Vertical" x:Name="CenterAnswer" Margin="25, 10" VerticalAlignment="Center" MouseLeftButtonDown="CenterAnswer_MouseLeftButtonDown">
+                    <StackPanel Orientation="Vertical" x:Name="CenterAnswer" Margin="25, 10" VerticalAlignment="Center" MouseLeftButtonDown="QuestionAnsweredHandle_MouseDown">
                         <Ellipse Width="100" Height="100" Fill="#ff8e00" Margin="14,0"></Ellipse>
-                        <TextBlock Text="{Binding CenterAnswer}" Foreground="White" FontSize="18" HorizontalAlignment="Center" Margin="15,25,15,5"></TextBlock>
+                        <TextBlock Text="{Binding AnswerTitle}" Foreground="White" FontSize="18" HorizontalAlignment="Center" Margin="15,25,15,5"></TextBlock>
                     </StackPanel>
 
-                    <StackPanel Orientation="Vertical" x:Name="RightAnswer" Margin="25, 10" VerticalAlignment="Center" MouseLeftButtonDown="RightAnswer_MouseLeftButtonDown">
+                    <StackPanel Orientation="Vertical" x:Name="RightAnswer" Margin="25, 10" VerticalAlignment="Center" MouseLeftButtonDown="QuestionAnsweredHandle_MouseDown">
                         <Ellipse Width="100" Height="100" Fill="#80c683" Margin="14,0"></Ellipse>
-                        <TextBlock Text="{Binding RightAnswer}" Foreground="White" FontSize="18" HorizontalAlignment="Center" Margin="15,25,15,5"></TextBlock>
+                        <TextBlock Text="{Binding AnswerTitle}" Foreground="White" FontSize="18" HorizontalAlignment="Center" Margin="15,25,15,5"></TextBlock>
                     </StackPanel>
                 </StackPanel>
 

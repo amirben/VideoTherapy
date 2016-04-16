@@ -69,20 +69,20 @@
 
                 <StackPanel x:Name="ExerciseDetails" Background="#7F000000" Width="360" Height="340" Margin="15,0,15,15">
                     <Grid HorizontalAlignment="Stretch" Height="50"  >
-                        <Button x:Name="BackwardBtn" HorizontalAlignment="Left" Height="28" Width="28" Margin="10,10,0,5" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
+                        <!--<Button x:Name="BackwardBtn" HorizontalAlignment="Left" Height="28" Width="28" Margin="10,10,0,5" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
                             <Button.Content>
                                 <Image Source="Images\arrow_left.png" Height="26" Width="26" ></Image>
-                                <!--<Border CornerRadius="20" Height="26" Width="26" Margin="0" BorderBrush="Transparent" BorderThickness="0" Background="#4fc3f7" >
+                                --><!--<Border CornerRadius="20" Height="26" Width="26" Margin="0" BorderBrush="Transparent" BorderThickness="0" Background="#4fc3f7" >
                                     <Image Source="Images\back.png" Height="16" Width="16" ></Image>
-                                </Border>-->
+                                </Border>--><!--
                             </Button.Content>
-                        </Button>
-                        <TextBlock x:Name="CurrentTrainingLbl" HorizontalAlignment="Stretch" Text="{Binding TrainingNumber, StringFormat='Training #{0}'}" VerticalAlignment="Top" TextAlignment="Left" FontSize="24"  Margin="50,10,0.2,0"  Foreground="White" FontWeight="Bold"/>
+                        </Button>-->
+                        <TextBlock x:Name="CurrentTrainingLbl" HorizontalAlignment="Stretch" Text="{Binding TrainingNumber, StringFormat='Training #{0}'}" VerticalAlignment="Top" TextAlignment="Left" FontSize="24"  Margin="25,10,0.2,0"  Foreground="White" FontWeight="Bold"/>
                         <!--Text="{Binding TreatmentNumber, StringFormat='Treatment #{0}'}"-->
                     </Grid>
 
-                    <TextBlock x:Name="CurrentExerciseLbl" HorizontalAlignment="Stretch" Text="{Binding ExerciseNum, StringFormat='Exercise #{0}'}" VerticalAlignment="Center" TextAlignment="Left" FontSize="34"  Margin="50,0,0,0" FontWeight="Bold" Foreground="White" />
-                    <TextBlock x:Name="ExerciseNameLbl" TextWrapping="Wrap" HorizontalAlignment="Stretch" Text="{Binding ExerciseName}" VerticalAlignment="Center" TextAlignment="Left" FontSize="20"  Margin="46,0,0,0" FontWeight="Bold" Foreground="White" />
+                    <TextBlock x:Name="CurrentExerciseLbl" HorizontalAlignment="Stretch" Text="{Binding ExerciseNum, StringFormat='Exercise #{0}'}" VerticalAlignment="Center" TextAlignment="Left" FontSize="34"  Margin="25,0,0,0" FontWeight="Bold" Foreground="White" />
+                    <TextBlock x:Name="ExerciseNameLbl" TextWrapping="Wrap" HorizontalAlignment="Stretch" Text="{Binding ExerciseName}" VerticalAlignment="Center" TextAlignment="Left" FontSize="20"  Margin="25,0,0,0" FontWeight="Bold" Foreground="White" />
 
 
                     <StackPanel x:Name="ExerciseTotalScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0" >

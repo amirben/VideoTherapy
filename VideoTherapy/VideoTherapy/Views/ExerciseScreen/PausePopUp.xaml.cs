@@ -23,6 +23,7 @@ namespace VideoTherapy.Views.ExerciseScreen
     public partial class PausePopUp : UserControl
     {
         private bool _hideRequest = false;
+        public event ExerciseView.ClosePausePopupDelegate ClosePopup;
 
         public PausePopUp()
         {
@@ -66,6 +67,11 @@ namespace VideoTherapy.Views.ExerciseScreen
         {
             PausePopUpStackpanel.Width = width;
             PausePopUpStackpanel.Height = height;
+        }
+
+        private void ResumeTraining_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ClosePopup();
         }
     }
 }

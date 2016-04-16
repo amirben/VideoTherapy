@@ -82,9 +82,9 @@ namespace VideoTherapy.Views.ExerciseScreen
             MotionQualityValue.Text = trainingQuality.ToString();
             MotionQualityProgressBar.Value = trainingQuality;
 
-            //int trainingScore = Convert.ToInt32(Scoring.GetTrainingScore(CurrentTraining));
-            Random rnd = new Random();
-            int trainingScore = rnd.Next(80, 95);
+            int trainingScore = Convert.ToInt32(Scoring.GetTrainingScore(CurrentTraining));
+            //Random rnd = new Random();
+            //int trainingScore = rnd.Next(80, 95);
             RepetitionsProgressBar.Value = trainingScore;
             RepetitionScore.Text = trainingScore.ToString();
         }

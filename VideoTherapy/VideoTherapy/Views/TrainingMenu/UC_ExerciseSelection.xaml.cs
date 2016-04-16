@@ -44,9 +44,9 @@ namespace VideoTherapy.Views.TrainingMenu
         {
             List<Exercise> showExerciseList = new List<Exercise>();
 
-            foreach (int key in CurrentTraining.Playlist2.Keys)
+            foreach (int key in CurrentTraining.Playlist.Keys)
             {
-                showExerciseList.Add(CurrentTraining.Playlist2[key][0]);
+                showExerciseList.Add(CurrentTraining.Playlist[key][0]);
             }
 
             ExercisesListUI.DataContext = showExerciseList;

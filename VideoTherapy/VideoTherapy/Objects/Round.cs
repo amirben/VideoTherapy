@@ -27,14 +27,12 @@ namespace VideoTherapy.Objects
 
         public event Exercise.NextRoundDelegate NextRoundEvent;
 
-        private string LastGesture = "squat_getting_up";
 
         public Round(int _roundNumber, int repetitions)
         {
             RoundNumber = _roundNumber;
             RoundRepetitions = repetitions;
             GestureList = new Dictionary<string, VTGesture>();
-    
         }
 
         public void UpdateGestureDetection(string _gestureName, DiscreteGestureResult _gestureResult, float _gestureProgress)
@@ -51,16 +49,12 @@ namespace VideoTherapy.Objects
                     _gesture.ProgressValue = _gestureProgress;
                 }
 
-                if (_gestureResult.Detected && _gesture.IsPassConfidanceTrshold() && _gesture.IsPassProgressTrshold())                                            
+                if (_gestureResult.Detected && _gesture.IsPassConfidanceTrshold() && _gesture.IsPassProgressTrshold() && !_gesture.IsSuccess)                                            
                 {
+                    Console.WriteLine("Round {0}, G: {1}, prog: {2}, conf: {3}", RoundNumber, _gesture.GestureName, _gestureProgress, _gestureResult.Confidence);
+
                     _gesture.IsSuccess = true;
                     CheckProgress();
-                }
-
-                if (CheckRoundSuccess() && _gestureProgress <= 0.0f && !_gestureResult.Detected)
-                {
-                    //todo throw next round event
-                    NextRoundEvent();
                 }
             }
         }
@@ -79,6 +73,9 @@ namespace VideoTherapy.Objects
             }
 
             RoundSuccess = true;
+
+            NextRoundEvent();
+
             return true;
         }
 
@@ -89,6 +86,8 @@ namespace VideoTherapy.Objects
 
             RoundMotionQuality = Convert.ToInt32(Scoring.GetRoundMotionScore(GestureList));
             this.NotifyPropertyChanged("RoundMotionQuality");
+
+            
         }
 
 

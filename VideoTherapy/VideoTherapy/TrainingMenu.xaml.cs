@@ -76,7 +76,6 @@ namespace VideoTherapy
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
             finishFirstGDBSemaphore.Wait();
-            Console.WriteLine();
         }
 
         public void Dispose()
@@ -108,14 +107,15 @@ namespace VideoTherapy
 
             Barrier downloadTrainingBarrier = new Barrier(1);
             
-            foreach (int key in _currentTraining.Playlist2.Keys)
+            foreach (int key in _currentTraining.Playlist.Keys)
             {
-                Exercise exercise = _currentTraining.Playlist2[key][1];
+                Exercise exercise = _currentTraining.Playlist[key][1];
                 int newKey = key;
-
-                downloadTrainingBarrier.AddParticipant();
-                if (exercise.isTrackable)
+               
+                if (exercise.isTrackable && !exercise.Downloaded)
                 {
+                    downloadTrainingBarrier.AddParticipant();
+
                     if (newKey == FIRST_EXERCISE)
                     {
                         finishFirstGDBSemaphore.Wait();
@@ -152,7 +152,7 @@ namespace VideoTherapy
                 finishFirstGDBSemaphore.Release();
             }
 
-            foreach (var item in _currentTraining.Playlist2[key])
+            foreach (var item in _currentTraining.Playlist[key])
             {
                 if (!item.isDemo && !item.Equals(exercise))
                 {
@@ -232,6 +232,7 @@ namespace VideoTherapy
         private void _trainingSelection_StartPlaylist(Training currentTraining)
         {
             this.Content = splash;
+            splash.MessageTimer.Stop();
 
             worker.RunWorkerAsync();
             //barrier.SignalAndWait();

@@ -10,10 +10,10 @@ namespace VideoTherapy.Objects
     {
         public int QuestionNumber { set; get; }
         public string QuestionString{ set; get; }
-        public string LeftAnswer { set; get; }
-        public string CenterAnswer { set; get; }
-        public string RightAnswer { set; get; }
-        public string SelectedAnswer { set; get; }
+        public Answer LeftAnswer { set; get; }
+        public Answer CenterAnswer { set; get; }
+        public Answer RightAnswer { set; get; }
+        public int SelectedAnswer { set; get; }
 
     }
 }

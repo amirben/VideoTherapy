@@ -73,19 +73,27 @@ namespace VideoTherapy.Utils
         {
             int numOfSuccess = 0;
             int numOfExercises = 0;
-            foreach (var key in CurrentTraining.Playlist2.Keys)
+            foreach (var key in CurrentTraining.Playlist.Keys)
             {
-                foreach (var exercise in CurrentTraining.Playlist2[key])
+                Exercise exercise = CurrentTraining.Playlist[key][1];
+                
+                if (exercise.ExerciseScore != null)
                 {
-                    if (!exercise.isDemo)
-                    {
-                        if (exercise.isSucceed)
-                        {
-                            numOfSuccess++;
-                        }
-                        numOfExercises++;
-                    }
+                    numOfExercises += exercise.ExerciseScore.TotalRepetitions;
+                    numOfSuccess += exercise.ExerciseScore.TotalRepetitionsDone;
                 }
+
+                //foreach (var exercise in CurrentTraining.Playlist[key])
+                //{
+                //    if (!exercise.isDemo)
+                //    {
+                //        if (exercise.isSucceed)
+                //        {
+                //            numOfSuccess++;
+                //        }
+                //        numOfExercises++;
+                //    }
+                //}
             }
 
             return (numOfSuccess / numOfExercises) * 100;
@@ -96,16 +104,24 @@ namespace VideoTherapy.Utils
             float avg = 0;
             int numOfExe = 0;
 
-            foreach (var key in CurrentTraining.Playlist2.Keys)
+            foreach (var key in CurrentTraining.Playlist.Keys)
             {
-                foreach (var exercise in CurrentTraining.Playlist2[key])
+                Exercise exercise = CurrentTraining.Playlist[key][1];
+
+                if (exercise.ExerciseScore != null)
                 {
-                    if (!exercise.isDemo)
-                    {
-                        avg+= exercise.ExerciseMotionScore;
-                        numOfExe++;
-                    }
+                    avg += exercise.ExerciseScore.MoitionQuality;
+                    numOfExe++;
                 }
+
+                //foreach (var exercise in CurrentTraining.Playlist[key])
+                //{
+                //    if (!exercise.isDemo)
+                //    {
+                //        avg+= exercise.ExerciseMotionScore;
+                //        numOfExe++;
+                //    }
+                //}
             }
 
             return avg / numOfExe;

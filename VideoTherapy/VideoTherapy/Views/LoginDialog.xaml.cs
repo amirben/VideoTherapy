@@ -180,6 +180,7 @@ namespace VideoTherapy
                 //Save login screen and change to splash
                 loginScreen = this.Content;
                 this.Content = splash;
+                splash.MessageTimer.Start();
 
                 //start download data
                 worker.RunWorkerAsync();

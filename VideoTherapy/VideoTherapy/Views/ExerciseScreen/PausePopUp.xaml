@@ -23,6 +23,8 @@
                     <Span>Please return to continue training.</Span>
                 </TextBlock>
 
+                <TextBlock x:Name="ResumeTraining" Background="#ff8e00" Foreground="White" FontSize="36" FontWeight="Bold" TextAlignment="Center" Padding="8" Margin="15,15,15,10" Text="Resume training" MouseLeftButtonDown="ResumeTraining_MouseLeftButtonDown"/>
+
             </StackPanel>
         </Border>
     </Border>

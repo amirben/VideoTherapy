@@ -13,12 +13,16 @@
 					HorizontalAlignment="Center">
 
                 <StackPanel x:Name="NoTrackingPopup" Orientation="Vertical" Background="Black" >
-                    <Image Source="../../images/info.png" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50" Width="50" Margin="0,20,0,10"></Image>
+                    <!--<Image Source="../../images/info.png" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50" Width="50" Margin="0,20,0,10"></Image>-->
+                    <Border CornerRadius="26" Background="#4fc3f7" VerticalAlignment="Top" Margin="0,20,0,10" HorizontalAlignment="Center" Width="45" Height="45">
+                        <TextBlock x:Name="CountdownText" FontFamily="Roboto" FontSize="40" Foreground="White" HorizontalAlignment="Center"/>
+                    </Border>
+                    
                     <TextBlock Foreground="White" Text="Tracking is unavaliable" HorizontalAlignment="Center" FontSize="46" Margin="0,0,0,10"></TextBlock>
                     <Line HorizontalAlignment="Stretch"  Stroke="#4fc3f7" Margin="10,5,10,10" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"  StrokeThickness="2" />
 
                     <TextBlock Foreground="White" FontSize="30" TextAlignment="Center" Padding="4" Margin="15,5,15,10" TextWrapping="Wrap">
-                    <Span>The system has no tracking data available to track the quality of you movements/</Span>
+                    <Span>The system has no tracking data available to track the quality of you movements.</Span>
                     <LineBreak/>
                     <Span>You can still perform this exercise, but the moition quality guages will be off</Span>
                     </TextBlock>

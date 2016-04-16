@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.Kinect;
 using Microsoft.Kinect.VisualGestureBuilder;
 using VideoTherapy.Objects;
+using System.Windows.Threading;
+using System.IO;
 
 namespace VideoTherapy.Kinect_Detection
 {
@@ -20,14 +22,13 @@ namespace VideoTherapy.Kinect_Detection
         /// <summary> Gesture frame reader which will handle gesture events coming from the sensor </summary>
         private VisualGestureBuilderFrameReader vgbFrameReader = null;
 
-
         private KinectSensor _sensor = null;
 
         private GestureAnalysis _gestureAnalysis;
 
         private Gesture ContinuousGestureData = null;
 
-        public Boolean StopDetecion { set; get; }
+        public Boolean StopDetection { set; get; }
 
         //Constractor
         public GestureDetector(KinectSensor _sensor, GestureAnalysis _gestureAnalysis, Exercise _currentExercise)
@@ -48,47 +49,109 @@ namespace VideoTherapy.Kinect_Detection
 
             // create the vgb source. The associated body tracking ID will be set when a valid body frame arrives from the sensor.
             vgbFrameSource = new VisualGestureBuilderFrameSource(_sensor, 0);
-            vgbFrameSource.TrackingIdLost += Source_TrackingIdLost;
+            //vgbFrameSource.TrackingIdLost += Source_TrackingIdLost;
 
             // open the reader for the vgb frames
             vgbFrameReader = vgbFrameSource.OpenReader();
             if (this.vgbFrameReader != null)
             {
                 vgbFrameReader.IsPaused = true;
+                vgbFrameReader.FrameArrived += VgbFrameReader_FrameArrived;
             }
 
             // load all gestures from the gesture database
-            using (  var database = new VisualGestureBuilderDatabase(_currentExercise.DBPath))
-            //using (var database = new VisualGestureBuilderDatabase(@"C:\Users\amirb\Desktop\Afeka\VideoTherapy\VideoTherapy - Client\VideoTherapy\VideoTherapy\VideoTherapy\DB\squat.gbd"))
-            //using (var database = new VisualGestureBuilderDatabase(_currentExercise.DBPath))
+            if (File.Exists(_currentExercise.DBPath))
             {
-                vgbFrameSource.AddGestures(database.AvailableGestures);
-
-                //setup the continuous gesture
-                foreach (var gesture in database.AvailableGestures)
+                using (var database = new VisualGestureBuilderDatabase(_currentExercise.DBPath))
                 {
-                    if (gesture.Name.Equals(_currentExercise.ContinuousGestureName))
+                    vgbFrameSource.AddGestures(database.AvailableGestures);
+
+                    //setup the continuous gesture
+                    foreach (var gesture in database.AvailableGestures)
                     {
-                        ContinuousGestureData = gesture;
-                        break;
+                        if (gesture.Name.Equals(_currentExercise.ContinuousGestureName))
+                        {
+                            ContinuousGestureData = gesture;
+                            break;
+                        }
+                    }
+                }
+
+                //todo - implmnt gesture disable
+                foreach (var gesutre in this.vgbFrameSource.Gestures)
+                {
+                    foreach (var notTrackGesture in _currentExercise.VTGestureList)
+                    {
+                        if (gesutre.Name.Equals(notTrackGesture.GestureName) && !notTrackGesture.IsTrack)
+                        {
+                            vgbFrameSource.SetIsEnabled(gesutre, false);
+                        }
                     }
                 }
             }
+            
+        }
 
-            //todo - implmnt gesture disable
-            foreach (var gesutre in this.vgbFrameSource.Gestures)
+        private void VgbFrameReader_FrameArrived(object sender, VisualGestureBuilderFrameArrivedEventArgs e)
+        {
+            float progress = 0;
+
+            //using (var frame = vgbFrameReader.CalculateAndAcquireLatestFrame())
+            using (var frame = e.FrameReference.AcquireFrame())
             {
-                foreach (var notTrackGesture in _currentExercise.VTGestureList)
+                if (frame != null)
                 {
-                    if (gesutre.Name.Equals(notTrackGesture.GestureName) && !notTrackGesture.IsTrack)
+                    // get all discrete and continuous gesture results that arrived with the latest frame
+                    var discreteResults = frame.DiscreteGestureResults;
+                    var continuousResults = frame.ContinuousGestureResults;
+
+                    if (discreteResults != null)
                     {
-                        vgbFrameSource.SetIsEnabled(gesutre, false);
+                        foreach (var gesture in vgbFrameSource.Gestures)
+                        {
+                            DiscreteGestureResult discreteResult = null;
+                            ContinuousGestureResult continuousResult = null;
+
+                            if (gesture.GestureType == GestureType.Discrete)
+                            {
+                                discreteResults.TryGetValue(gesture, out discreteResult);
+
+                                if (discreteResult != null)
+                                {
+                                    continuousResults.TryGetValue(ContinuousGestureData, out continuousResult);
+
+                                    if (continuousResult != null)
+                                    {
+                                        progress = continuousResult.Progress;
+
+                                        if (progress < 0f)
+                                        {
+                                            progress = 0.0f;
+                                        }
+                                        else if (progress > 1.0)
+                                        {
+                                            progress = 1.0f;
+                                        }
+                                    }
+                                }
+                            }
+
+                            //update the analyzer
+                            if (continuousResult != null && discreteResult != null)
+                            {
+                                //if (!StopDetection)
+                                _gestureAnalysis.UpdateGestureResult(gesture.Name, discreteResult, progress);
+                                
+                                //Console.WriteLine("Gesture {0}, confidance {1}, progress", gesture.Name, discreteResult.Confidence, progress);
+                            }
+                        }// foreach
+                    }//if (discrete != null)
+                    else
+                    {
+                        //_gestureAnalysis.CheckIfRoundSucces();
                     }
-                }
-            }
-
-
-            StopDetecion = false;
+                }//if (frame != null)
+            }//using
         }
 
         public void GestureDetectionToAnalyze()
@@ -135,14 +198,18 @@ namespace VideoTherapy.Kinect_Detection
                             }
 
                             //update the analyzer
-                            if (continuousResult != null && discreteResult != null && !StopDetecion)
+                            if (continuousResult != null && discreteResult != null)
                             {
+                                //if (!StopDetection)
                                 _gestureAnalysis.UpdateGestureResult(gesture.Name, discreteResult, progress);
                                 //Console.WriteLine("Gesture {0}, confidance {1}, progress", gesture.Name, discreteResult.Confidence, progress);
                             }
-
                         }// foreach
                     }//if (discrete != null)
+                    else
+                    {
+                        //_gestureAnalysis.CheckIfRoundSucces();
+                    }
                 }//if (frame != null)
             }//using
         }
@@ -189,19 +256,6 @@ namespace VideoTherapy.Kinect_Detection
                 }
             }
         }
-
-
-        /// <summary>
-        /// Handles the TrackingIdLost event for the VisualGestureBuilderSource object
-        /// </summary>
-        /// <param name="sender">object sending the event</param>
-        /// <param name="e">event arguments</param>
-        private void Source_TrackingIdLost(object sender, TrackingIdLostEventArgs e)
-        {
-            //todo - implmnt
-        }
-
-
 
         /// <summary>
         /// Disposes all unmanaged resources for the class

@@ -62,8 +62,8 @@ namespace VideoTherapy
             //    }
 
             //}
-            
-            Close();
+            Environment.Exit(Environment.ExitCode);
+            //Close();
         }
 
 

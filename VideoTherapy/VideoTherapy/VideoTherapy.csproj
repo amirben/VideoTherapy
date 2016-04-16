@@ -81,10 +81,12 @@
     <Compile Include="Kinect Utils\BackgroundRemovalTool.cs" />
     <Compile Include="Kinect Utils\DrawSkeleton.cs" />
     <Compile Include="Model-View\CircularProgress.cs" />
+    <Compile Include="Objects\Answer.cs" />
     <Compile Include="Objects\Exercise.cs" />
     <Compile Include="Objects\Patient.cs" />
     <Compile Include="Objects\Question.cs" />
     <Compile Include="Objects\Round.cs" />
+    <Compile Include="Objects\Session.cs" />
     <Compile Include="Objects\Therapist.cs" />
     <Compile Include="Objects\Training.cs" />
     <Compile Include="Objects\Treatment.cs" />
@@ -232,12 +234,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="DB\lower_limbs.gbd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="DB\squat.gbd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -309,6 +305,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\prev_session.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\question.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Content Include="XML\TreatmentsList.xml">

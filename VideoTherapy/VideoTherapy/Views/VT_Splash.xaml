@@ -11,10 +11,10 @@
             <ImageBrush ImageSource="..\Images\city_sunny_background.jpg"></ImageBrush>
         </Grid.Background>
         
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Width="220">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#7F000000">
                 <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="..\Images\vt_logo.png"/>
-                <Label Content="Loading your training" HorizontalContentAlignment="Center" FontFamily="Roboto" Foreground="White" FontSize="16"/>
+                <Label x:Name="LoadingMessage" Content="Loading your training" HorizontalContentAlignment="Center" FontFamily="Roboto" Foreground="White" FontSize="16"/>
             </StackPanel>
 
             <ProgressBar Minimum="0" Maximum="100" IsIndeterminate="True" Height="8" Background="Transparent" Foreground="#FF4FC3F7" BorderBrush="Transparent">

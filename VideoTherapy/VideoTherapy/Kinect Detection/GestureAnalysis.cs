@@ -37,23 +37,37 @@ namespace VideoTherapy.Kinect_Detection
                 {
                     //checking if it detected
                     // todo - add confidace threshold
-                    if (result.Detected && result.Confidence >= startGesture.ConfidanceTrshold)
+                    if (result.Detected ) //&& result.Confidence >= startGesture.ConfidanceTrshold)
                     {
                         startGesture.IsSuccess = result.Detected;
-                        startGesture.ConfidenceValue = result.Confidence;
+                        //startGesture.ConfidenceValue = result.Confidence;
                         CurrentExercise.isStart = true;
 
                         //throw event to UI
                         startGestureDeteced();
-                        //todo !! throw event to remove label
                     }
                 }
             }
+            //else if (progress <= 0)
+            //{
+            //    CheckIfRoundSucces();
+            //}
             //In case of regular gesture
             else
             {
                 CurrentExercise.CurrentRound.UpdateGestureDetection(gestureName, result, progress);
+
+                if (progress <= 0)
+                {
+                    CheckIfRoundSucces();
+                }
+
             }
+        }
+
+        public void CheckIfRoundSucces()
+        {
+            CurrentExercise.CurrentRound.CheckRoundSuccess();
         }
     }
 }

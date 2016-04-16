@@ -25,6 +25,7 @@ namespace VideoTherapy.Views.ExerciseScreen
         private DispatcherTimer showPopUpTimer;
         private int timerCounter = 0;
         private const int TIMER_COUNTER = 5;
+        private int countDown = TIMER_COUNTER;
 
         public NoTrackingPopUp()
         {
@@ -35,6 +36,8 @@ namespace VideoTherapy.Views.ExerciseScreen
             showPopUpTimer = new DispatcherTimer();
             showPopUpTimer.Interval = new TimeSpan(0, 0, 0, 1, 0);
             showPopUpTimer.Tick += ShowPopUpTimer_Tick;
+
+            CountdownText.Text = countDown.ToString();
         }
 
         private void ShowPopUpTimer_Tick(object sender, EventArgs e)
@@ -43,9 +46,14 @@ namespace VideoTherapy.Views.ExerciseScreen
             {
                 StopTimer();
                 timerCounter = 0;
+                countDown = TIMER_COUNTER;
+                CountdownText.Text = countDown.ToString();
+
                 ExerciseView.CloseNotTrackablePopUp();
             }
 
+            CountdownText.Text = countDown.ToString();
+            countDown--;
             timerCounter++;
         }
         public void StartTimer()
