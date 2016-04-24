@@ -47,23 +47,11 @@ namespace VideoTherapy
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             OpenLoginPopUp();
-
-            //CloseAppDelegate closeApp = new CloseAppDelegate(CloseApp);
-            //LogOutDelegate logOut = new LogOutDelegate(LogOut);
         }
 
         private void CloseApp(Patient _currentPatient)
         {
-            //if (_currentPatient != null)
-            //{
-            //    using (DownloadCache downloadCache = new DownloadCache(_currentPatient))
-            //    {
-            //        downloadCache.DeleteTempDir();
-            //    }
-
-            //}
             Environment.Exit(Environment.ExitCode);
-            //Close();
         }
 
 
@@ -96,11 +84,13 @@ namespace VideoTherapy
             }               
         }
 
-        private void OpenExerciseWindow()
+        public void OpenDistanceChecker(Patient _currentPatient, Training _currentTraining)
         {
-            //OpenningWindow.Children.Clear();
-            //OpenningWindow.Background = null;
-            //OpenningWindow.Children.Add(new ExerciseView());
+            using (DistanceWindow distanceWindow = new DistanceWindow(_currentPatient, _currentTraining))
+            {
+                distanceWindow.mainWindow = this;
+                this.Content = distanceWindow;
+            }
         }
 
         public void OpenTrainingWindow(Patient _currentPatient, Training _selectedTraining)
@@ -131,66 +121,12 @@ namespace VideoTherapy
 
         public void OpenExerciseWindow(Patient _currentPatient, Training _currentTraining)
         {
-            //var watch = System.Diagnostics.Stopwatch.StartNew();
-
-            //foreach (int key in _currentTraining.Playlist2.Keys)
-            //{
-            //    Exercise exercise = _currentTraining.Playlist2[key][1];
-            //    if (exercise.isTrackable)
-            //    {
-            //        string json = await ApiConnection.GetExerciseGesturesApiAsync(exercise.ExerciseId);
-            //        JSONConvertor.GettingExerciseGesture(exercise, json);
-
-            //        using (DownloadCache dc = new DownloadCache(_currentPatient))
-            //        {
-            //            dc.DownloadGDBfile(exercise);
-            //        }
-
-            //        foreach (var item in _currentTraining.Playlist2[key])
-            //        {
-            //            if (!item.isDemo && !item.Equals(exercise))
-            //            {
-            //                item.DBPath = exercise.DBPath;
-            //                item.CopyGesturesFromOrigin(exercise);
-            //            }
-
-            //        }
-            //    }
-
-            //}
-
-            //watch.Stop();
-            //var elapsedMs = watch.ElapsedMilliseconds;
-            //Console.WriteLine("Downloading gdb " + elapsedMs.ToString());
-
-            
-
-            //OpenningWindow.Background = null;
             using (ExerciseView _exerciseView = new ExerciseView(_currentPatient, _currentTraining))
             {
                 _exerciseView.MainWindow = this;
                 _exerciseView.GoBackToTreatmentScreen += OpenTreatmentWindow;
                 this.Content = _exerciseView;
             }
-        }
-
-        public void DownloadGDBOld()
-        {
-            ////download the gestures and .gdb files for the current training
-            //foreach (var exercise in _currentTraining.Playlist)
-            //{
-            //    if (!exercise.isDemo && !exercise.isDuplicate)
-            //    {
-            //        string json = await ApiConnection.GetExerciseGesturesApiAsync(exercise.ExerciseId);
-            //        JSONConvertor.GettingExerciseGesture(exercise, json);
-
-            //        using (DownloadCache dc = new DownloadCache(_currentPatient))
-            //        {
-            //            dc.DownloadGDBfile(exercise);
-            //        }
-            //    }
-
-            //}
         }
     }
 }

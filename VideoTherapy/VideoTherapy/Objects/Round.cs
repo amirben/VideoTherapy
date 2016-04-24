@@ -49,9 +49,10 @@ namespace VideoTherapy.Objects
                     _gesture.ProgressValue = _gestureProgress;
                 }
 
-                if (_gestureResult.Detected && _gesture.IsPassConfidanceTrshold() && _gesture.IsPassProgressTrshold() && !_gesture.IsSuccess)                                            
+                if (_gestureResult.Detected && _gesture.IsPassConfidanceTrshold() && _gesture.IsPassProgressTrshold() && !_gesture.IsSuccess && _gestureProgress > 0.1)                                            
                 {
-                    Console.WriteLine("Round {0}, G: {1}, prog: {2}, conf: {3}", RoundNumber, _gesture.GestureName, _gestureProgress, _gestureResult.Confidence);
+                    Console.WriteLine("Round {0}, G: {1}, prog: {2}, conf: {3}, Time: {4}, Detected {5}", RoundNumber, _gesture.GestureName, _gestureProgress, _gestureResult.Confidence
+                                        ,DateTime.Now.ToString("mm:ss:ffff"), _gestureResult.Detected);
 
                     _gesture.IsSuccess = true;
                     CheckProgress();

@@ -146,73 +146,73 @@ namespace VideoTherapy.Kinect_Detection
                             }
                         }// foreach
                     }//if (discrete != null)
-                    else
-                    {
-                        //_gestureAnalysis.CheckIfRoundSucces();
-                    }
+                    //else
+                    //{
+                    //    //_gestureAnalysis.CheckIfRoundSucces();
+                    //}
                 }//if (frame != null)
             }//using
         }
 
-        public void GestureDetectionToAnalyze()
-        {
-            float progress = 0;
+        //public void GestureDetectionToAnalyze()
+        //{
+        //    float progress = 0;
 
-            using (var frame = vgbFrameReader.CalculateAndAcquireLatestFrame())
-            {
-                if (frame != null)
-                {
-                    // get all discrete and continuous gesture results that arrived with the latest frame
-                    var discreteResults = frame.DiscreteGestureResults;
-                    var continuousResults = frame.ContinuousGestureResults;
+        //    using (var frame = vgbFrameReader.CalculateAndAcquireLatestFrame())
+        //    {
+        //        if (frame != null)
+        //        {
+        //            // get all discrete and continuous gesture results that arrived with the latest frame
+        //            var discreteResults = frame.DiscreteGestureResults;
+        //            var continuousResults = frame.ContinuousGestureResults;
                     
-                    if (discreteResults != null)
-                    {
-                        foreach (var gesture in vgbFrameSource.Gestures)
-                        {
-                            DiscreteGestureResult discreteResult = null;
-                            ContinuousGestureResult continuousResult = null;
+        //            if (discreteResults != null)
+        //            {
+        //                foreach (var gesture in vgbFrameSource.Gestures)
+        //                {
+        //                    DiscreteGestureResult discreteResult = null;
+        //                    ContinuousGestureResult continuousResult = null;
 
-                            if (gesture.GestureType == GestureType.Discrete)
-                            {
-                                discreteResults.TryGetValue(gesture, out discreteResult);
+        //                    if (gesture.GestureType == GestureType.Discrete)
+        //                    {
+        //                        discreteResults.TryGetValue(gesture, out discreteResult);
 
-                                if (discreteResult != null)
-                                {
-                                    continuousResults.TryGetValue(ContinuousGestureData, out continuousResult);
+        //                        if (discreteResult != null)
+        //                        {
+        //                            continuousResults.TryGetValue(ContinuousGestureData, out continuousResult);
 
-                                    if (continuousResult != null)
-                                    {
-                                        progress = continuousResult.Progress;
+        //                            if (continuousResult != null)
+        //                            {
+        //                                progress = continuousResult.Progress;
 
-                                        if (progress < 0f)
-                                        {
-                                            progress = 0.0f;
-                                        }
-                                        else if (progress > 1.0)
-                                        {
-                                            progress = 1.0f;
-                                        }
-                                    }
-                                }
-                            }
+        //                                if (progress < 0f)
+        //                                {
+        //                                    progress = 0.0f;
+        //                                }
+        //                                else if (progress > 1.0)
+        //                                {
+        //                                    progress = 1.0f;
+        //                                }
+        //                            }
+        //                        }
+        //                    }
 
-                            //update the analyzer
-                            if (continuousResult != null && discreteResult != null)
-                            {
-                                //if (!StopDetection)
-                                _gestureAnalysis.UpdateGestureResult(gesture.Name, discreteResult, progress);
-                                //Console.WriteLine("Gesture {0}, confidance {1}, progress", gesture.Name, discreteResult.Confidence, progress);
-                            }
-                        }// foreach
-                    }//if (discrete != null)
-                    else
-                    {
-                        //_gestureAnalysis.CheckIfRoundSucces();
-                    }
-                }//if (frame != null)
-            }//using
-        }
+        //                    //update the analyzer
+        //                    if (continuousResult != null && discreteResult != null)
+        //                    {
+        //                        //if (!StopDetection)
+        //                        _gestureAnalysis.UpdateGestureResult(gesture.Name, discreteResult, progress);
+        //                        //Console.WriteLine("Gesture {0}, confidance {1}, progress", gesture.Name, discreteResult.Confidence, progress);
+        //                    }
+        //                }// foreach
+        //            }//if (discrete != null)
+        //            else
+        //            {
+        //                //_gestureAnalysis.CheckIfRoundSucces();
+        //            }
+        //        }//if (frame != null)
+        //    }//using
+        //}
 
 
         /// <summary>

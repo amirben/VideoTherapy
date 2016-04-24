@@ -14,7 +14,6 @@ namespace VideoTherapy.Utils
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-
             if (value is Training)
             {
                 Training training = (Training)System.Convert.ChangeType(value, typeof(Training));
@@ -42,6 +41,42 @@ namespace VideoTherapy.Utils
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return this;
+        }
+    }
+
+    class LastTrainingDateConvertor : MarkupExtension, IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (value != null ? (value as DateTime?).Value.ToString("dd-MM-yyyy") : "n/a");
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return this;
+        }
+    }
+
+    class NAOrScoringConvertor : MarkupExtension, IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (!value.Equals(0) ? value : "n/a");
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
         }
 
         public override object ProvideValue(IServiceProvider serviceProvider)

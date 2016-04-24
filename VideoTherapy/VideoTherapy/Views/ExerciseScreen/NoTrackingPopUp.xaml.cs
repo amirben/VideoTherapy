@@ -64,6 +64,7 @@ namespace VideoTherapy.Views.ExerciseScreen
         public void StopTimer()
         {
             timerCounter = 0;
+            countDown = TIMER_COUNTER;
             showPopUpTimer.Stop();
         }
         public void SetSize(int height, int width)

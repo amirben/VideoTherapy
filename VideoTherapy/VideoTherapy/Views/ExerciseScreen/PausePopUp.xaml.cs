@@ -32,36 +32,36 @@ namespace VideoTherapy.Views.ExerciseScreen
 
         }
 
-        public void ShowHandlerDialog()
-        {
-            Visibility = Visibility.Visible;
+        //public void ShowHandlerDialog()
+        //{
+        //    Visibility = Visibility.Visible;
 
-            //_parent.IsEnabled = false;
+        //    //_parent.IsEnabled = false;
 
-            _hideRequest = false;
-            while (!_hideRequest)
-            {
-                // HACK: Stop the thread if the application is about to close
-                if (this.Dispatcher.HasShutdownStarted ||
-                    this.Dispatcher.HasShutdownFinished)
-                {
-                    break;
-                }
+        //    _hideRequest = false;
+        //    while (!_hideRequest)
+        //    {
+        //        // HACK: Stop the thread if the application is about to close
+        //        if (this.Dispatcher.HasShutdownStarted ||
+        //            this.Dispatcher.HasShutdownFinished)
+        //        {
+        //            break;
+        //        }
 
-                // HACK: Simulate "DoEvents"
-                this.Dispatcher.Invoke(
-                    DispatcherPriority.Background,
-                    new ThreadStart(delegate { }));
-                Thread.Sleep(20);
-            }
+        //        // HACK: Simulate "DoEvents"
+        //        this.Dispatcher.Invoke(
+        //            DispatcherPriority.Background,
+        //            new ThreadStart(delegate { }));
+        //        Thread.Sleep(20);
+        //    }
 
-        }
+        //}
 
-        private void HideHandlerDialog()
-        {
-            _hideRequest = true;
-            Visibility = Visibility.Hidden;
-        }
+        //private void HideHandlerDialog()
+        //{
+        //    _hideRequest = true;
+        //    Visibility = Visibility.Hidden;
+        //}
 
         public void SetSize(int height, int width)
         {

@@ -70,7 +70,15 @@ namespace VideoTherapy
 
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            MainWindow.OpenExerciseWindow(_currentPatient, _currentTraining);
+            if (_currentTraining.IsTraceableTraining)
+            {
+                MainWindow.OpenDistanceChecker(_currentPatient, _currentTraining);
+            }
+            else
+            {
+                MainWindow.OpenExerciseWindow(_currentPatient, _currentTraining);
+            }
+            
         }
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
@@ -92,7 +100,7 @@ namespace VideoTherapy
             watch = new System.Diagnostics.Stopwatch();
             watch.Start();
 
-            Thread downloadGDBThread = new Thread(DownloadGDBFiles);
+            Task downloadGDBThread = new Task(DownloadGDBFiles);
             downloadGDBThread.Start();
             
             AttachDelegates();
@@ -112,7 +120,7 @@ namespace VideoTherapy
                 Exercise exercise = _currentTraining.Playlist[key][1];
                 int newKey = key;
                
-                if (exercise.isTrackable && !exercise.Downloaded)
+                if (exercise.IsTrackable && !exercise.Downloaded)
                 {
                     downloadTrainingBarrier.AddParticipant();
 

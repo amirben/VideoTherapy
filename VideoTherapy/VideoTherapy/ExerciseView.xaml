@@ -67,7 +67,7 @@
 
             <StackPanel x:Name="ExerciseDetailsAndStatus" Orientation="Vertical" DockPanel.Dock="Left" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20" >
 
-                <StackPanel x:Name="ExerciseDetails" Background="#7F000000" Width="360" Height="340" Margin="15,0,15,15">
+                <StackPanel x:Name="ExerciseDetails" Background="#7F000000" Width="360" Height="360" Margin="15,0,15,15">
                     <Grid HorizontalAlignment="Stretch" Height="50"  >
                         <!--<Button x:Name="BackwardBtn" HorizontalAlignment="Left" Height="28" Width="28" Margin="10,10,0,5" Background="Transparent" BorderThickness="0" BorderBrush="Transparent">
                             <Button.Content>
@@ -82,8 +82,9 @@
                     </Grid>
 
                     <TextBlock x:Name="CurrentExerciseLbl" HorizontalAlignment="Stretch" Text="{Binding ExerciseNum, StringFormat='Exercise #{0}'}" VerticalAlignment="Center" TextAlignment="Left" FontSize="34"  Margin="25,0,0,0" FontWeight="Bold" Foreground="White" />
-                    <TextBlock x:Name="ExerciseNameLbl" TextWrapping="Wrap" HorizontalAlignment="Stretch" Text="{Binding ExerciseName}" VerticalAlignment="Center" TextAlignment="Left" FontSize="20"  Margin="25,0,0,0" FontWeight="Bold" Foreground="White" />
-
+                    <TextBlock x:Name="ExerciseNameLbl" TextWrapping="WrapWithOverflow" HorizontalAlignment="Stretch" Text="{Binding ExerciseName}" VerticalAlignment="Center" TextAlignment="Left"
+                                   FontSize="20"  Margin="25,0,0,0" FontWeight="Bold" Foreground="White"/>
+                   
 
                     <StackPanel x:Name="ExerciseTotalScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0" >
                         <Grid x:Name="RoundMotionQualityGrid"  Margin="0,0,15,0" HorizontalAlignment="Center">

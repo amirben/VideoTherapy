@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="VideoTherapy.Views.ExerciseScreen.MoreThenOnePopUp"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VideoTherapy.Views.ExerciseScreen"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="600">
+    <Border Visibility="{Binding Visibility}" Background="#90000000">
+
+        <Border Visibility="{Binding Visibility}"  BorderThickness="1" VerticalAlignment="Center"
+					HorizontalAlignment="Center">
+
+            <StackPanel x:Name="MoreThenOnePopUpStackpanel" Orientation="Vertical" Background="Black" >
+                <Image Source="../../images/paused.png" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50" Width="50" Margin="0,20,0,10"></Image>
+                <TextBlock Foreground="White" Text="Exercise Paused" HorizontalAlignment="Center" FontSize="50" Margin="0,0,0,10"></TextBlock>
+                <Line HorizontalAlignment="Stretch"  Stroke="#e43834" Margin="10,5,10,10" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"  StrokeThickness="2" />
+
+                <TextBlock Foreground="White" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" Padding="4" Margin="15,5,15,10">
+                    <Span>There is more then one preson detected.</Span>
+                    <LineBreak/>
+                    <Span>Please stay only one patient in front of the Kinect.</Span>
+                </TextBlock>
+
+                <TextBlock x:Name="ResumeTraining" Background="#e43834" Foreground="White" FontSize="36" FontWeight="Bold" TextAlignment="Center" Padding="8" Margin="15,15,15,10" Text="Resume training" MouseLeftButtonDown="ResumeTraining_MouseLeftButtonDown"/>
+
+            </StackPanel>
+        </Border>
+    </Border>
+</UserControl>

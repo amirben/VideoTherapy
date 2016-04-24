@@ -22,7 +22,7 @@
                     <Grid x:Name="MotionQualityGrid" Margin="0,0,15,0">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,-25,0,0">
                             <TextBlock x:Name="MotionQualityValue" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="44" Foreground="White" Text="91" />
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="28" Foreground="White" Text="%" />
+                            <TextBlock x:Name="MotionQualityPrecentLbl" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="28" Foreground="White" Text="%" />
                         </StackPanel>
 
                         <ProgressBar x:Name="MotionQualityProgressBar" Margin="0,0,0,25" Value="91">
@@ -36,14 +36,14 @@
                             </ProgressBar.Template>
                         </ProgressBar>
 
-                        <TextBlock Foreground="White" FontFamily="Roboto" FontSize="20" FontWeight="Normal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Training Compliance" Margin="0,20, 0, 0"/>
+                        <TextBlock Foreground="White" FontFamily="Roboto" FontSize="20" FontWeight="Normal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Training Repititions" Margin="0,20, 0, 0"/>
                     </Grid>
 
 
                     <Grid x:Name="RepetitionsGrid" Margin="15,0,0,0">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,-25,0,0">
                             <TextBlock x:Name="RepetitionScore" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="44" Foreground="White" Text="91" />
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="28" Foreground="White" Text="%" />
+                            <TextBlock x:Name="RepetitionScorePrecentLbl" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="28" Foreground="White" Text="%" />
                         </StackPanel>
 
                         <ProgressBar x:Name="RepetitionsProgressBar" Margin="0,0,0,25" Value="91">
@@ -57,7 +57,7 @@
                             </ProgressBar.Template>
                         </ProgressBar>
 
-                        <TextBlock Foreground="White" FontFamily="Roboto" FontSize="20" FontWeight="Normal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Training Score" Margin="0,25, 0, 0"/>
+                        <TextBlock Foreground="White" FontFamily="Roboto" FontSize="20" FontWeight="Normal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Training Quality" Margin="0,25, 0, 0"/>
                     </Grid>
                 </StackPanel>
 

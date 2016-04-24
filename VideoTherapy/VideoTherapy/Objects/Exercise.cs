@@ -35,18 +35,18 @@ namespace VideoTherapy.Objects
         public Boolean Downloaded { set; get; }
         public Boolean isLastDuplicate { set; get; }
 
-        public Boolean isPause { set; get; }
-        public Boolean isStart { set; get; }
+        public Boolean IsFinish { set; get; }
+        public Boolean IsStart { set; get; }
 
         //Exercise gestures -> used for init gesture list for this exercise
-        public Boolean isTrackable { set; get; }
+        public Boolean IsTrackable { set; get; }
         public List<VTGesture> VTGestureList { set; get; }
         public string ContinuousGestureName { set; get; }
         public VTGesture StartGesutre { set; get; }
      
-        public Boolean isSucceed { set; get; }
+        public Boolean IsSucceed { set; get; }
         public Boolean IsPlayed { set; get;}
-
+        public int VideoComplianceValue { set; get; }
         //Rounds
         public ObservableCollection<Round> Rounds;
         public Round CurrentRound { set; get; }
@@ -60,59 +60,51 @@ namespace VideoTherapy.Objects
         //Events
         public event PropertyChangedEventHandler PropertyChanged;
         public event ExerciseView.NextRoundUpdataDelegate NextRoundUpdateUIEvent;
-        //public event ExerciseView.StopDetectionDelegate StopDetectionEvent;
         public event ExerciseView.UpdateLastRound UpdateLastRound;
 
         public delegate void NextRoundDelegate();
               
 
-        public Exercise()
-        {
-           // NextRoundDelegate nextRoundDelegate = new NextRoundDelegate(NextRoundEvent);
+        public Exercise() {  }
 
-        }
-
-        public void AddNextRoundEvent()
+        public void CheckComplianceOfExercise(int videoPosition)
         {
-            //CurrentRound.NextRoundEvent += new NextRoundDelegate(NextRoundEvent);
-            //NextRoundDelegate nextRoundDelegate = new NextRoundDelegate(NextRoundEvent);
-            CurrentRound.NextRoundEvent += NextRoundEvent;
+            if (videoPosition >= VideoComplianceValue)
+            {
+                IsPlayed = true;
+            }
+            else
+            {
+                IsPlayed = false;
+            }
+
+            
         }
 
         //Next round
         public void NextRoundEvent()
         {
-            //StopDetectionEvent();
-
-            if (!isPause)
+            if (!IsFinish)
             {
                 RoundIndex++;
-                this.NotifyPropertyChanged("RoundNumber");
-                this.NotifyPropertyChanged("RoundProgress");
-                UpdateLastRound();
 
                 //Scoring update
                 ExerciseMotionScore = Convert.ToInt32(Scoring.GetExerciseScore(this));
                 this.NotifyPropertyChanged("ExerciseMotionScore");
 
+                CurrentRound = Rounds[RoundIndex];
                 if (RoundIndex < Repetitions)
                 {
-                    //Stop detecion
-
                     //changing the round and add event to him
-                    CurrentRound = Rounds[RoundIndex];
-                    AddNextRoundEvent();
-
-                    //printstatus();
-
-                    //update UI of the change
-                    NextRoundUpdateUIEvent();
+                    CurrentRound.NextRoundEvent += NextRoundEvent;
                 }
                 else
                 {
-                    UpdateLastRound();
-                    isPause = true;
+                    IsFinish = true;
                 }
+
+                //update UI of the change
+                NextRoundUpdateUIEvent();
             }
         }
 
@@ -120,7 +112,7 @@ namespace VideoTherapy.Objects
         public int SumUpExerciseRepetitions()
         {
             int numOfSuccesRound = 0;
-            if (isTrackable)
+            if (IsTrackable)
             {
                 foreach (var round in Rounds)
                 {
@@ -131,12 +123,12 @@ namespace VideoTherapy.Objects
                 }
 
                 ExerciseRepetitionDone = numOfSuccesRound;
-                isSucceed = (numOfSuccesRound / Repetitions) * 100 > 50 ? true : false;
+                IsSucceed = (numOfSuccesRound / Repetitions) * 100 > 50 ? true : false;
             }
             else
             {
                 ExerciseRepetitionDone = 0;
-                isSucceed = false;
+                IsSucceed = false;
             }
 
             return ExerciseRepetitionDone;
@@ -145,37 +137,24 @@ namespace VideoTherapy.Objects
 
         public void ClearAllDataInExercise()
         {
-            isStart = false;
-            isSucceed = false;
+            IsStart = false;
+            IsSucceed = false;
             RoundIndex = 0;
             Rounds = null;
+
+            IsPlayed = false;
+            IsFinish = false;
+
+            ExerciseMotionScore = 0;
+            ExerciseRepetitionDone = 0;
             ExerciseScore = null;
-        }
-
-        private void printstatus()
-        {
-
-            Console.WriteLine("=============== In Exercise ==================");
-            Console.WriteLine(CurrentRound.RoundProgress);
-            Console.WriteLine(CurrentRound.RoundSuccess);
-            Console.WriteLine("Current round {0}",CurrentRound.RoundNumber);
-            //Console.WriteLine("Exe: " + this.GetHashCode());
-            Console.WriteLine();
-            foreach (var item in CurrentRound.GestureList)
-            {
-                Console.WriteLine(item.Key);
-                Console.WriteLine(item.Value.IsSuccess);
-                Console.WriteLine(item.Value.ProgressValue);
-                Console.WriteLine(item.Value.TrsholdProgressValue);
-                Console.WriteLine();
-            }
         }
 
         //Create rounds for exercise
         public void CreateRounds()
         {
             Rounds = new ObservableCollection<Round>();
-            for (int i = 0; i < Repetitions; i++)
+            for (int i = 0; i <= Repetitions; i++)
             {
                 Round round = new Round(i, Repetitions);
                 
@@ -191,7 +170,7 @@ namespace VideoTherapy.Objects
             }
 
             CurrentRound = Rounds[0];
-            AddNextRoundEvent();
+            CurrentRound.NextRoundEvent += NextRoundEvent;
         }
 
         /// <summary>

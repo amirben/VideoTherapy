@@ -69,7 +69,7 @@ namespace VideoTherapy.Utils
 
         //todo - ExerciceQuality - like in the above, need to change
 
-        public static float GetTrainingScore(Training CurrentTraining)
+        public static int GetTrainingScore(Training CurrentTraining)
         {
             int numOfSuccess = 0;
             int numOfExercises = 0;
@@ -96,10 +96,10 @@ namespace VideoTherapy.Utils
                 //}
             }
 
-            return (numOfSuccess / numOfExercises) * 100;
+            return (numOfExercises != 0) ? (int) (numOfSuccess / (int) numOfExercises) * 100 : 0;
         }
 
-        public static float GetTrainingQuailty(Training CurrentTraining)
+        public static int GetTrainingQuailty(Training CurrentTraining)
         {
             float avg = 0;
             int numOfExe = 0;
@@ -124,7 +124,8 @@ namespace VideoTherapy.Utils
                 //}
             }
 
-            return avg / numOfExe;
+            
+            return (numOfExe != 0) ? (int) (avg / numOfExe) : 0;
         }
 
 

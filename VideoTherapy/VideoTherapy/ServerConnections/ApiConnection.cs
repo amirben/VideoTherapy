@@ -48,7 +48,9 @@ namespace VideoTherapy.ServerConnections
         /// Enum that represent the types of the API
         /// </summary>
         private enum ApiType { AppLogin, GetUserData, GetTreatment, GetTraining, GetExerciseGestures,
-                                ReportExercise, GetTreatmentByUser, ReportTrainingFeedback };
+                                ReportExercise, GetTreatmentByUser, ReportTrainingFeedback,
+                                ReportTrainingCompliance
+        };
 
         /// <summary>
         /// Initializes a new dictionary that represent the tuples for the REST-api request
@@ -110,7 +112,12 @@ namespace VideoTherapy.ServerConnections
                 case ApiType.ReportTrainingFeedback:
                     ApiTypeString = "treatments/report-training-feedback";
                     break;
-            }
+
+                case ApiType.ReportTrainingCompliance:
+                    ApiTypeString = "calendar/set-completed-event";
+                    break;
+                   
+                 }
         }
 
         /// <summary>
@@ -218,6 +225,19 @@ namespace VideoTherapy.ServerConnections
             Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.ReportExercise, "exerciseId", exercise.ExerciseId.ToString(), "numRepitionTotal", exercise.ExerciseScore.TotalRepetitions.ToString(),
                                                                         "numRepitionDone", exercise.ExerciseScore.TotalRepetitionsDone.ToString(), "motionQuality", exercise.ExerciseScore.MoitionQuality.ToString(),
                                                                         "calGuid", training.CalGuid, "calEventId", training.CalEventId );
+
+            return await ConnectingApiAsync(_pairs);
+        }
+
+        /// <summary>
+        /// Report training compliance, use only when compliance pass the value
+        /// <param name="training">Current training</param>
+        /// </summary>
+        public static async Task<string> ReportTrainingComplianceApiAsync(Training training)
+        {
+            //todo - add scoring data in exercise class
+            Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.ReportTrainingCompliance, "calGuid", training.CalGuid,
+                                                "eventId", training.CalEventId);
 
             return await ConnectingApiAsync(_pairs);
         }

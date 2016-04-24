@@ -12,21 +12,25 @@ namespace VideoTherapy.Objects
         public int TrainingId { set; get; }
         public int TrainingNumber { set; get; }
         public string TrainingName { set; get; }
-        public bool isRecommended { set; get; }
+        public bool IsRecommended { set; get; }
         public int Repetitions { set; get; }
         public int TrainingCompleted { set; get; }
-        public DateTime LastViewed { set; get; }
+        public DateTime? LastViewed { set; get; }
         public string TrainingThumbs { set; get; }
         public string CalGuid { set; get; }
         public string CalEventId { set; get; }
+        public float TrainingComplianceValue { set; get; }
 
         public Dictionary<int, List<Exercise>> Playlist { set; get; }
 
+        public Boolean IsTraceableTraining { set; get; }
         public Boolean Downloaded { set; get;}
         public Boolean SkipDemo { set; get; } 
 
         public int TrainingScore { set; get; }
         public int TrainingCompliance { set; get; }
+
+        public Boolean TrainingComplianceFlag { set; get; }
 
         public Exercise CurrentExercise { set; get; }
 
@@ -38,12 +42,12 @@ namespace VideoTherapy.Objects
             Score sessionScore = new Score();
 
             //currently sending only tracking exercises
-            if (Playlist[sessionId][1].isTrackable)
+            if (Playlist[sessionId][1].IsTrackable)
             {
                 int numOfExercisesStart = 0;
                 foreach (Exercise exercise in Playlist[sessionId])
                 {
-                    if (!exercise.isDemo && exercise.isStart) //only if exercise as been started it will calculate the score
+                    if (!exercise.isDemo && exercise.IsStart) //only if exercise as been started it will calculate the score
                     {
                         numOfExercisesStart++;
 
@@ -57,11 +61,9 @@ namespace VideoTherapy.Objects
 
                 Playlist[sessionId][1].ExerciseScore = sessionScore;
 
-                //todo - send to server
+                //send to server
                 var response = await ApiConnection.ReportExerciseScoreApiAsync(Playlist[sessionId][1], this);
-
-                Console.WriteLine(sessionScore);
-                Console.WriteLine(response);
+                Console.WriteLine("Send exercise to server response: " + response);
             }
 
         }
@@ -152,6 +154,32 @@ namespace VideoTherapy.Objects
             }
         }
 
+        public bool CheckTrainingCompliance()
+        {
+            int numOfPlayed = 0;
+            int numOfExercises = 0;
+
+            foreach (var exercises in Playlist.Values)
+            {
+                foreach (var exercise in exercises)
+                {
+                    if (!exercise.isDemo)
+                    {
+                        if (exercise.IsPlayed)
+                        {
+                            numOfPlayed++;
+                        }
+                        numOfExercises++;
+                    }
+                }
+               
+            }
+
+            float t = (numOfPlayed / (float) numOfExercises);
+            TrainingComplianceFlag = t > TrainingComplianceValue;
+            return TrainingComplianceFlag;
+        }
+
         public void ClearTrainingData()
         {
             foreach (var key in Playlist.Keys)
@@ -164,8 +192,6 @@ namespace VideoTherapy.Objects
                     }
                 }
             }
-
-            
         }
     }
 }

@@ -28,7 +28,7 @@ namespace VideoTherapy.Kinect_Detection
         public void UpdateGestureResult(string gestureName, DiscreteGestureResult result, float progress)
         {
             //Checking for start geture
-            if (!CurrentExercise.isStart)
+            if (!CurrentExercise.IsStart)
             {
                 VTGesture startGesture = CurrentExercise.StartGesutre;
 
@@ -41,27 +41,27 @@ namespace VideoTherapy.Kinect_Detection
                     {
                         startGesture.IsSuccess = result.Detected;
                         //startGesture.ConfidenceValue = result.Confidence;
-                        CurrentExercise.isStart = true;
+                        CurrentExercise.IsStart = true;
 
                         //throw event to UI
                         startGestureDeteced();
                     }
                 }
             }
-            //else if (progress <= 0)
-            //{
-            //    CheckIfRoundSucces();
-            //}
-            //In case of regular gesture
             else
             {
-                CurrentExercise.CurrentRound.UpdateGestureDetection(gestureName, result, progress);
-
-                if (progress <= 0)
+                if (!CurrentExercise.IsFinish)
                 {
-                    CheckIfRoundSucces();
-                }
+                    if (progress <= 0 && result.Confidence <= 0.001f && !result.Detected)
+                    {
+                        CheckIfRoundSucces();
+                    }
 
+                    else
+                    {
+                        CurrentExercise.CurrentRound.UpdateGestureDetection(gestureName, result, progress);
+                    }
+                }
             }
         }
 

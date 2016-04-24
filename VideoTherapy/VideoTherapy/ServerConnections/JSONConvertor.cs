@@ -186,7 +186,7 @@ namespace VideoTherapy.ServerConnections
                 //todo 
                 foreach (var training in treatment.TrainingList)
                 {
-                    if (training.isRecommended)
+                    if (training.IsRecommended)
                     {
                         treatment.RecommendedTraining = training;
                         break;
@@ -245,6 +245,10 @@ namespace VideoTherapy.ServerConnections
 
                     newTraining.LastViewed = tempDateTime;
                 }
+                else
+                {
+                    newTraining.LastViewed = null;
+                }
                 
                 //add scoring!!
                 Dictionary<string, float> scoringDic = JsonConvert.DeserializeObject<Dictionary<string, float>>(currentObj["session_usage"].ToString());
@@ -286,7 +290,7 @@ namespace VideoTherapy.ServerConnections
                 currentObj.TryGetValue("upcomingEvent", out checkUpComming);
                 if (checkUpComming != null && (Boolean)checkUpComming)
                 {
-                    newTraining.isRecommended = true;
+                    newTraining.IsRecommended = true;
                 }
 
 
@@ -294,8 +298,11 @@ namespace VideoTherapy.ServerConnections
                 currentObj.TryGetValue("cal_guid", out calGuid);
                 newTraining.CalGuid = calGuid.ToString();
 
-                currentObj.TryGetValue("next_cal_event_id", out calGuid);
-                newTraining.CalGuid = calGuid.ToString();
+                object calEvent;
+                currentObj.TryGetValue("next_cal_event_id", out calEvent);
+                newTraining.CalEventId = calEvent.ToString();
+
+                newTraining.TrainingComplianceValue = 0.6f;
             }
 
             return trainingList;
@@ -358,8 +365,9 @@ namespace VideoTherapy.ServerConnections
                     newExercise.Repetitions = item.exerciseCycles;
                     newExercise.ExerciseNum = numOfExercises;
                     newExercise.SessionId = item.sessionId;
-                    newExercise.isTrackable = item.isTrackable;
+                    newExercise.IsTrackable = item.isTrackable;
                     newExercise.Mode = (bool) item.isTrackable ? Exercise.ExerciseMode.Traceable : Exercise.ExerciseMode.NonTraceable;
+                    newExercise.VideoComplianceValue = 2;
 
                     //for future download for not duplicate the same file
                     if (i != 1)
@@ -370,6 +378,16 @@ namespace VideoTherapy.ServerConnections
                     numOfExercises++;
 
                     _training.Playlist[temp].Add(newExercise);
+                }
+
+            }
+
+            foreach (var exercises in _training.Playlist.Values)
+            {
+                if (exercises[1].IsTrackable)
+                {
+                    _training.IsTraceableTraining = true;
+                    break;
                 }
             }
         }

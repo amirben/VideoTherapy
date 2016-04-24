@@ -86,7 +86,7 @@
     <Compile Include="Objects\Patient.cs" />
     <Compile Include="Objects\Question.cs" />
     <Compile Include="Objects\Round.cs" />
-    <Compile Include="Objects\Session.cs" />
+    <Compile Include="Objects\Score.cs" />
     <Compile Include="Objects\Therapist.cs" />
     <Compile Include="Objects\Training.cs" />
     <Compile Include="Objects\Treatment.cs" />
@@ -106,6 +106,12 @@
     <Compile Include="Utils\HttpsReplaceToHttp.cs" />
     <Compile Include="Utils\Scoring.cs" />
     <Compile Include="Utils\TrainingValueToColorConvert.cs" />
+    <Compile Include="Views\DistanceWindow.xaml.cs">
+      <DependentUpon>DistanceWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExerciseScreen\MoreThenOnePopUp.xaml.cs">
+      <DependentUpon>MoreThenOnePopUp.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ExerciseScreen\NoTrackingPopUp.xaml.cs">
       <DependentUpon>NoTrackingPopUp.xaml</DependentUpon>
     </Compile>
@@ -152,6 +158,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TreatmentMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DistanceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExerciseScreen\MoreThenOnePopUp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
