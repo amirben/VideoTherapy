@@ -15,7 +15,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid.Background>
-            <ImageBrush ImageSource="Images\city_sunny_background.jpg"></ImageBrush>
+            <ImageBrush ImageSource="Images\background.jpg"></ImageBrush>
         </Grid.Background>
 
     </Grid>

@@ -70,15 +70,15 @@ namespace VideoTherapy
 
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (_currentTraining.IsTraceableTraining)
-            {
-                MainWindow.OpenDistanceChecker(_currentPatient, _currentTraining);
-            }
-            else
-            {
-                MainWindow.OpenExerciseWindow(_currentPatient, _currentTraining);
-            }
-            
+            //if (_currentTraining.IsTraceableTraining)
+            //{
+            //    MainWindow.OpenDistanceChecker(_currentPatient, _currentTraining);
+            //}
+            //else
+            //{
+            //    MainWindow.OpenExerciseWindow(_currentPatient, _currentTraining);
+            //}
+            MainWindow.OpenExerciseWindow(_currentPatient, _currentTraining);
         }
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)

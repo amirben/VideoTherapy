@@ -126,7 +126,8 @@ namespace VideoTherapy.ServerConnections
             _patient.UserProfileLink = o.data.profileUrl;
 
             _patient.PatientTreatment = new Treatment();
-            _patient.PatientTreatment.TreatmentId = o.data.treatmentIds;
+            Console.WriteLine(o.data.treatmentIds[0]);
+            _patient.PatientTreatment.TreatmentId = o.data.treatmentIds[0];
 
         }
 
