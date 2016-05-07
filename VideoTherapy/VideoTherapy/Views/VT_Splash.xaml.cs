@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using VideoTherapy.ServerConnections;
 
 namespace VideoTherapy.Views
 {
@@ -24,6 +25,9 @@ namespace VideoTherapy.Views
         public DispatcherTimer MessageTimer;
         private int timeCounter = 0;
 
+        public event EventHandler ErrorEvent;
+        public event MainWindow.CloseAppDelegate CloseApp;
+
         public VT_Splash()
         {
             InitializeComponent();
@@ -31,7 +35,6 @@ namespace VideoTherapy.Views
             MessageTimer = new DispatcherTimer();
             MessageTimer.Interval = new TimeSpan(0, 0, 1);
             MessageTimer.Tick += MessageTimer_Tick;
-            
         }
 
         private void MessageTimer_Tick(object sender, EventArgs e)
@@ -46,8 +49,12 @@ namespace VideoTherapy.Views
                 case 10:
                     LoadingMessage.Content = "We are almost there!";
                     break;
-                case 30:
+                case 25:
                     LoadingMessage.Content = "Takes more than usual...";
+                    break;
+                case 30:
+                    StopLoadingMessages();
+                    ErrorEvent(null, new ErrorMessege("We had problem to login, try again", 0));
                     break;
             }
         }
@@ -65,6 +72,12 @@ namespace VideoTherapy.Views
         {
             MessageTimer.Stop();
             
+        }
+
+        private void CloseButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            CloseApp(null);
+
         }
     }
 }

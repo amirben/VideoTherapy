@@ -70,11 +70,11 @@
             <StackPanel x:Name="TrainingScore" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,45,0,0">
                 <Grid x:Name="MotionQualityGrid"  Margin="0,0,15,0">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,-40,0,0">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="{Binding TrainingCompliance}" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="White" Text="{Binding TrainingQuality}" />
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="36" Foreground="White" Text="%" />
                     </StackPanel>
 
-                    <ProgressBar x:Name="MotionQualityProgressBar" Margin="10,0,10,45" Value="{Binding TrainingCompliance}">
+                    <ProgressBar x:Name="MotionQualityProgressBar" Margin="10,0,10,45" Value="{Binding TrainingQuality}">
                         <ProgressBar.Template>
                             <ControlTemplate>
                                 <Grid>
@@ -85,7 +85,7 @@
                         </ProgressBar.Template>
                     </ProgressBar>
 
-                    <TextBlock  Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Training Compliance" Margin="34,0,21.6,0.2"/>
+                    <TextBlock  Foreground="White" FontFamily="Roboto" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="Training Quality" Margin="34,0,21.6,0.2"/>
                 </Grid>
 
 

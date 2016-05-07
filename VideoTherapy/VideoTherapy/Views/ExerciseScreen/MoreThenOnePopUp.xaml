@@ -12,14 +12,17 @@
 					HorizontalAlignment="Center">
 
             <StackPanel x:Name="MoreThenOnePopUpStackpanel" Orientation="Vertical" Background="Black" >
-                <Image Source="../../images/paused.png" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50" Width="50" Margin="0,20,0,10"></Image>
+                <Image x:Name="pauseImg" Source="../../images/paused.png" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50" Width="50" Margin="0,20,0,10"></Image>
+                <Border x:Name="countDownTextBorder" CornerRadius="26" Background="#ff8e00" VerticalAlignment="Top" Margin="0,20,0,10" HorizontalAlignment="Center" Width="50" Height="50" Visibility="Collapsed">
+                    <TextBlock x:Name="CountdownText" FontFamily="Roboto" FontSize="40" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
                 <TextBlock Foreground="White" Text="Exercise Paused" HorizontalAlignment="Center" FontSize="50" Margin="0,0,0,10"></TextBlock>
                 <Line HorizontalAlignment="Stretch"  Stroke="#e43834" Margin="10,5,10,10" X2="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"  StrokeThickness="2" />
 
                 <TextBlock Foreground="White" FontSize="30" TextAlignment="Center" TextWrapping="WrapWithOverflow" Padding="4" Margin="15,5,15,10">
                     <Span>There is more then one preson detected.</Span>
                     <LineBreak/>
-                    <Span>Please stay only one patient in front of the Kinect.</Span>
+                    <Span>Only one patient can be front of the Kinect.</Span>
                 </TextBlock>
 
                 <TextBlock x:Name="ResumeTraining" Background="#e43834" Foreground="White" FontSize="36" FontWeight="Bold" TextAlignment="Center" Padding="8" Margin="15,15,15,10" Text="Resume training" MouseLeftButtonDown="ResumeTraining_MouseLeftButtonDown"/>

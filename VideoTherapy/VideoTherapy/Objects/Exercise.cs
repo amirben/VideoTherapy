@@ -39,13 +39,14 @@ namespace VideoTherapy.Objects
         public Boolean IsStart { set; get; }
 
         //Exercise gestures -> used for init gesture list for this exercise
-        public Boolean IsTrackable { set; get; }
+        public Boolean IsTraceable { set; get; }
         public List<VTGesture> VTGestureList { set; get; }
         public string ContinuousGestureName { set; get; }
         public VTGesture StartGesutre { set; get; }
      
         public Boolean IsSucceed { set; get; }
-        public Boolean IsPlayed { set; get;}
+        public float SuccessRate { set; get; }
+        public Boolean IsCompliance { set; get;}
         public int VideoComplianceValue { set; get; }
         //Rounds
         public ObservableCollection<Round> Rounds;
@@ -53,7 +54,7 @@ namespace VideoTherapy.Objects
         public int RoundIndex = 0;
 
         //Score
-        public int ExerciseMotionScore { set; get; }
+        public int ExerciseMotionScore { set; get; } //quailty
         public int ExerciseRepetitionDone { set; get; }
         public Score ExerciseScore { set; get; }
 
@@ -71,11 +72,11 @@ namespace VideoTherapy.Objects
         {
             if (videoPosition >= VideoComplianceValue)
             {
-                IsPlayed = true;
+                IsCompliance = true;
             }
             else
             {
-                IsPlayed = false;
+                IsCompliance = false;
             }
 
             
@@ -89,7 +90,7 @@ namespace VideoTherapy.Objects
                 RoundIndex++;
 
                 //Scoring update
-                ExerciseMotionScore = Convert.ToInt32(Scoring.GetExerciseScore(this));
+                ExerciseMotionScore = Convert.ToInt32(Scoring.GetExerciseMotionScore(this));
                 this.NotifyPropertyChanged("ExerciseMotionScore");
 
                 CurrentRound = Rounds[RoundIndex];
@@ -112,7 +113,7 @@ namespace VideoTherapy.Objects
         public int SumUpExerciseRepetitions()
         {
             int numOfSuccesRound = 0;
-            if (IsTrackable)
+            if (IsTraceable)
             {
                 foreach (var round in Rounds)
                 {
@@ -123,7 +124,10 @@ namespace VideoTherapy.Objects
                 }
 
                 ExerciseRepetitionDone = numOfSuccesRound;
-                IsSucceed = (numOfSuccesRound / Repetitions) * 100 > 50 ? true : false;
+                float t =  numOfSuccesRound / (float) Repetitions;
+                IsSucceed = (numOfSuccesRound / (float)Repetitions) > SuccessRate ? true : false;
+
+                Console.WriteLine("Ex id {0}, Succeed = {1}, succeed/rep = {2}", ExerciseId, IsSucceed, numOfSuccesRound / (float) Repetitions);
             }
             else
             {
@@ -142,7 +146,7 @@ namespace VideoTherapy.Objects
             RoundIndex = 0;
             Rounds = null;
 
-            IsPlayed = false;
+            IsCompliance = false;
             IsFinish = false;
 
             ExerciseMotionScore = 0;

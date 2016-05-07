@@ -15,7 +15,7 @@
                 <StackPanel x:Name="NoTrackingPopup" Orientation="Vertical" Background="Black" >
                     <!--<Image Source="../../images/info.png" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50" Width="50" Margin="0,20,0,10"></Image>-->
                     <Border CornerRadius="26" Background="#4fc3f7" VerticalAlignment="Top" Margin="0,20,0,10" HorizontalAlignment="Center" Width="45" Height="45">
-                        <TextBlock x:Name="CountdownText" FontFamily="Roboto" FontSize="40" Foreground="White" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="CountdownText" FontFamily="Roboto" FontSize="40" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     
                     <TextBlock Foreground="White" Text="Tracking is unavaliable" HorizontalAlignment="Center" FontSize="46" Margin="0,0,0,10"></TextBlock>

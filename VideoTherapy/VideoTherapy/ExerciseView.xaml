@@ -188,7 +188,7 @@
                 </Border>
 
                 <Image x:Name="ClosePlayerButton" Grid.Column="2" Source=".\Images\close.png" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                       Height="70" Width="70" Margin="5,0" MouseLeftButtonDown="GoBackTreatmentButton_MouseDown" ToolTip="Back to treatment"/>
+                       Height="70" Width="70" Margin="5,0" MouseLeftButtonDown="GoBackTreatmentButton_MouseDown" ToolTip="Back to treatment" IsHitTestVisible="True"/>
 
             </Grid>
 

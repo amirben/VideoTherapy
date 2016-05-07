@@ -116,8 +116,6 @@ namespace VideoTherapy.Views.ExerciseScreen
             string json = JsonConvert.SerializeObject(questionList);
 
             string response = await ApiConnection.ReportTrainingFeedback(json, ExerciseView.CurrentTraining.CalGuid, ExerciseView.CurrentTraining.CalEventId);
-
-            Console.WriteLine(response);
         }
 
 

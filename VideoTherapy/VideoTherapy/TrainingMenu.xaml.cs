@@ -45,6 +45,7 @@ namespace VideoTherapy
         private VT_Splash splash;
         private BackgroundWorker worker;
         private const int FIRST_EXERCISE = 1;
+        private bool userInDistance = false;
 
         //close app
         public event MainWindow.CloseAppDelegate CloseApp;
@@ -62,6 +63,7 @@ namespace VideoTherapy
             this.Loaded += TrainingMenu_Loaded;
 
             splash = new VT_Splash();
+            //splash.ErrorEvent+=
 
             worker = new BackgroundWorker();
             worker.DoWork += Worker_DoWork;
@@ -70,6 +72,10 @@ namespace VideoTherapy
 
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            if (userInDistance)
+            {
+                MainWindow.OpenExerciseWindow(_currentPatient, _currentTraining);
+            }
             //if (_currentTraining.IsTraceableTraining)
             //{
             //    MainWindow.OpenDistanceChecker(_currentPatient, _currentTraining);
@@ -78,7 +84,8 @@ namespace VideoTherapy
             //{
             //    MainWindow.OpenExerciseWindow(_currentPatient, _currentTraining);
             //}
-            MainWindow.OpenExerciseWindow(_currentPatient, _currentTraining);
+
+            //MainWindow.OpenExerciseWindow(_currentPatient, _currentTraining);
         }
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
@@ -120,7 +127,7 @@ namespace VideoTherapy
                 Exercise exercise = _currentTraining.Playlist[key][1];
                 int newKey = key;
                
-                if (exercise.IsTrackable && !exercise.Downloaded)
+                if (exercise.IsTraceable && !exercise.Downloaded)
                 {
                     downloadTrainingBarrier.AddParticipant();
 
@@ -239,11 +246,25 @@ namespace VideoTherapy
 
         private void _trainingSelection_StartPlaylist(Training currentTraining)
         {
-            this.Content = splash;
-            splash.MessageTimer.Stop();
+            if (_currentTraining.IsTraceableTraining)
+            {
+                using (DistanceWindow distance = new DistanceWindow(_currentPatient, currentTraining))
+                {
+                    this.Content = distance;
+                    distance.trainingMenu = this;
+                }
+                //MainWindow.OpenDistanceChecker(_currentPatient, _currentTraining);
+            }
 
             worker.RunWorkerAsync();
             //barrier.SignalAndWait();
+        }
+
+        public void OpenSplash()
+        {
+            userInDistance = true;
+            this.Content = splash;
+            splash.MessageTimer.Stop();
         }
     }
 }

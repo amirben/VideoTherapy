@@ -221,12 +221,16 @@ namespace VideoTherapy.ServerConnections
         /// </summary>
         public static async Task<string> ReportExerciseScoreApiAsync(Exercise exercise, Training training)
         {
-            //todo - add scoring data in exercise class
-            Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.ReportExercise, "exerciseId", exercise.ExerciseId.ToString(), "numRepitionTotal", exercise.ExerciseScore.TotalRepetitions.ToString(),
-                                                                        "numRepitionDone", exercise.ExerciseScore.TotalRepetitionsDone.ToString(), "motionQuality", exercise.ExerciseScore.MoitionQuality.ToString(),
-                                                                        "calGuid", training.CalGuid, "calEventId", training.CalEventId );
+            if (!training.CalEventId.Equals(""))
+            {
+                Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.ReportExercise, "exerciseId", exercise.ExerciseId.ToString(), "numRepitionTotal", exercise.ExerciseScore.TotalRepetitions.ToString(),
+                                                            "numRepitionDone", exercise.ExerciseScore.TotalRepetitionsDone.ToString(), "motionQuality", exercise.ExerciseScore.MoitionQuality.ToString(),
+                                                            "calGuid", training.CalGuid, "calEventId", training.CalEventId);
 
-            return await ConnectingApiAsync(_pairs);
+                return await ConnectingApiAsync(_pairs);
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -235,11 +239,15 @@ namespace VideoTherapy.ServerConnections
         /// </summary>
         public static async Task<string> ReportTrainingComplianceApiAsync(Training training)
         {
-            //todo - add scoring data in exercise class
-            Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.ReportTrainingCompliance, "calGuid", training.CalGuid,
-                                                "eventId", training.CalEventId);
+            if (!training.CalEventId.Equals(""))
+            {
+                Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.ReportTrainingCompliance, "calGuid", training.CalGuid,
+                                    "eventId", training.CalEventId);
 
-            return await ConnectingApiAsync(_pairs);
+                return await ConnectingApiAsync(_pairs);
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -248,9 +256,14 @@ namespace VideoTherapy.ServerConnections
         /// </summary>
         public static async Task<string> ReportTrainingFeedback(string feedbackJson, string calGuid, string eventId)
         {
-            Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.ReportTrainingFeedback, "calGuid", calGuid, "eventId", eventId, "feedback", feedbackJson);
+            if (!eventId.Equals(""))
+            {
+                Dictionary<string, string> _pairs = PairsDictinaryForApi(ApiType.ReportTrainingFeedback, "calGuid", calGuid, "eventId", eventId, "feedback", feedbackJson);
 
-            return await ConnectingApiAsync(_pairs);
+                return await ConnectingApiAsync(_pairs);
+            }
+
+            return null;
         }
     }
 }

@@ -25,43 +25,39 @@ namespace VideoTherapy.Views.ExerciseScreen
         private bool _hideRequest = false;
         public event ExerciseView.ClosePausePopupDelegate ClosePopup;
 
+        private DispatcherTimer countDownTimer;
+        private const int TIMER_COUNT = 3;
+        private int counterTimer = TIMER_COUNT;
+
         public PausePopUp()
         {
             InitializeComponent();
             Visibility = Visibility.Visible;
 
+            countDownTimer = new DispatcherTimer();
+            countDownTimer.Interval = new TimeSpan(0, 0, 1);
+            countDownTimer.Tick += CountDownTimer_Tick;
+
         }
 
-        //public void ShowHandlerDialog()
-        //{
-        //    Visibility = Visibility.Visible;
+        private void CountDownTimer_Tick(object sender, EventArgs e)
+        {
+            if (counterTimer > 0)
+            {
+                counterTimer--;
+                CountdownText.Text = counterTimer.ToString();
+            }
+            else
+            {
+                countDownTimer.Stop();
 
-        //    //_parent.IsEnabled = false;
+                ClosePopup();
 
-        //    _hideRequest = false;
-        //    while (!_hideRequest)
-        //    {
-        //        // HACK: Stop the thread if the application is about to close
-        //        if (this.Dispatcher.HasShutdownStarted ||
-        //            this.Dispatcher.HasShutdownFinished)
-        //        {
-        //            break;
-        //        }
-
-        //        // HACK: Simulate "DoEvents"
-        //        this.Dispatcher.Invoke(
-        //            DispatcherPriority.Background,
-        //            new ThreadStart(delegate { }));
-        //        Thread.Sleep(20);
-        //    }
-
-        //}
-
-        //private void HideHandlerDialog()
-        //{
-        //    _hideRequest = true;
-        //    Visibility = Visibility.Hidden;
-        //}
+                counterTimer = TIMER_COUNT;
+                countDownTextBorder.Visibility = Visibility.Collapsed;
+                pauseImg.Visibility = Visibility.Visible;
+            }
+        }
 
         public void SetSize(int height, int width)
         {
@@ -71,7 +67,11 @@ namespace VideoTherapy.Views.ExerciseScreen
 
         private void ResumeTraining_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ClosePopup();
+            pauseImg.Visibility = Visibility.Collapsed;
+            CountdownText.Text = TIMER_COUNT.ToString();
+            countDownTextBorder.Visibility = Visibility.Visible;
+
+            countDownTimer.Start();
         }
     }
 }

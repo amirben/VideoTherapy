@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VideoTherapy.ServerConnections;
+using VideoTherapy.Utils;
 
 namespace VideoTherapy.Objects
 {
     public class Training
     {
+        public const float TRAINING_COMPLIANCE = 0.6f;
+
         public int TrainingId { set; get; }
         public int TrainingNumber { set; get; }
         public string TrainingName { set; get; }
@@ -27,8 +30,8 @@ namespace VideoTherapy.Objects
         public Boolean Downloaded { set; get;}
         public Boolean SkipDemo { set; get; } 
 
+        public int TrainingQuality { set; get; }
         public int TrainingScore { set; get; }
-        public int TrainingCompliance { set; get; }
 
         public Boolean TrainingComplianceFlag { set; get; }
 
@@ -39,31 +42,13 @@ namespace VideoTherapy.Objects
 
         public async void SumUpSession(int sessionId)
         {
-            Score sessionScore = new Score();
-
             //currently sending only tracking exercises
-            if (Playlist[sessionId][1].IsTrackable)
+            if (Playlist[sessionId][1].IsTraceable && Playlist[sessionId][1].IsStart)
             {
-                int numOfExercisesStart = 0;
-                foreach (Exercise exercise in Playlist[sessionId])
-                {
-                    if (!exercise.isDemo && exercise.IsStart) //only if exercise as been started it will calculate the score
-                    {
-                        numOfExercisesStart++;
-
-                        sessionScore.TotalRepetitions += exercise.Repetitions;
-                        sessionScore.TotalRepetitionsDone += exercise.SumUpExerciseRepetitions();
-                        sessionScore.MoitionQuality += exercise.ExerciseMotionScore;
-                    }
-                }
-
-                sessionScore.MoitionQuality /= numOfExercisesStart;
-
-                Playlist[sessionId][1].ExerciseScore = sessionScore;
-
+                Playlist[sessionId][1].ExerciseScore = Scoring.SumUpSessionScoring(Playlist[sessionId]);
+                
                 //send to server
                 var response = await ApiConnection.ReportExerciseScoreApiAsync(Playlist[sessionId][1], this);
-                Console.WriteLine("Send exercise to server response: " + response);
             }
 
         }
@@ -87,7 +72,7 @@ namespace VideoTherapy.Objects
                 return CurrentExercise;
             }
 
-            SumUpSession(currentSessionId);
+            //SumUpSession(currentSessionId);
             return GetNextSession();
             
         }
@@ -109,6 +94,8 @@ namespace VideoTherapy.Objects
 
         public Exercise GetPrevExercise()
         {
+            CurrentExercise.ClearAllDataInExercise();
+
             if (!Playlist[currentSessionId].First().Equals(CurrentExercise))
             {
                 int i = Playlist[currentSessionId].IndexOf(CurrentExercise);
@@ -133,6 +120,8 @@ namespace VideoTherapy.Objects
 
         public Exercise GetPrevSession()
         {
+            CurrentExercise.ClearAllDataInExercise();
+
             if (currentSessionId == 1)
             {
                 return CurrentExercise;
@@ -165,7 +154,7 @@ namespace VideoTherapy.Objects
                 {
                     if (!exercise.isDemo)
                     {
-                        if (exercise.IsPlayed)
+                        if (exercise.IsCompliance)
                         {
                             numOfPlayed++;
                         }
@@ -192,6 +181,9 @@ namespace VideoTherapy.Objects
                     }
                 }
             }
+
+            CurrentExercise = null;
+            currentSessionId = 1;
         }
     }
 }

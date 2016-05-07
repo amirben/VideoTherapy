@@ -91,7 +91,7 @@ namespace VideoTherapy
         /// <summary>
         /// Splash screen when loading
         /// </summary>
-        private VT_Splash splash = new VT_Splash();
+        private VT_Splash splash;
 
         //*************
         //todo - remove
@@ -111,8 +111,14 @@ namespace VideoTherapy
             //Adding event to the static class
             JSONConvertor.ErrorEvent += JSONConvertor_ErrorEvent;
 
+            splash = new VT_Splash();
+            splash.ErrorEvent += JSONConvertor_ErrorEvent;
+            splash.CloseApp += Close;
+           
+
             CheckConfigFile();
         }
+
         #endregion
 
         #region methods
@@ -172,27 +178,35 @@ namespace VideoTherapy
             //************
 
             //retrive the user id
-            bool userIdExist = await LoginUserForId(email, password);
+            int userIdExist = await LoginUserForId(email, password);
 
-            //if there is a user id
-            if (userIdExist)
+            switch (userIdExist)
             {
-                //Save login screen and change to splash
-                loginScreen = this.Content;
-                this.Content = splash;
-                splash.MessageTimer.Start();
 
-                //start download data
-                worker.RunWorkerAsync();
+                case 0://in case that email or password are wrong
+                    //print error to error label
+                    errorMessegeFromServer.Content = "Error in username or password";
+                    errorMessegeFromServer.Visibility = Visibility.Visible;
+
+                    break;
+
+                case 1: //if there is a user id
+                    //Save login screen and change to splash
+                    loginScreen = this.Content;
+                    this.Content = splash;
+                    splash.MessageTimer.Start();
+
+                    //start download data
+                    worker.RunWorkerAsync();
+                    break;
+
+                case 2:
+                    //error connection
+                    errorMessegeFromServer.Content = "Check your connection";
+                    errorMessegeFromServer.Visibility = Visibility.Visible;
+                    break;
             }
 
-            //in case that email or password are wrong
-            else
-            {
-                //print error to error label
-                errorMessegeFromServer.Content = "Error in username or password";
-                errorMessegeFromServer.Visibility = Visibility.Visible;
-            }
         }
 
         /// <summary>
@@ -200,7 +214,7 @@ namespace VideoTherapy
         /// </summary>
         /// <param name="emil">User email</param>
         /// <param name="password">User password</param>
-        private async Task<bool> LoginUserForId(string email, string password)
+        private async Task<int> LoginUserForId(string email, string password)
         {
             bool regexCheck = Regex.IsMatch(email,
                 @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
@@ -212,15 +226,24 @@ namespace VideoTherapy
                 wrongInputLbl.Visibility = Visibility.Hidden;
 
                 email = Uri.EscapeDataString(email);
-                string loginData = await ApiConnection.AppLoginApiAsync(email, password);
-                
-                _currentPatient = JSONConvertor.CreatePatient(loginData);
+                try
+                {
+                    string loginData = await ApiConnection.AppLoginApiAsync(email, password);
 
-                return _currentPatient != null ? true : false;
+                    _currentPatient = JSONConvertor.CreatePatient(loginData);
+
+                    return _currentPatient != null ? 1 : 0;
+                }
+                catch (HttpRequestException httpE)
+                {
+                    
+                    return 2;
+                }
+                
             }
 
             wrongInputLbl.Visibility = Visibility.Visible;
-            return false;   
+            return 0;   
         }
 
         /// <summary>
@@ -492,6 +515,11 @@ namespace VideoTherapy
             CloseApp(null);
         }
 
+        private void Close(Patient patient)
+        {
+            CloseApp(null);
+        }
+
         /// <summary>
         /// Check email regex, show messege if the email isn't like pattern
         /// </summary>
@@ -561,6 +589,15 @@ namespace VideoTherapy
 
             IsNeedToSaveConfig();
 
+        }
+
+        public void LoginErrorAccur()
+        {
+            worker.CancelAsync();
+                
+            //print error to error label
+            errorMessegeFromServer.Content = "We had problem to login, try again";
+            errorMessegeFromServer.Visibility = Visibility.Visible;
         }
 
         /// <summary>

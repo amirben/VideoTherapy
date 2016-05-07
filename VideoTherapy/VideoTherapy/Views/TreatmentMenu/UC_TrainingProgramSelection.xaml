@@ -250,7 +250,7 @@
 
         <!--Treatment List-->
         <ListBox x:Name="TreatmentTrainingList" Grid.Row="2" BorderBrush="Transparent" Background="Transparent" 
-                 Margin="5,5" Height="400"
+                 Margin="5,5" Height="350"
                  ItemsSource="{Binding}" ItemTemplate="{DynamicResource TrainingImageDataTemplate}"
                  ItemsPanel="{DynamicResource TrainingImageItemsPanelTemplate}" ScrollViewer.CanContentScroll="True" 
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">

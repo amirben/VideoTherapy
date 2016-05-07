@@ -126,7 +126,6 @@ namespace VideoTherapy.ServerConnections
             _patient.UserProfileLink = o.data.profileUrl;
 
             _patient.PatientTreatment = new Treatment();
-            Console.WriteLine(o.data.treatmentIds[0]);
             _patient.PatientTreatment.TreatmentId = o.data.treatmentIds[0];
 
         }
@@ -237,7 +236,6 @@ namespace VideoTherapy.ServerConnections
 
                 //todo - yoav need to change the api
                 currentObj.TryGetValue("lastTrainedDate", out temp);
-                Console.WriteLine(temp.ToString());
                 if (!temp.ToString().Equals("[]"))
                 {
                     Dictionary<string, string> tempDate = JsonConvert.DeserializeObject<Dictionary<string, string>>(temp.ToString());
@@ -257,16 +255,16 @@ namespace VideoTherapy.ServerConnections
                 scoringDic.TryGetValue("num_repeatition_total", out tempFloat2);
                 if (tempFloat1 == 0)
                 {
-                    newTraining.TrainingCompliance = 0;
+                    newTraining.TrainingScore = 0;
                 }
                 else
                 {
-                    newTraining.TrainingCompliance = (int)(tempFloat1 / tempFloat2 * 100);
+                    newTraining.TrainingScore = (int)(tempFloat1 / tempFloat2 * 100);
                 }
                 //newTraining.TrainingCompliance = (int)(scoringDic["num_repeatition_done"] / scoringDic["num_repeatition_total"] * 100);
 
                 scoringDic.TryGetValue("motion_quality", out tempFloat1);
-                newTraining.TrainingScore = (int)(tempFloat1 * 100);
+                newTraining.TrainingQuality = (int)(tempFloat1 * 100);
                 //newTraining.TrainingScore = (int)(scoringDic["motion_quality"] * 100);
 
 
@@ -286,15 +284,6 @@ namespace VideoTherapy.ServerConnections
                     //newTraining.TrainingCompleted = Int32.Parse(calEvents["completed"].ToString());
                 }
 
-                //check if this training is the upcoming one
-                Object checkUpComming = false;
-                currentObj.TryGetValue("upcomingEvent", out checkUpComming);
-                if (checkUpComming != null && (Boolean)checkUpComming)
-                {
-                    newTraining.IsRecommended = true;
-                }
-
-
                 object calGuid;
                 currentObj.TryGetValue("cal_guid", out calGuid);
                 newTraining.CalGuid = calGuid.ToString();
@@ -303,7 +292,15 @@ namespace VideoTherapy.ServerConnections
                 currentObj.TryGetValue("next_cal_event_id", out calEvent);
                 newTraining.CalEventId = calEvent.ToString();
 
-                newTraining.TrainingComplianceValue = 0.6f;
+                //check if this training is the upcoming one
+                Object checkUpComming = false;
+                currentObj.TryGetValue("upcomingEvent", out checkUpComming);
+                if (checkUpComming != null && (Boolean)checkUpComming && !newTraining.CalEventId.Equals(""))
+                {
+                    newTraining.IsRecommended = true;
+                }
+
+                newTraining.TrainingComplianceValue = Training.TRAINING_COMPLIANCE;
             }
 
             return trainingList;
@@ -366,9 +363,12 @@ namespace VideoTherapy.ServerConnections
                     newExercise.Repetitions = item.exerciseCycles;
                     newExercise.ExerciseNum = numOfExercises;
                     newExercise.SessionId = item.sessionId;
-                    newExercise.IsTrackable = item.isTrackable;
+                    newExercise.IsTraceable = item.isTrackable;
                     newExercise.Mode = (bool) item.isTrackable ? Exercise.ExerciseMode.Traceable : Exercise.ExerciseMode.NonTraceable;
+
+                    //todo - should be from server
                     newExercise.VideoComplianceValue = 2;
+                    newExercise.SuccessRate = 0.5f;
 
                     //for future download for not duplicate the same file
                     if (i != 1)
@@ -385,7 +385,7 @@ namespace VideoTherapy.ServerConnections
 
             foreach (var exercises in _training.Playlist.Values)
             {
-                if (exercises[1].IsTrackable)
+                if (exercises[1].IsTraceable)
                 {
                     _training.IsTraceableTraining = true;
                     break;

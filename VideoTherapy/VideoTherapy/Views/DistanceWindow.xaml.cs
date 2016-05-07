@@ -22,6 +22,7 @@ namespace VideoTherapy.Views
     /// </summary>
     public partial class DistanceWindow : UserControl, IDisposable
     {
+        private const float DISTANCE = 2f;
 
         /// <summary>
         /// Active Kinect sensor
@@ -39,6 +40,7 @@ namespace VideoTherapy.Views
         private Body[] bodies = null;
 
         public MainWindow mainWindow;
+        public VideoTherapy.TrainingMenu trainingMenu;
 
         private Training currentTraining;
         private Patient currentPatient;
@@ -66,13 +68,22 @@ namespace VideoTherapy.Views
                 this.kinectSensor.Open();
             }
 
-            // open the reader for the body frames
-            this.bodyFrameReader = this.kinectSensor.BodyFrameSource.OpenReader();
-
-            if (this.bodyFrameReader != null)
+            if (kinectSensor.IsAvailable)
             {
-                this.bodyFrameReader.FrameArrived += BodyFrameReader_FrameArrived;
+                // open the reader for the body frames
+                this.bodyFrameReader = this.kinectSensor.BodyFrameSource.OpenReader();
+
+                if (this.bodyFrameReader != null)
+                {
+                    this.bodyFrameReader.FrameArrived += BodyFrameReader_FrameArrived;
+                }
             }
+            else
+            {
+                //mainWindow.OpenExerciseWindow(currentPatient, currentTraining);
+                trainingMenu.OpenSplash();
+            }
+            
         }
 
         private void BodyFrameReader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
@@ -99,7 +110,7 @@ namespace VideoTherapy.Views
                 }
 
                 if (dataReceived)
-                {
+                { 
                     int numTrack = this.bodies.Where(t => t.IsTracked).Count();
 
                     if (numTrack == 1)
@@ -108,9 +119,17 @@ namespace VideoTherapy.Views
 
                         float z = body.Joints[JointType.SpineBase].Position.Z;
 
-                        if (z >= 2f)
+                        Console.WriteLine("Range = {0}", z);
+                        
+                        #if DEBUG
+                        meter.Text = "Range = " + z.ToString();
+                        meter.Visibility = Visibility.Visible;
+                        #endif
+
+                        if (z >= DISTANCE)
                         {
-                            mainWindow.OpenExerciseWindow(currentPatient, currentTraining);
+                            //mainWindow.OpenExerciseWindow(currentPatient, currentTraining);
+                            trainingMenu.OpenSplash();
                             //this.bodyFrameReader.FrameArrived -= BodyFrameReader_FrameArrived;
                             stopDetection = true;
                         }
