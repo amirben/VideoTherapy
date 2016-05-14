@@ -47,17 +47,20 @@ namespace VideoTherapy.Views
 
         private bool stopDetection;
 
-        public DistanceWindow(Patient currentPatient, Training currentTraining)
+        public DistanceWindow(Patient currentPatient, Training currentTraining, VideoTherapy.TrainingMenu trainingMenu)
         {
-             InitializeComponent();
+            InitializeComponent();
 
             this.currentPatient = currentPatient;
             this.currentTraining = currentTraining;
+            this.trainingMenu = trainingMenu;
+
+            //SetKinectConnection();
 
             this.Loaded += DistanceWindow_Loaded;
         }
 
-        private void DistanceWindow_Loaded(object sender, RoutedEventArgs e)
+        private void SetKinectConnection()
         {
             // one sensor is currently supported
             this.kinectSensor = KinectSensor.GetDefault();
@@ -83,7 +86,12 @@ namespace VideoTherapy.Views
                 //mainWindow.OpenExerciseWindow(currentPatient, currentTraining);
                 trainingMenu.OpenSplash();
             }
-            
+        }
+
+        private void DistanceWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+
+            SetKinectConnection();
         }
 
         private void BodyFrameReader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)

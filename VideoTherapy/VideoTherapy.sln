@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoTherapy", "VideoTherapy\VideoTherapy.csproj", "{9A2F5D0C-A9EA-49B9-AF88-A380B9878361}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoTherapy-Objects", "VideoTherapy-Objects\VideoTherapy-Objects.csproj", "{26139272-4DAB-4FBE-BBF1-40C2B409817D}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "VideoTherapy Kinect Application", "VideoTherapyKinectApplication\VideoTherapyKinectApplication.vdproj", "{B174D756-ED77-4989-9857-D425DC3EF828}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,8 @@ Global
 		{26139272-4DAB-4FBE-BBF1-40C2B409817D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26139272-4DAB-4FBE-BBF1-40C2B409817D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26139272-4DAB-4FBE-BBF1-40C2B409817D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B174D756-ED77-4989-9857-D425DC3EF828}.Debug|Any CPU.ActiveCfg = Debug
+		{B174D756-ED77-4989-9857-D425DC3EF828}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

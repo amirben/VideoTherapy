@@ -201,7 +201,7 @@ namespace VideoTherapy
 
         private void _gestureAnalysis_startGestureDeteced()
         {
-            WaitForStartLbl.Visibility = Visibility.Hidden;
+            //WaitForStartLbl.Visibility = Visibility.Hidden;
         }
 
         private void StartTraceableMode()
@@ -385,7 +385,7 @@ namespace VideoTherapy
             NAExerciseMotion.Visibility = Visibility.Visible;
 
             DemoStatus.Visibility = Visibility.Visible;
-            WaitForStartLbl.Visibility = Visibility.Collapsed;
+            //WaitForStartLbl.Visibility = Visibility.Collapsed;
         }
 
         private void SetUIInTrackingMode()
@@ -403,7 +403,7 @@ namespace VideoTherapy
             RoundMotionPanel.Visibility = Visibility.Visible;
             NARoundMotion.Visibility = Visibility.Collapsed;
 
-            WaitForStartLbl.Visibility = Visibility.Visible;
+            //WaitForStartLbl.Visibility = Visibility.Visible;
 
             ExerciseMotionPanel.Visibility = Visibility.Visible;
             NAExerciseMotion.Visibility = Visibility.Collapsed;
@@ -757,9 +757,13 @@ namespace VideoTherapy
 
         private async void CloseExeciseView()
         {
-            CurrentTraining.ClearTrainingData();
-            string response = await ApiConnection.GetTrainingApiAsync(CurrentTraining.TrainingId);
-            JSONConvertor.GettingPatientTraining2(CurrentTraining, response);
+            Task clearData = new Task(async() =>
+            {
+                CurrentTraining.ClearTrainingData();
+                string response = await ApiConnection.GetTrainingApiAsync(CurrentTraining.TrainingId);
+                JSONConvertor.GettingPatientTraining2(CurrentTraining, response);
+            });
+            clearData.Start();
 
             GoBackToTreatmentScreen(CurrentPatient);
         }

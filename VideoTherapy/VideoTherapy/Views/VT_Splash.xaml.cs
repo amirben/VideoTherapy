@@ -45,6 +45,8 @@ namespace VideoTherapy.Views
             {
                 case 5:
                     LoadingMessage.Content = "On our way!";
+                    //ErrorEvent(null, new ErrorMessege("We had problem to login, try again", 0));
+                    //StopLoadingMessages();
                     break;
                 case 10:
                     LoadingMessage.Content = "We are almost there!";

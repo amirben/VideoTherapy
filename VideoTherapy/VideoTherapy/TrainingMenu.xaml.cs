@@ -42,6 +42,7 @@ namespace VideoTherapy
         public delegate void NextTraining();
 
         private SemaphoreSlim finishFirstGDBSemaphore;
+        private SemaphoreSlim userInDistanceSemaphore;
         private VT_Splash splash;
         private BackgroundWorker worker;
         private const int FIRST_EXERCISE = 1;
@@ -72,10 +73,9 @@ namespace VideoTherapy
 
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (userInDistance)
-            {
-                MainWindow.OpenExerciseWindow(_currentPatient, _currentTraining);
-            }
+            userInDistanceSemaphore.Wait();
+            MainWindow.OpenExerciseWindow(_currentPatient, _currentTraining);
+            
             //if (_currentTraining.IsTraceableTraining)
             //{
             //    MainWindow.OpenDistanceChecker(_currentPatient, _currentTraining);
@@ -107,8 +107,8 @@ namespace VideoTherapy
             watch = new System.Diagnostics.Stopwatch();
             watch.Start();
 
-            Task downloadGDBThread = new Task(DownloadGDBFiles);
-            downloadGDBThread.Start();
+            Task downloadGDBTask = new Task(DownloadGDBFiles);
+            downloadGDBTask.Start();
             
             AttachDelegates();
             AddToUI();
@@ -135,7 +135,7 @@ namespace VideoTherapy
                     {
                         finishFirstGDBSemaphore.Wait();
                     }
-                    Thread downloadGDB = new Thread(() => DownloadCurrentGDB(exercise, newKey, downloadTrainingBarrier));
+                    Task downloadGDB = new Task(() => DownloadCurrentGDB(exercise, newKey, downloadTrainingBarrier));
                     downloadGDB.Start(); 
                 }
 
@@ -213,7 +213,7 @@ namespace VideoTherapy
 
             if (!_currentTraining.Downloaded)
             {
-                Thread downloadGDBThread = new Thread(DownloadGDBFiles);
+                Task downloadGDBThread = new Task(DownloadGDBFiles);
                 downloadGDBThread.Start();
             }
 
@@ -229,8 +229,8 @@ namespace VideoTherapy
 
             if (!_currentTraining.Downloaded)
             {
-                Thread downloadGDBThread = new Thread(DownloadGDBFiles);
-                downloadGDBThread.Start();
+                Thread downloadGDBTask = new Thread(DownloadGDBFiles);
+                downloadGDBTask.Start();
             }
 
             _trainingSelection.DataContext = _currentTraining;
@@ -246,23 +246,32 @@ namespace VideoTherapy
 
         private void _trainingSelection_StartPlaylist(Training currentTraining)
         {
+            
             if (_currentTraining.IsTraceableTraining)
             {
-                using (DistanceWindow distance = new DistanceWindow(_currentPatient, currentTraining))
+                worker.RunWorkerAsync();
+                userInDistanceSemaphore = new SemaphoreSlim(1);
+                
+                using (DistanceWindow distance = new DistanceWindow(_currentPatient, currentTraining, this))
                 {
                     this.Content = distance;
-                    distance.trainingMenu = this;
+                    //distance.trainingMenu = this;
                 }
                 //MainWindow.OpenDistanceChecker(_currentPatient, _currentTraining);
             }
+            else
+            {
+                MainWindow.OpenExerciseWindow(_currentPatient, _currentTraining);
+            }
 
-            worker.RunWorkerAsync();
+            
             //barrier.SignalAndWait();
         }
 
         public void OpenSplash()
         {
             userInDistance = true;
+            userInDistanceSemaphore.Release();
             this.Content = splash;
             splash.MessageTimer.Stop();
         }

@@ -19,14 +19,14 @@
 
         <Grid Visibility="Visible" >
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Bottom">
-                <StackPanel x:Name="WaitForStartLbl" Background="#7F000000" Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
+                <!--<StackPanel x:Name="WaitForStartLbl" Background="#7F000000" Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
                     <Image Source=".\Images\info.png" Height="34" Width="34" Margin="15,5,5,5"/>
-                    <!--<Border Background="#4fc3f7" BorderThickness="2" CornerRadius="20" Height="34" Width="34" Margin="15,5,5,5">
+                    --><!--<Border Background="#4fc3f7" BorderThickness="2" CornerRadius="20" Height="34" Width="34" Margin="15,5,5,5">
                         <TextBlock Text="i" FontFamily="Roboto" FontSize="20"  Foreground="#7F000000" TextAlignment="Center" Margin="5"/>
-                    </Border>-->
+                    </Border>--><!--
 
                     <Label Foreground="White" FontFamily="Roboto" FontSize="20" Margin="5,15,15,15">Place your body on the figure to start</Label>
-                </StackPanel>
+                </StackPanel>-->
 
                 <StackPanel x:Name="VideoControls" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20">
                     <ContentControl Cursor="Hand" ToolTip="Previous session" MouseDown="PrevSessionMouseClick">

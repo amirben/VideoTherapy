@@ -46,7 +46,7 @@ namespace VideoTherapy
         /// <summary>
         /// Semaphore used to syncronize the call to api
         /// </summary> 
-        private SemaphoreSlim _semaphoreSlime = new SemaphoreSlim(1);
+        private SemaphoreSlim _semaphoreSlime;
 
         /// <summary>
         /// Parent of corrent user control
@@ -165,6 +165,7 @@ namespace VideoTherapy
         {
             //create worker for background job
             CreateWorker();
+            _semaphoreSlime = new SemaphoreSlim(1);
             isErrorAccure = false;
 
             string email = emailTxt.Text;
@@ -187,7 +188,6 @@ namespace VideoTherapy
                     //print error to error label
                     errorMessegeFromServer.Content = "Error in username or password";
                     errorMessegeFromServer.Visibility = Visibility.Visible;
-
                     break;
 
                 case 1: //if there is a user id
@@ -225,7 +225,7 @@ namespace VideoTherapy
             {
                 wrongInputLbl.Visibility = Visibility.Hidden;
 
-                email = Uri.EscapeDataString(email);
+                //email = Uri.EscapeDataString(email);
                 try
                 {
                     string loginData = await ApiConnection.AppLoginApiAsync(email, password);
@@ -253,7 +253,7 @@ namespace VideoTherapy
         {
             try
             {
-                await _semaphoreSlime.WaitAsync();
+               // await _semaphoreSlime.WaitAsync();
                 if (!isErrorAccure)
                 {
                     string userData = await ApiConnection.GetUserDataApiAsync(_currentPatient.AccountId, ApiConnection.PATIENT_LEVEL);
@@ -261,11 +261,15 @@ namespace VideoTherapy
                 }
                 
             }
+            catch
+            {
+                return;
+            }
             finally
             {
                 _semaphoreSlime.Release();
             }
-                       
+
         }
 
         /// <summary>
@@ -275,7 +279,7 @@ namespace VideoTherapy
         {
             try
             {
-                await _semaphoreSlime.WaitAsync();
+                //await _semaphoreSlime.WaitAsync();
                 if (!isErrorAccure)
                 {
                     //string treatmentData = await ApiConnection.GetTreatmentApiAsync(_currentPatient.PatientTreatment.TreatmentId);
@@ -284,11 +288,15 @@ namespace VideoTherapy
                 }
                 
             }
+            catch
+            {
+                //throw new Exception();
+            }
             finally
             {
                 _semaphoreSlime.Release();
             }
-            
+
         }
 
         /// <summary>
@@ -298,7 +306,7 @@ namespace VideoTherapy
         {
             try
             {
-                await _semaphoreSlime.WaitAsync();
+                //await _semaphoreSlime.WaitAsync();
 
                 if (!isErrorAccure)
                 {
@@ -307,7 +315,7 @@ namespace VideoTherapy
                     //downloading all the trainings data in the current treatment
                     foreach (Training training in _currentPatient.PatientTreatment.TrainingList)
                     {
-                        Thread t = new Thread(async () =>
+                        Task t = new Task(async () =>
                         {
                             string trainingData = await ApiConnection.GetTrainingApiAsync(training.TrainingId);
                             JSONConvertor.GettingPatientTraining2(training, trainingData);
@@ -328,6 +336,10 @@ namespace VideoTherapy
                 }
 
             }
+            catch
+            {
+                //throw new Exception();
+            }
             finally
             {
                 _semaphoreSlime.Release();
@@ -341,7 +353,7 @@ namespace VideoTherapy
         {
             try
             {
-                await _semaphoreSlime.WaitAsync();
+                //await _semaphoreSlime.WaitAsync();
 
                 if (!isErrorAccure)
                 {
@@ -352,6 +364,10 @@ namespace VideoTherapy
                 }
                 
             }
+            catch
+            {
+               // throw new Exception();
+            }
             finally
             {
                 _semaphoreSlime.Release();
@@ -361,11 +377,11 @@ namespace VideoTherapy
         /// <summary>
         /// Check if user ask to rememeber his details.
         /// </summary>
-        private async void IsNeedToSaveConfig()
+        private void IsNeedToSaveConfig()
         {
             try
             {
-                await _semaphoreSlime.WaitAsync();
+                //await _semaphoreSlime.WaitAsync();
                 if (!isErrorAccure)
                 {
                     //configuration handler
@@ -382,11 +398,16 @@ namespace VideoTherapy
                 }
                 
             }
+            catch
+            {
+                //throw new Exception();
+            }
+            
             finally
             {
                 _semaphoreSlime.Release();
             }
-            
+
         }
 
         /// <summary>
@@ -460,6 +481,19 @@ namespace VideoTherapy
 
             worker.DoWork += Worker_DoWork;
             worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
+            worker.Disposed += Worker_Disposed;
+        }
+
+        private void Worker_Disposed(object sender, EventArgs e)
+        {
+            //change back to login;
+            this.Content = loginScreen;
+
+            //print error to error label
+            errorMessegeFromServer.Content = "Error: " + lastErrorMessege.Code + " " + lastErrorMessege.Messege.ToString();
+            errorMessegeFromServer.Visibility = Visibility.Visible;
+
+            isErrorAccure = false;
         }
         #endregion
 
@@ -547,10 +581,8 @@ namespace VideoTherapy
         /// <summary>
         /// worker completed method - open treatment screen
         /// </summary>
-        private async void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            await _semaphoreSlime.WaitAsync();
-
             //**************
             //TODO - remove
             watch.Stop();
@@ -558,19 +590,11 @@ namespace VideoTherapy
             Console.WriteLine(time.ToString());
             //**************
 
-            if (isErrorAccure)
-            {
-                //change back to login;
-                this.Content = loginScreen;
-
-                //print error to error label
-                errorMessegeFromServer.Content = "Error: " + lastErrorMessege.Code + " " + lastErrorMessege.Messege.ToString();
-                errorMessegeFromServer.Visibility = Visibility.Visible;
-            }
-            else
+            Console.WriteLine(e.ToString());
+            if (!e.Cancelled && !isErrorAccure)
             {
                 MainWindow.OpenTreatmentWindow(_currentPatient);
-            }
+            } 
 
         }
 
@@ -579,25 +603,53 @@ namespace VideoTherapy
         /// </summary>
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
+            _semaphoreSlime.Wait();
             RetrivePatientDetails();
+            if (CheckCancel(e)) return;
 
+            _semaphoreSlime.Wait();
             RetriveTreatmentDetails();
+            if (CheckCancel(e)) return;
 
             //RetriveTherapistDetails();
 
+            _semaphoreSlime.Wait();
             RetriveTrainingDetails();
+            if (CheckCancel(e)) return;
 
+            _semaphoreSlime.Wait();
             IsNeedToSaveConfig();
+            if (CheckCancel(e)) return;
 
+            //_semaphoreSlime.Wait();
+
+            Console.WriteLine("finish work");
         }
 
+        private bool CheckCancel(DoWorkEventArgs e)
+        {
+            Console.WriteLine("Check cancel called");
+            if (worker.CancellationPending)
+            {
+                Console.WriteLine("cancel!!!");
+                e.Cancel = true;
+                isErrorAccure = true;
+                return true;
+            }
+
+            return false;
+        }
+
+        
         public void LoginErrorAccur()
         {
             worker.CancelAsync();
-                
+            lastErrorMessege = new ErrorMessege("We had problem to login, try again", 0);
+            worker.Dispose();
+             
             //print error to error label
-            errorMessegeFromServer.Content = "We had problem to login, try again";
-            errorMessegeFromServer.Visibility = Visibility.Visible;
+            //errorMessegeFromServer.Content = 
+            //errorMessegeFromServer.Visibility = Visibility.Visible;
         }
 
         /// <summary>
@@ -610,11 +662,13 @@ namespace VideoTherapy
             {
                 worker.CancelAsync();
             }
-                
-            worker.Dispose();
-
+            
             isErrorAccure = true;
             lastErrorMessege = e as ErrorMessege;
+            worker.Dispose();
+            
+
+            
         }
         #endregion
 

@@ -60,7 +60,7 @@ namespace VideoTherapy.ServerConnections
 
             if (checkError)
             {
-                ErrorEvent(null, new ErrorMessege(((ServerCode)o.code).ToString(), (int)o.code));
+                //ErrorEvent(null, new ErrorMessege(((ServerCode)o.code).ToString(), (int)o.code));
 
                 return null;
             }
@@ -166,9 +166,18 @@ namespace VideoTherapy.ServerConnections
                 treatment.TreatmentProgress = DateFormat.CalcTreatementDateProgress(treatment.StartDate, treatment.EndDate);
 
                 //treatment scoring
-                Dictionary<string, float> scoringDic = JsonConvert.DeserializeObject<Dictionary<string, float>>(item.scoring.ToString());
-                treatment.TreatmentCompliance = (int) (scoringDic["num_repition_done"] / scoringDic["num_repition_total"] * 100);
-                treatment.TreatmentScore = (int) (scoringDic["motion_quality"] * 100);
+                try
+                {
+                    Dictionary<string, float> scoringDic = JsonConvert.DeserializeObject<Dictionary<string, float>>(item.scoring.ToString());
+                    treatment.TreatmentCompliance = (int)(scoringDic["num_repition_done"] / scoringDic["num_repition_total"] * 100);
+                    treatment.TreatmentScore = (int)(scoringDic["motion_quality"] * 100);
+                }
+                catch
+                {
+                    treatment.TreatmentCompliance = 0;
+                    treatment.TreatmentScore = 0;
+                }
+                
 
                 //therapist details
                 treatment.TreatmentTherapist = new Therapist();

@@ -86,7 +86,7 @@ namespace VideoTherapy
 
         public void OpenDistanceChecker(Patient _currentPatient, Training _currentTraining)
         {
-            using (DistanceWindow distanceWindow = new DistanceWindow(_currentPatient, _currentTraining))
+            using (DistanceWindow distanceWindow = new DistanceWindow(_currentPatient, _currentTraining, null))
             {
                 distanceWindow.mainWindow = this;
                 this.Content = distanceWindow;
