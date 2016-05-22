@@ -31,7 +31,8 @@ namespace VideoTherapy.ServerConnections
         /// Uri of the server
         /// </summary>
         /// https://videotherapy.co/dev/vt/api/dispatcher.php
-        private readonly static string apiUri = "http://dev.videotherapy.co/vt/api/dispatcher.php";
+        private readonly static string apiUri = "https://videotherapy.co/vt/api/dispatcher.php";
+        private readonly static string apiUriDev = "http://dev.videotherapy.co/vt/api/dispatcher.php";
 
         /// <summary>
         /// The type of the Api that need to be use
@@ -139,7 +140,6 @@ namespace VideoTherapy.ServerConnections
                 var x = response.EnsureSuccessStatusCode();
 
                 content = await response.Content.ReadAsStringAsync();
-
             }
 
             return content;

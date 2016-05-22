@@ -22,7 +22,7 @@ namespace VideoTherapy.Views
     /// </summary>
     public partial class DistanceWindow : UserControl, IDisposable
     {
-        private const float DISTANCE = 2f;
+        private const float DISTANCE = 2.2f;
 
         /// <summary>
         /// Active Kinect sensor
@@ -129,10 +129,10 @@ namespace VideoTherapy.Views
 
                         Console.WriteLine("Range = {0}", z);
                         
-                        #if DEBUG
-                        meter.Text = "Range = " + z.ToString();
+                        //#if DEBUG
+                        meter.Text = "Range = " + String.Format("{0:0.00}", z);
                         meter.Visibility = Visibility.Visible;
-                        #endif
+                        //#endif
 
                         if (z >= DISTANCE)
                         {

@@ -32,6 +32,7 @@ namespace VideoTherapy
     /// 
     public partial class ExerciseView : UserControl,  IDisposable
     {
+        private string VT_Intro = @"http://mil01.objectstorage.softlayer.net/v1/AUTH_2bc94b1c-c83f-4247-b43c-c1dfaf29db00/vtexercisevideos2/vtTrainingIntro.mp4";
         public Exercise CurrentExercise { set; get; }
 
         public Dictionary<int, List<Exercise>> Playlist { set; get; }
@@ -105,8 +106,23 @@ namespace VideoTherapy
 
             CreatePauseTimer();
 
-            CurrentExercise = CurrentTraining.GetNextExercise();
-            UpdatePlayerAfterExerciseChange();
+            UserProfile.DataContext = CurrentPatient;
+
+            RemoveUpperLayer();
+            
+            ExerciseVideo.Source = new Uri(VT_Intro);
+            ExerciseVideo.Play();
+            
+            //CurrentExercise = CurrentTraining.GetNextExercise();
+            //UpdatePlayerAfterExerciseChange();
+        }
+
+        private void RemoveUpperLayer()
+        {
+            ExerciseDetails.Visibility = Visibility.Collapsed;
+            ExerciseStatus.Visibility = Visibility.Collapsed;
+            DemoStatus.Visibility = Visibility.Collapsed;
+            PlayerControl.Visibility = Visibility.Collapsed;
         }
 
         private void TrackingLostTimer_Tick(object sender, EventArgs e)
@@ -137,9 +153,11 @@ namespace VideoTherapy
 
         private void UpdateDataContext()
         {
+            ExerciseDetails.Visibility = Visibility.Visible;
+
             //Data context update
             DataContext = CurrentExercise;
-            UserProfile.DataContext = CurrentPatient;
+            
             CurrentTrainingLbl.DataContext = CurrentTraining;
 
             ExerciseMotionQualityGrid.DataContext = CurrentExercise;
@@ -154,9 +172,14 @@ namespace VideoTherapy
       
         private void UpdateExerciseUI()
         {
+            PlayerControl.Visibility = Visibility.Visible;
             ExerciseStatus.DataContext = CurrentExercise.CurrentRound;
             RoundIndexText.DataContext = CurrentExercise.CurrentRound;
             RoundMotionQualityGrid.DataContext = CurrentExercise.CurrentRound;
+
+            Binding videoBinding = new Binding("VideoPath");
+            ExerciseVideo.SetBinding(MediaElement.SourceProperty, videoBinding);
+
         }
 
         private void CreatePauseTimer()
@@ -178,11 +201,13 @@ namespace VideoTherapy
 
                 case Exercise.ExerciseMode.NonTraceable:
                     OpenNotTrackablePopUp();
-                    SetUIInNoTrackableMode();
+                    StartNonTraceableMode();
+                    //SetUIInNoTrackableMode();
                     break;
 
                 case Exercise.ExerciseMode.NonTraceableDuplicate:
-                    SetUIInNoTrackableMode();
+                    //SetUIInNoTrackableMode();
+                    StartNonTraceableMode();
                     ExerciseVideo.Play();
                     inPlayMode = true;
 
@@ -202,6 +227,52 @@ namespace VideoTherapy
         private void _gestureAnalysis_startGestureDeteced()
         {
             //WaitForStartLbl.Visibility = Visibility.Hidden;
+        }
+
+        private void StartNonTraceableMode()
+        {
+            SetUIInNoTrackableMode();
+
+            _sensor = KinectSensor.GetDefault();
+
+            //todo - check, not working
+            if (_sensor != null)
+            {
+                _sensor.Open();
+
+                // 2) Initialize the background removal tool.
+                _backgroundRemovalTool = new BackgroundRemovalTool(_sensor.CoordinateMapper);
+                _drawSkeleton = new DrawSkeleton(_sensor, (int)(KinectSkeleton.Width), (int)(KinectSkeleton.Height));
+
+                _reader = _sensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.BodyIndex | FrameSourceTypes.Body);
+                _reader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived_NonTraceable;
+
+            }
+        }
+
+        private void Reader_MultiSourceFrameArrived_NonTraceable(object sender, MultiSourceFrameArrivedEventArgs e)
+        {
+            var reference = e.FrameReference.AcquireFrame();
+
+            using (var colorFrame = reference.ColorFrameReference.AcquireFrame())
+            using (var depthFrame = reference.DepthFrameReference.AcquireFrame())
+            using (var bodyFrame = reference.BodyFrameReference.AcquireFrame())
+            using (var bodyIndexFrame = reference.BodyIndexFrameReference.AcquireFrame())
+            {
+                if (colorFrame != null && depthFrame != null && bodyIndexFrame != null && bodyFrame != null)
+                {
+                    // 3) Update the image source.
+                    KinectShilloute.Source = _backgroundRemovalTool.GreenScreen(colorFrame, depthFrame, bodyIndexFrame);
+
+                    KinectSkeleton.Source = _drawSkeleton.DrawBodySkeleton(bodyFrame);
+
+                    if (this.bodies == null)
+                    {
+                        this.bodies = new Body[bodyFrame.BodyCount];
+                    }
+                    bodyFrame.GetAndRefreshBodyData(this.bodies);
+                }
+            }
         }
 
         private void StartTraceableMode()
@@ -386,6 +457,8 @@ namespace VideoTherapy
 
             DemoStatus.Visibility = Visibility.Visible;
             //WaitForStartLbl.Visibility = Visibility.Collapsed;
+
+            
         }
 
         private void SetUIInTrackingMode()
@@ -430,6 +503,9 @@ namespace VideoTherapy
 
         private void OpenSummaryPopUp()
         {
+            //ExerciseVideo.Visibility = Visibility.Hidden;
+            //Background = new SolidColorBrush(Color.FromArgb(0x80, 0xc6, 0x83, 0));
+
             summary = new SummaryPopUp();
             int width = (int)(ActualWidth / 2.5);
             int height = (int)(ActualHeight * 0.75);
@@ -709,7 +785,8 @@ namespace VideoTherapy
             {
                 ChangeUIToPauseMode();
 
-                if (_gestureDetector != null)
+                if  (_gestureDetector != null && 
+                        (CurrentExercise.Mode == Exercise.ExerciseMode.Traceable || CurrentExercise.Mode == Exercise.ExerciseMode.TraceableDuplicate))
                 {
                     _gestureDetector.IsPaused = true;
                 }
@@ -719,9 +796,10 @@ namespace VideoTherapy
             {
                 ChangeUIToPlayMode();
 
-                if (_gestureDetector != null)
+                if (_gestureDetector != null &&
+                        (CurrentExercise.Mode == Exercise.ExerciseMode.Traceable || CurrentExercise.Mode == Exercise.ExerciseMode.TraceableDuplicate))
                 {
-                    _gestureDetector.IsPaused = false;
+                    _gestureDetector.IsPaused = true;
                 }
             }
         }
@@ -751,7 +829,8 @@ namespace VideoTherapy
         {
             //todo - need to clear all data
             //Returning to the treatement screen
-            CloseExeciseView();
+            //CloseExeciseView();
+            OpenQuestionnairePopUp();
         }
         #endregion
 

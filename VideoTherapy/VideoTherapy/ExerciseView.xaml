@@ -7,10 +7,11 @@
              xmlns:mv="clr-namespace:VideoTherapy.Model_View"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1400">
-    <Grid x:Name="ExerciseWindow" Background="#80c683">
+    <Grid x:Name="ExerciseWindow" Background="Black">
+        <!--#80c683-->
 
         <!--Source="{Binding VideoPath}" Margin="-6,0,6,0"-->
-        <MediaElement x:Name="ExerciseVideo" Source="{Binding VideoPath}" Stretch="Fill" LoadedBehavior="Manual" UnloadedBehavior="Stop"  MediaEnded="ExerciseVideo_MediaEnded"/>
+        <MediaElement x:Name="ExerciseVideo" Stretch="Fill" LoadedBehavior="Manual" UnloadedBehavior="Stop"  MediaEnded="ExerciseVideo_MediaEnded"/>
             <Grid x:Name="KinectFrame"  HorizontalAlignment="Right" Grid.ColumnSpan="2147483647" Grid.RowSpan="2147483647">
             <Image x:Name="KinectShilloute" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="235,10,-235,-10"/>
             <Image x:Name="KinectSkeleton"  VerticalAlignment="Center" HorizontalAlignment="Right" Margin="200,10,-220,-10"/>
@@ -18,7 +19,7 @@
 
 
         <Grid Visibility="Visible" >
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <StackPanel x:Name="PlayerControl" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Bottom">
                 <!--<StackPanel x:Name="WaitForStartLbl" Background="#7F000000" Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
                     <Image Source=".\Images\info.png" Height="34" Width="34" Margin="15,5,5,5"/>
                     --><!--<Border Background="#4fc3f7" BorderThickness="2" CornerRadius="20" Height="34" Width="34" Margin="15,5,5,5">
@@ -27,7 +28,6 @@
 
                     <Label Foreground="White" FontFamily="Roboto" FontSize="20" Margin="5,15,15,15">Place your body on the figure to start</Label>
                 </StackPanel>-->
-
                 <StackPanel x:Name="VideoControls" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20">
                     <ContentControl Cursor="Hand" ToolTip="Previous session" MouseDown="PrevSessionMouseClick">
                         <Border CornerRadius="30" Height="40" Width="40" Margin="5" BorderBrush="Transparent" BorderThickness="0" Background="#7F000000" >
@@ -171,7 +171,7 @@
                 </Grid>
             </StackPanel>
 
-            <Grid  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="15" >
+            <Grid x:Name="UserImg"  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="15" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="4*" />
                     <ColumnDefinition Width="1*" />

@@ -10,5 +10,6 @@ namespace VideoTherapy.Objects
     {
         public int AnswerNum { set; get; }
         public string AnswerTitle { set; get; }
+        public char AnswerKey { set; get; }
     }
 }

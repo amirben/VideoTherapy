@@ -16,6 +16,8 @@ using System.Windows.Shapes;
 using Newtonsoft.Json;
 using VideoTherapy.Objects;
 using VideoTherapy.ServerConnections;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Linq;
 
 namespace VideoTherapy.Views.ExerciseScreen
 {
@@ -29,6 +31,10 @@ namespace VideoTherapy.Views.ExerciseScreen
 
         public ExerciseView ExerciseView;
 
+        private List<string> propertiesToSerialize = new List<string>(new string[]
+        {
+            "AnswerKey"
+        });
 
         public QuestionnairePopUp()
         {
@@ -62,27 +68,27 @@ namespace VideoTherapy.Views.ExerciseScreen
             q1.QuestionNumber = 1;
             q1.QuestionString = "How was your training?";
 
-            q1.LeftAnswer = new Answer() { AnswerNum = 1, AnswerTitle = "Too difficult" };
-            q1.CenterAnswer = new Answer() { AnswerNum = 2, AnswerTitle = "Too easy" };
-            q1.RightAnswer = new Answer() { AnswerNum = 3, AnswerTitle = "Just right" };
-            q1.SelectedAnswer = 0;
+            q1.LeftAnswer = new Answer() { AnswerNum = 1, AnswerTitle = "Too difficult", AnswerKey = 'b'};
+            q1.CenterAnswer = new Answer() { AnswerNum = 2, AnswerTitle = "Too easy", AnswerKey = 'c' };
+            q1.RightAnswer = new Answer() { AnswerNum = 3, AnswerTitle = "Just right", AnswerKey = 'a' };
+            q1.SelectedAnswer = ' ';
 
 
             Question q2 = new Question();
             q2.QuestionNumber = 2;
             q2.QuestionString = "Did you feel safe?";
-            q2.LeftAnswer = new Answer() { AnswerNum = 1, AnswerTitle = "No" };
-            q2.CenterAnswer = new Answer() { AnswerNum = 2, AnswerTitle = "Moderately" };
-            q2.RightAnswer = new Answer() { AnswerNum = 3, AnswerTitle = "Yes" };
-            q2.SelectedAnswer = 0;
+            q2.LeftAnswer = new Answer() { AnswerNum = 1, AnswerTitle = "No", AnswerKey = 'b' };
+            q2.CenterAnswer = new Answer() { AnswerNum = 2, AnswerTitle = "Moderately", AnswerKey = 'c' };
+            q2.RightAnswer = new Answer() { AnswerNum = 3, AnswerTitle = "Yes", AnswerKey = 'a' };
+            q2.SelectedAnswer = ' ';
 
             Question q3 = new Question();
             q3.QuestionNumber = 3;
             q3.QuestionString = "Did you enjoy your training?";
-            q3.LeftAnswer = new Answer() { AnswerNum = 1, AnswerTitle = "No"};
-            q3.CenterAnswer = new Answer() { AnswerNum = 2, AnswerTitle = "It was ok" };
-            q3.RightAnswer = new Answer() { AnswerNum = 3, AnswerTitle = "Yes" };
-            q3.SelectedAnswer = 0;
+            q3.LeftAnswer = new Answer() { AnswerNum = 1, AnswerTitle = "No", AnswerKey = 'b' };
+            q3.CenterAnswer = new Answer() { AnswerNum = 2, AnswerTitle = "It was ok", AnswerKey = 'c' };
+            q3.RightAnswer = new Answer() { AnswerNum = 3, AnswerTitle = "Yes", AnswerKey = 'a' };
+            q3.SelectedAnswer = ' ';
 
             questionList.AddLast(q1);
             questionList.AddLast(q2);
@@ -113,28 +119,36 @@ namespace VideoTherapy.Views.ExerciseScreen
 
         private async void SendAnswersToServer()
         {
+            List<Question> list = questionList.ToList();
+
+
+            JObject answers = new JObject();
+            answers["10"] = list[0].SelectedAnswer.ToString();
+            answers["20"] = list[1].SelectedAnswer.ToString();
+            answers["30"] = list[2].SelectedAnswer.ToString();
+
             string json = JsonConvert.SerializeObject(questionList);
-
+            //string json = answers.ToString();
+            
             string response = await ApiConnection.ReportTrainingFeedback(json, ExerciseView.CurrentTraining.CalGuid, ExerciseView.CurrentTraining.CalEventId);
+            Console.WriteLine(response);
         }
-
-
 
         private void LeftAnswer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            currentNode.Value.SelectedAnswer = currentNode.Value.LeftAnswer.AnswerNum;
+            currentNode.Value.SelectedAnswer = currentNode.Value.LeftAnswer.AnswerKey;
             NextQuesiton();
         }
 
         private void CenterAnswer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            currentNode.Value.SelectedAnswer = currentNode.Value.CenterAnswer.AnswerNum;
+            currentNode.Value.SelectedAnswer = currentNode.Value.CenterAnswer.AnswerKey;
             NextQuesiton();
         }
 
         private void RightAnswer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            currentNode.Value.SelectedAnswer = currentNode.Value.RightAnswer.AnswerNum;
+            currentNode.Value.SelectedAnswer = currentNode.Value.RightAnswer.AnswerKey;
             NextQuesiton();
         }
 
@@ -147,8 +161,9 @@ namespace VideoTherapy.Views.ExerciseScreen
         {
             Answer currentAnswer = ((StackPanel)sender).DataContext as Answer;
 
-            currentNode.Value.SelectedAnswer = currentAnswer.AnswerNum;
+            currentNode.Value.SelectedAnswer = currentAnswer.AnswerKey;
             NextQuesiton();
         }
     }
+
 }

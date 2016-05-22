@@ -13,7 +13,7 @@ namespace VideoTherapy.Objects
         public Answer LeftAnswer { set; get; }
         public Answer CenterAnswer { set; get; }
         public Answer RightAnswer { set; get; }
-        public int SelectedAnswer { set; get; }
+        public char  SelectedAnswer { set; get; }
 
     }
 }

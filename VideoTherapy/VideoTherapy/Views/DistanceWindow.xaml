@@ -24,7 +24,7 @@
                     
                 </TextBlock>
 
-                    <TextBlock x:Name="meter" FontSize="20" Visibility="Collapsed" Foreground="White" Text="ddddd"/>
+                    <TextBlock x:Name="meter" FontSize="20" Visibility="Visible" Foreground="White" Text="Range = -" HorizontalAlignment="Center"/>
             </StackPanel>
         </Border>
 

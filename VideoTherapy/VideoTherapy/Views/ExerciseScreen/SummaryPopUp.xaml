@@ -9,7 +9,7 @@
              d:DesignHeight="600" d:DesignWidth="600">
     
     <Border Visibility="{Binding Visibility}" Background="#90000000">
-        <Border Visibility="{Binding Visibility}"  BorderThickness="1" VerticalAlignment="Center"
+        <Border Visibility="{Binding Visibility}"  BorderThickness="2" VerticalAlignment="Center" BorderBrush="White"
 					HorizontalAlignment="Center">
             
             <StackPanel x:Name="SummaryPopUpStackpanel" Orientation="Vertical" Background="Black" >

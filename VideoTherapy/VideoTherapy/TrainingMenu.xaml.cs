@@ -52,6 +52,8 @@ namespace VideoTherapy
         public event MainWindow.CloseAppDelegate CloseApp;
         public event MainWindow.LogOutDelegate LogOut;
 
+        private Barrier distanceBarrier;
+
         private System.Diagnostics.Stopwatch watch;
 
         public TrainingMenu(Patient currentPatient, Training currentTraining)
@@ -73,9 +75,12 @@ namespace VideoTherapy
 
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            userInDistanceSemaphore.Wait();
-            MainWindow.OpenExerciseWindow(_currentPatient, _currentTraining);
+            Console.WriteLine("worker stuck");
             
+            //distanceBarrier.SignalAndWait();
+            Console.WriteLine("worker release");
+            MainWindow.OpenExerciseWindow(_currentPatient, _currentTraining);
+
             //if (_currentTraining.IsTraceableTraining)
             //{
             //    MainWindow.OpenDistanceChecker(_currentPatient, _currentTraining);
@@ -91,6 +96,10 @@ namespace VideoTherapy
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
             finishFirstGDBSemaphore.Wait();
+            
+            Console.WriteLine("in dowork before sem");
+            userInDistanceSemaphore.Wait();
+            Console.WriteLine("in dowork after sem");
         }
 
         public void Dispose()
@@ -249,12 +258,16 @@ namespace VideoTherapy
             
             if (_currentTraining.IsTraceableTraining)
             {
-                worker.RunWorkerAsync();
                 userInDistanceSemaphore = new SemaphoreSlim(1);
-                
+                userInDistanceSemaphore.Wait();
+
+                worker.RunWorkerAsync();
+
                 using (DistanceWindow distance = new DistanceWindow(_currentPatient, currentTraining, this))
                 {
                     this.Content = distance;
+                    
+                    Console.WriteLine("distance wait finish");
                     //distance.trainingMenu = this;
                 }
                 //MainWindow.OpenDistanceChecker(_currentPatient, _currentTraining);
@@ -271,9 +284,12 @@ namespace VideoTherapy
         public void OpenSplash()
         {
             userInDistance = true;
-            userInDistanceSemaphore.Release();
+            
             this.Content = splash;
             splash.MessageTimer.Stop();
+            userInDistanceSemaphore.Release();
+            Console.WriteLine("distance + splash release");
+            //distanceBarrier.SignalAndWait();
         }
     }
 }
